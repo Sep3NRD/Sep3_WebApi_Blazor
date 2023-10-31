@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+
+// Consider Animal Service after packaging
+
+option csharp_namespace = "GrpcItem";
+
+package proto;
+
+// The greeting service definition.
+service ItemService {
+    rpc createItem(int32 ) returns (Item){};
+}
+
+message Item{
+    string name=1;
+    double price = 2;
+}

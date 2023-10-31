@@ -10,4 +10,9 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
+
+    <ItemGroup>
+      <PackageReference Include="Grpc.AspNetCore" Version="2.58.0" />
+    </ItemGroup>
+
 </Project>
