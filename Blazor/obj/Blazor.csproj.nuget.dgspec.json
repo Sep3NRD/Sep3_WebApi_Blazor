@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ricardo\\RiderProjects\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj": {}
+    "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ricardo\\RiderProjects\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj": {
+    "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ricardo\\RiderProjects\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
+        "projectUniqueName": "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
         "projectName": "Blazor",
-        "projectPath": "C:\\Users\\Ricardo\\RiderProjects\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
-        "packagesPath": "C:\\Users\\Ricardo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ricardo\\RiderProjects\\Sep3_WebApi_Blazor\\Blazor\\obj\\",
+        "projectPath": "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
+        "packagesPath": "C:\\Users\\nural\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\Blazor\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Ricardo\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\nural\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
