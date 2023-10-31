@@ -23,7 +23,7 @@ public class ItemController : ControllerBase
         try
         {
             Item created = await ItemLogic.CreateAsync(dto);
-            return Created($"/items/{created.ItemId}", created);
+            return Created($"/items/{created.Name}", created);
         }
         catch (Exception e)
         {
