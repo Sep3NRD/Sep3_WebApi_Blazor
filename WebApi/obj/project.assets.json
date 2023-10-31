@@ -1278,19 +1278,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nural\\.nuget\\packages\\": {}
+    "C:\\Users\\Ricardo\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\WebApi\\WebApi.csproj",
+      "projectUniqueName": "C:\\Users\\Ricardo\\Documents\\GitHub\\Sep3_WebApi_Blazor\\WebApi\\WebApi.csproj",
       "projectName": "WebApi",
-      "projectPath": "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\WebApi\\WebApi.csproj",
-      "packagesPath": "C:\\Users\\nural\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\WebApi\\obj\\",
+      "projectPath": "C:\\Users\\Ricardo\\Documents\\GitHub\\Sep3_WebApi_Blazor\\WebApi\\WebApi.csproj",
+      "packagesPath": "C:\\Users\\Ricardo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Ricardo\\Documents\\GitHub\\Sep3_WebApi_Blazor\\WebApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\nural\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Ricardo\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -1302,8 +1302,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\Application\\Application.csproj": {
-              "projectPath": "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\Application\\Application.csproj"
+            "C:\\Users\\Ricardo\\Documents\\GitHub\\Sep3_WebApi_Blazor\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\Ricardo\\Documents\\GitHub\\Sep3_WebApi_Blazor\\Application\\Application.csproj"
             }
           }
         }
