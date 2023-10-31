@@ -1,7 +1,43 @@
 ﻿@page "/CreateItem"
+@using Domain.DTOs
+@using HttpClients.ClientInterfaces
+@inject IItemService ItemService
+@inject NavigationManager navMgr
 <h3>CreateItem</h3>
 
 @code {
     
+    private string ItemName = "";
+    private double ItemPrice;
+    string msg = "";
+    
+    
+
+    private async Task Create()
+    {
+        
+        if (string.IsNullOrEmpty(ItemName))
+        {
+            msg = "Title cannot be empty!";
+            return;
+        }
+        if (ItemPrice == null)
+        {
+            msg = "Price cannot be empty!";
+            return;
+        }
+
+        try
+        {
+            ItemCreationDto dto = new(ItemName, ItemPrice);
+            await ItemService.CreateAsync(dto);
+            navMgr.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
     
 }

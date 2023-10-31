@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Blazor.Data;
+using HttpClients.ClientInterfaces;
+using HttpClients.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,5 +29,8 @@ app.UseRouting();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+
+builder.Services.AddScoped<IItemService, ItemHttpClient>();
+builder.Services.AddSingleton<ItemHttpClient>();
 
 app.Run();
