@@ -4,9 +4,14 @@ using HttpClients.ClientInterfaces;
 
 namespace HttpClients.Implementations;
 
-public class ItemHttpClass : IItemService
+public class ItemHttpClient : IItemService
 {
     private readonly HttpClient client;
+    
+    public ItemHttpClient(HttpClient client)
+    {
+        this.client = client;
+    }
     
     public async Task CreateAsync(ItemCreationDto dto)
     {
