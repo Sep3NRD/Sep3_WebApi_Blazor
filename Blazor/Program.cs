@@ -31,5 +31,6 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 builder.Services.AddScoped<IItemService, ItemHttpClient>();
+builder.Services.AddSingleton<ItemHttpClient>();
 
 app.Run();
