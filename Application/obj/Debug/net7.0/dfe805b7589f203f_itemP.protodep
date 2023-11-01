@@ -1,4 +1,4 @@
 obj\Debug\net7.0\Proto/ItemP.cs \
-obj\Debug\net7.0\Proto/ItemPGrpc.cs: C:/Users/Ricardo/.nuget/packages/grpc.tools/2.59.0/build/native/include/google/protobuf/empty.proto\
- C:/Users/Ricardo/.nuget/packages/grpc.tools/2.59.0/build/native/include/google/protobuf/wrappers.proto\
+obj\Debug\net7.0\Proto/ItemPGrpc.cs: C:/Users/nural/.nuget/packages/grpc.tools/2.59.0/build/native/include/google/protobuf/empty.proto\
+ C:/Users/nural/.nuget/packages/grpc.tools/2.59.0/build/native/include/google/protobuf/wrappers.proto\
  Proto/itemP.proto

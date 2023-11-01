@@ -1,3 +1,79 @@
+/* _content/Blazor/Pages/CreateItem.razor.rz.scp.css */
+/* styles.css */
+.section-title[b-4wymo90ulv] {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.card.post-form[b-4wymo90ulv] {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.form-group[b-4wymo90ulv] {
+    margin-bottom: 15px;
+}
+
+label[b-4wymo90ulv] {
+    font-weight: bold;
+}
+
+.form-control[b-4wymo90ulv] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea.form-control[b-4wymo90ulv] {
+    height: 150px;
+}
+
+.button-row[b-4wymo90ulv] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.error-message[b-4wymo90ulv] {
+    color: red;
+}
+
+.btn.create-button[b-4wymo90ulv] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn.create-button:hover[b-4wymo90ulv] {
+    background-color: #0056b3;
+}
+.modal[b-4wymo90ulv] {
+    display: none; /* Initially hide the modal */
+    position: fixed; /* Fixed position to overlay content */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background overlay */
+    z-index: 9999; /* Ensure it's above other content */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content[b-4wymo90ulv] {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
 /* _content/Blazor/Shared/MainLayout.razor.rz.scp.css */
 .page[b-r0yqwuvdyg] {
     position: relative;

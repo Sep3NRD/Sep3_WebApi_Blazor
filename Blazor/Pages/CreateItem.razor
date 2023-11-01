@@ -3,22 +3,49 @@
 @using HttpClients.ClientInterfaces
 @inject IItemService ItemService
 @inject NavigationManager navMgr
-<h3>CreateItem</h3>
+
+<div class="card">
+    <h3>Create a new Item.</h3>
+    <div class="field">
+        <label>Item name:</label>
+        <input type="text" @bind="ItemName" />
+    </div>
+    <div class="field">
+        <label style="text-align: center">Price:</label>
+        <input type="text" @bind="ItemPrice" />
+    </div>
+    @if (!string.IsNullOrEmpty(msg))
+    {
+        <div class="field">
+            <label style="color: red">
+                @msg
+            </label>
+        </div>
+    }
+
+    <div class="field">
+        <button class="loginbtn" @onclick="Create">Create</button>
+    </div>
+</div>
+
+<Modal ShowModal="showModal">
+    <p>Your Item has been added successfully.</p>
+    <button @onclick="@Proceed">Ok</button>
+</Modal>
 
 @code {
     
     private string ItemName = "";
     private double ItemPrice;
     string msg = "";
-    
-    
+    private bool showModal;
 
     private async Task Create()
     {
         
         if (string.IsNullOrEmpty(ItemName))
         {
-            msg = "Title cannot be empty!";
+            msg = "Name cannot be empty!";
             return;
         }
         if (ItemPrice == null)
@@ -31,13 +58,18 @@
         {
             ItemCreationDto dto = new(ItemName, ItemPrice);
             await ItemService.CreateAsync(dto);
-            navMgr.NavigateTo("/");
+            showModal = true;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             msg = e.Message;
         }
+    }
+    private void Proceed()
+    {
+        showModal = false;
+        navMgr.NavigateTo("/");
     }
     
 }
