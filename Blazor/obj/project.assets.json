@@ -45,19 +45,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nural\\.nuget\\packages\\": {}
+    "C:\\Users\\Duarte\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
+      "projectUniqueName": "C:\\Users\\Duarte\\OneDrive\\Documentos\\3rd Semester\\DNP\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
       "projectName": "Blazor",
-      "projectPath": "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
-      "packagesPath": "C:\\Users\\nural\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\Blazor\\obj\\",
+      "projectPath": "C:\\Users\\Duarte\\OneDrive\\Documentos\\3rd Semester\\DNP\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
+      "packagesPath": "C:\\Users\\Duarte\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Duarte\\OneDrive\\Documentos\\3rd Semester\\DNP\\Sep3_WebApi_Blazor\\Blazor\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\nural\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Duarte\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -69,8 +69,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\HttpClients\\HttpClients.csproj": {
-              "projectPath": "C:\\Users\\nural\\RiderProjects\\Assingment1_DNP_v2\\Sep3_WebApi_Blazor\\HttpClients\\HttpClients.csproj"
+            "C:\\Users\\Duarte\\OneDrive\\Documentos\\3rd Semester\\DNP\\Sep3_WebApi_Blazor\\HttpClients\\HttpClients.csproj": {
+              "projectPath": "C:\\Users\\Duarte\\OneDrive\\Documentos\\3rd Semester\\DNP\\Sep3_WebApi_Blazor\\HttpClients\\HttpClients.csproj"
             }
           }
         }

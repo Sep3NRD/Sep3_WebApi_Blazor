@@ -1,0 +1,64 @@
+@page "/ViewItems"
+@using Domain.Models
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@inject IItemService itemService
+
+<h3>Items</h3>
+
+<div>
+    <button @onclick="LoadItems">Load</button>
+</div>
+
+@if (items == null)
+{
+    
+}
+else if (!items.Any())
+{
+    <p>No Items to display</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Price:</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in items)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+@if (!string.IsNullOrEmpty(msg))
+{
+    <label style="color: red">@msg</label>
+}
+
+@code {
+        private IEnumerable<Item>? items;
+    private string msg = "";
+
+    private async Task LoadItems()
+    {
+        try
+        {
+            items = await itemService.GetAsync(null, null);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+}
+}

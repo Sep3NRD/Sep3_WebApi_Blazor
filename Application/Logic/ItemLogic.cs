@@ -23,6 +23,11 @@ public class ItemLogic : IItemLogic
         return created;
     }
 
+    public async Task<IEnumerable<Item>> GetAsync(SearchItemParametersDto searchParameters)
+    {
+        return await itemGrpc.GetAsync(searchParameters);
+    }
+
     private void ValidateTodo(ItemCreationDto dto)
     {
         if (string.IsNullOrEmpty(dto.Name))

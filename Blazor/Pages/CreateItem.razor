@@ -4,16 +4,6 @@
 @inject IItemService ItemService
 @inject NavigationManager navMgr
 
-@if (showModal)
-{
-    <div class="modal-overlay">
-        <div class="modal-content">
-            <p>Your Item has been added successfully.</p>
-            <button @onclick="@Proceed">Ok</button>
-        </div>
-    </div>
-}
-
 <div class="card">
     <h3>Create a new Item.</h3>
     <div class="field">
@@ -34,19 +24,21 @@
     }
 
     <div class="field">
-        <button class="createbtnbtn" @onclick="Create">Create</button>
+        <button class="loginbtn" @onclick="Create">Create</button>
     </div>
 </div>
 
-
-
+<Modal ShowModal="showModal">
+    <p>Your Item has been added successfully.</p>
+    <button @onclick="@Proceed">Ok</button>
+</Modal>
 
 @code {
     
     private string ItemName = "";
     private double ItemPrice;
     string msg = "";
-    private bool showModal = false;
+    private bool showModal;
 
     private async Task Create()
     {
@@ -65,9 +57,8 @@
         try
         {
             ItemCreationDto dto = new(ItemName, ItemPrice);
-            showModal = true;
             await ItemService.CreateAsync(dto);
-            
+            showModal = true;
         }
         catch (Exception e)
         {

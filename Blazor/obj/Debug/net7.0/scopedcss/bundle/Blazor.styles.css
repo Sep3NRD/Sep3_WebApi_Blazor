@@ -1,29 +1,59 @@
 /* _content/Blazor/Pages/CreateItem.razor.rz.scp.css */
-.card[b-4wymo90ulv] {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    width: 250px;
-    padding: 25px;
-    text-align: center;
-    margin: auto;
-    margin-top: 50px;
+/* styles.css */
+.section-title[b-4wymo90ulv] {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
-.field[b-4wymo90ulv] {
-    margin-top: 20px;
-}
-
-.createbtnbtn[b-4wymo90ulv] {
-    background-color:lightgreen;
+.card.post-form[b-4wymo90ulv] {
+    border: 1px solid #ccc;
+    padding: 20px;
     border-radius: 5px;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
 }
 
-.createbtnbtn:hover[b-4wymo90ulv]{
-    transform: scale(1.1);
-    box-shadow: 0 2px 10px 2px #3f3f3f;
+.form-group[b-4wymo90ulv] {
+    margin-bottom: 15px;
+}
+
+label[b-4wymo90ulv] {
+    font-weight: bold;
+}
+
+.form-control[b-4wymo90ulv] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea.form-control[b-4wymo90ulv] {
+    height: 150px;
+}
+
+.button-row[b-4wymo90ulv] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.error-message[b-4wymo90ulv] {
+    color: red;
+}
+
+.btn.create-button[b-4wymo90ulv] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn.create-button:hover[b-4wymo90ulv] {
+    background-color: #0056b3;
 }
 .modal[b-4wymo90ulv] {
     display: none; /* Initially hide the modal */
@@ -43,26 +73,6 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-.modal-overlay[b-4wymo90ulv] {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background overlay */
-    z-index: 9999; /* Ensure it's above other content */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content[b-4wymo90ulv] {
-    background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    width: 400px; /* Adjust the width to your desired size */
 }
 /* _content/Blazor/Shared/MainLayout.razor.rz.scp.css */
 .page[b-r0yqwuvdyg] {

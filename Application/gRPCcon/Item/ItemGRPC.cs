@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Grpc.Net.Client;
 using Application;
+using Domain.DTOs;
 using Google.Protobuf;
 using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
@@ -25,5 +26,10 @@ public class ItemGRPC : IItemGRPC
               
               client.postItem(itemToSend);
              return Task.FromResult(item);
+       }
+
+       public Task<IEnumerable<Domain.Models.Item>> GetAsync(SearchItemParametersDto searchParameters)
+       {
+              throw new NotImplementedException();
        }
 }

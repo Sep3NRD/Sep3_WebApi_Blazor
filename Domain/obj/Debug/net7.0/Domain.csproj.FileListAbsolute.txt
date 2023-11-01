@@ -31,3 +31,14 @@ C:\Users\Ricardo\Documents\GitHub\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\Dom
 C:\Users\Ricardo\Documents\GitHub\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\refint\Domain.dll
 C:\Users\Ricardo\Documents\GitHub\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\Domain.pdb
 C:\Users\Ricardo\Documents\GitHub\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\ref\Domain.dll
+C:\Users\Duarte\OneDrive\Documentos\3rd Semester\DNP\Sep3_WebApi_Blazor\Domain\bin\Debug\net7.0\Domain.deps.json
+C:\Users\Duarte\OneDrive\Documentos\3rd Semester\DNP\Sep3_WebApi_Blazor\Domain\bin\Debug\net7.0\Domain.dll
+C:\Users\Duarte\OneDrive\Documentos\3rd Semester\DNP\Sep3_WebApi_Blazor\Domain\bin\Debug\net7.0\Domain.pdb
+C:\Users\Duarte\OneDrive\Documentos\3rd Semester\DNP\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Duarte\OneDrive\Documentos\3rd Semester\DNP\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\Domain.AssemblyInfoInputs.cache
+C:\Users\Duarte\OneDrive\Documentos\3rd Semester\DNP\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\Domain.AssemblyInfo.cs
+C:\Users\Duarte\OneDrive\Documentos\3rd Semester\DNP\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\Domain.csproj.CoreCompileInputs.cache
+C:\Users\Duarte\OneDrive\Documentos\3rd Semester\DNP\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\Domain.dll
+C:\Users\Duarte\OneDrive\Documentos\3rd Semester\DNP\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\refint\Domain.dll
+C:\Users\Duarte\OneDrive\Documentos\3rd Semester\DNP\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\Domain.pdb
+C:\Users\Duarte\OneDrive\Documentos\3rd Semester\DNP\Sep3_WebApi_Blazor\Domain\obj\Debug\net7.0\ref\Domain.dll

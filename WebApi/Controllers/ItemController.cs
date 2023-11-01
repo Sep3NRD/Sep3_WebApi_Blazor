@@ -31,4 +31,20 @@ public class ItemController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Item>>> GetAsync([FromQuery] string? Name, [FromQuery] double? Price)
+    {
+        try
+        {
+            SearchItemParametersDto parameters = new(Name, Price);
+            var items = await ItemLogic.GetAsync(parameters);
+            return Ok(items);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
