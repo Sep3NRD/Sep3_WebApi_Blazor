@@ -17,9 +17,7 @@ builder.Services.AddScoped(
             BaseAddress = new Uri("http://localhost:5193") 
         }
 );
-
 builder.Services.AddScoped<IItemService, ItemHttpClient>();
-//builder.Services.AddSingleton<ItemHttpClient>();
 
 var app = builder.Build();
 

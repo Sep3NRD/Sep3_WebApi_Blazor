@@ -14,7 +14,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IItemGRPC, ItemGRPC>();
-
 builder.Services.AddScoped<IItemLogic, ItemLogic>();
 
 var app = builder.Build();

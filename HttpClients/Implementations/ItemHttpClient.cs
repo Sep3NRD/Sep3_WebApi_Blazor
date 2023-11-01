@@ -17,7 +17,9 @@ public class ItemHttpClient : IItemService
     
     public async Task CreateAsync(ItemCreationDto dto)
     {
-        HttpResponseMessage response = await client.PostAsJsonAsync("/items", dto);
+        
+        HttpResponseMessage response = await client.PostAsJsonAsync("/Item", dto);
+        
         string content = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {

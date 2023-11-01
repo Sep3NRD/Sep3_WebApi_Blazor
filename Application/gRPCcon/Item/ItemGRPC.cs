@@ -17,14 +17,15 @@ public class ItemGRPC : IItemGRPC
        {
               GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
               var client = new ItemService.ItemServiceClient(channel);
+              
 
               var itemToSend = new ItemP
               {
                      Name = item.Name,
                      Price = item.Price
-              };
-              
+              }; 
               client.postItem(itemToSend);
+              channel.ShutdownAsync();
              return Task.FromResult(item);
        }
 

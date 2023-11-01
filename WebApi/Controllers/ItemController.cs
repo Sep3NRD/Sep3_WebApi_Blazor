@@ -14,12 +14,13 @@ public class ItemController : ControllerBase
 
     public ItemController(IItemLogic itemLogic)
     {
-        this.ItemLogic = itemLogic;
+      ItemLogic = itemLogic;
     }
 
     [HttpPost]
     public async Task<ActionResult<Item>> CreateAsync([FromBody] ItemCreationDto dto)
     {
+        
         try
         {
             Item created = await ItemLogic.CreateAsync(dto);

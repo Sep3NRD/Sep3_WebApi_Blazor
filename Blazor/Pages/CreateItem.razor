@@ -8,7 +8,7 @@
 {
     <div class="modal-container">
         <div class="modal-content">
-            <p>Your Item has been added successfully.</p>
+            <p>@msg</p>
             <button @onclick="@Proceed">OK</button>
         </div>
     </div>
@@ -63,8 +63,9 @@
         try
         {
             ItemCreationDto dto = new(ItemName, ItemPrice);
-            showModal = true;
             await ItemService.CreateAsync(dto);
+            showModal = true;
+            
         }
         catch (Exception e)
         {
