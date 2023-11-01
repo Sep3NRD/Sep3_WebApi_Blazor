@@ -1,3 +1,4 @@
+using Application.gRPCcon.Item;
 using Application.Logic;
 using Application.LogicInterfaces;
 
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IItemGRPC, ItemGRPC>();
 
 builder.Services.AddScoped<IItemLogic, ItemLogic>();
 

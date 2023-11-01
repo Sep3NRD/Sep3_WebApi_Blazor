@@ -10,9 +10,19 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Protobuf Include="Proto\itemP.proto" GrpcServices="Client" />
+    </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Google.Protobuf" Version="3.25.0-rc2" />
       <PackageReference Include="Grpc.AspNetCore" Version="2.58.0" />
+      <PackageReference Include="Grpc.Net.Client" Version="2.59.0-pre1" />
+      <PackageReference Include="Grpc.Tools" Version="2.59.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
+
 
 </Project>

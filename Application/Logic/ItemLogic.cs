@@ -1,4 +1,5 @@
 using Application.DaoInterfaces;
+using Application.gRPCcon.Item;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Models;
@@ -8,12 +9,17 @@ namespace Application.Logic;
 public class ItemLogic : IItemLogic
 {
     
-    private readonly IItemDao itemDao;
+    private readonly IItemGRPC itemGrpc;
+
+    public ItemLogic(IItemGRPC itemGrpc)
+    {
+        this.itemGrpc = itemGrpc;
+    }
     public async Task<Item> CreateAsync(ItemCreationDto dto)
     {
         ValidateTodo(dto);
         Item item = new Item(dto.Name, dto.Price);
-        Item created = await itemDao.CreateAsync(item);
+        Item created = await itemGrpc.CreateAsync(item);
         return created;
     }
 
