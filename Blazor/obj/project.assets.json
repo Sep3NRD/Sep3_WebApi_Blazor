@@ -45,19 +45,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Duarte\\.nuget\\packages\\": {}
+    "C:\\Users\\Ricardo\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Duarte\\OneDrive\\Documentos\\3rd Semester\\DNP\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
+      "projectUniqueName": "C:\\Users\\Ricardo\\Documents\\GitHub\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
       "projectName": "Blazor",
-      "projectPath": "C:\\Users\\Duarte\\OneDrive\\Documentos\\3rd Semester\\DNP\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
-      "packagesPath": "C:\\Users\\Duarte\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Duarte\\OneDrive\\Documentos\\3rd Semester\\DNP\\Sep3_WebApi_Blazor\\Blazor\\obj\\",
+      "projectPath": "C:\\Users\\Ricardo\\Documents\\GitHub\\Sep3_WebApi_Blazor\\Blazor\\Blazor.csproj",
+      "packagesPath": "C:\\Users\\Ricardo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Ricardo\\Documents\\GitHub\\Sep3_WebApi_Blazor\\Blazor\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Duarte\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Ricardo\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -69,8 +69,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\Duarte\\OneDrive\\Documentos\\3rd Semester\\DNP\\Sep3_WebApi_Blazor\\HttpClients\\HttpClients.csproj": {
-              "projectPath": "C:\\Users\\Duarte\\OneDrive\\Documentos\\3rd Semester\\DNP\\Sep3_WebApi_Blazor\\HttpClients\\HttpClients.csproj"
+            "C:\\Users\\Ricardo\\Documents\\GitHub\\Sep3_WebApi_Blazor\\HttpClients\\HttpClients.csproj": {
+              "projectPath": "C:\\Users\\Ricardo\\Documents\\GitHub\\Sep3_WebApi_Blazor\\HttpClients\\HttpClients.csproj"
             }
           }
         }
