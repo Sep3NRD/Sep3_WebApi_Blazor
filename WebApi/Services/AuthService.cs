@@ -1,24 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Application.DaoInterfaces;
+using Application.gRPCcon.Costumer;
 using Domain.Models;
-using FileData.DAOs;
 
 namespace WebAPI.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IUserDao iUserDao;
+    private readonly ICostumerGrpc iCostumerGrpc;
     
 
-    public AuthService(IUserDao iUserDao)
+    public AuthService(ICostumerGrpc IcostumerGrpc)
     {
-        this.iUserDao = iUserDao;
+        this.iCostumerGrpc = iCostumerGrpc;
     }
     
     public Task<Costumer> ValidateUser(string username, string password)
     {
 
-        Task<Costumer?> existingUser = iUserDao.GetUserAsync(username, password);
+        Task<Costumer?> existingUser = iCostumerGrpc.GetUserAsync(username, password);
         
         if (existingUser == null)
         {
