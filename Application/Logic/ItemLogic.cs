@@ -31,7 +31,7 @@ public class ItemLogic : IItemLogic
     {
         if (string.IsNullOrEmpty(dto.Name))
             throw new Exception("Title cannot be empty.");
-        if (dto.Price == null)
+        if (dto.Price == 0)
             throw new Exception("Title cannot be empty.");
     }
 }

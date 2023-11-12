@@ -6,5 +6,6 @@ namespace Application.LogicInterfaces;
 public interface ICostumerLogic
 {
     Task<Costumer> CreateAsync(UserCreationDto userToCreate);
-    public Task<IEnumerable<Costumer>> GetAsync(SearchUserParametersDto searchParameters);
+    Task<IEnumerable<Costumer>> GetAsync(SearchUserParametersDto searchParameters);
+    
 }

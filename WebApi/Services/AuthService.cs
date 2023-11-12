@@ -17,19 +17,21 @@ public class AuthService : IAuthService
     public Task<Costumer> ValidateUser(string username, string password)
     {
 
-        Task<Costumer?> existingUser = iCostumerGrpc.GetUserAsync(username, password);
-        
-        if (existingUser == null)
-        {
-            throw new Exception("User not found");
-        }
+        // Task<Costumer?> existingUser = iCostumerGrpc.GetUserAsync(username, password);
+        //
+        // if (existingUser == null)
+        // {
+        //     throw new Exception("User not found");
+        // }
+        //
+        // if (!existingUser.Result.Password.Equals(password))
+        // {
+        //     throw new Exception("Password mismatch");
+        // }
+        //
+        // return existingUser;
 
-        if (!existingUser.Result.Password.Equals(password))
-        {
-            throw new Exception("Password mismatch");
-        }
-
-        return existingUser;
+        return null;
     }
     
 
