@@ -3,7 +3,7 @@ namespace Application.gRPCcon.Costumer;
 
 public interface ICostumerGrpc
 {
-    Task<Domain.Models.Costumer> createAsync(Domain.Models.Costumer costumer);
-    Task<Domain.Models.Costumer> getAsync(String username, string password);
+    Task<Domain.Models.Customer> CreateAsync(Domain.Models.Customer customer);
+    Task<Domain.Models.Customer> GetAsync(string username, string password);
 
 }

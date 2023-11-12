@@ -4,6 +4,6 @@ namespace WebAPI.Services;
 
 public interface IAuthService
 {
-    Task RegisterUser(Costumer user);
-    Task<Costumer> ValidateUser(string username, string password);
+    Task RegisterUser(Customer user);
+    Task<Customer> ValidateUser(string username, string password);
 }

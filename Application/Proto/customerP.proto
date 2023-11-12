@@ -7,7 +7,7 @@ option java_multiple_files = true;
 option java_package = "sep3.server";
 option java_outer_classname = "ItemProto";
 
-message Address {
+message AddressP {
   int32 door_number = 1;
   string street = 2;
   string city = 3;
@@ -16,13 +16,13 @@ message Address {
   string country = 6;
 }
 
-message Customer {
+message CustomerP {
   int32 id = 1;
-  string user_name = 2;
+  string username = 2;
   string password = 3;
-  string first_name = 4;
-  string last_name = 5;
-  Address address = 6;
+  string firstName = 4;
+  string lastName = 5;
+  AddressP address = 6;
 }
 
 message GetCustomerRequest {
@@ -30,13 +30,13 @@ message GetCustomerRequest {
   string password = 2;
 }
 
-message CustomerResponse {
-  Customer customer = 1;
+message CustomerResponseP {
+  CustomerP customer = 1;
 }
 
 service CustomerService {
-  rpc createCustomer(Customer) returns (CustomerResponse){};
-  rpc getCustomer(GetCustomerRequest) returns (CustomerResponse){};
-  rpc updateCustomer(Customer) returns (CustomerResponse){};
+  rpc createCustomer(CustomerP) returns (CustomerResponseP){};
+  rpc getCustomer(GetCustomerRequest) returns (CustomerResponseP){};
+  rpc updateCustomer(CustomerP) returns (CustomerResponseP){};
   rpc deleteCustomer(google.protobuf.StringValue) returns (google.protobuf.Empty){};
 }

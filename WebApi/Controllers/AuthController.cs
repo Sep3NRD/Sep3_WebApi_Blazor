@@ -23,22 +23,22 @@ public class AuthController : ControllerBase
         this.authService = authService;
     }
     
-    private List<Claim> GenerateClaims(Costumer costumer)
+    private List<Claim> GenerateClaims(Customer customer)
     {
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, config["Jwt:Subject"]),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-            new Claim(ClaimTypes.Name, costumer.UserName),
-            new Claim("Id",costumer.Id.ToString()),
+            new Claim(ClaimTypes.Name, customer.UserName),
+            new Claim("Id",customer.Id.ToString()),
         };
         return claims.ToList();
     }
     
-    private string GenerateJwt(Costumer costumer)
+    private string GenerateJwt(Customer customer)
     {
-        List<Claim> claims = GenerateClaims(costumer);
+        List<Claim> claims = GenerateClaims(customer);
     
         SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
         SigningCredentials signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
@@ -63,8 +63,8 @@ public class AuthController : ControllerBase
         
         try
         {
-            Costumer costumer = await authService.ValidateUser(userLoginDto.Username, userLoginDto.Password);
-            string token = GenerateJwt(costumer);
+            Customer customer = await authService.ValidateUser(userLoginDto.Username, userLoginDto.Password);
+            string token = GenerateJwt(customer);
     
             return Ok(token);
         }

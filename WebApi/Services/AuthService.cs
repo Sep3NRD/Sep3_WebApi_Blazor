@@ -14,7 +14,7 @@ public class AuthService : IAuthService
         this.iCostumerGrpc = iCostumerGrpc;
     }
     
-    public Task<Costumer> ValidateUser(string username, string password)
+    public Task<Customer> ValidateUser(string username, string password)
     {
 
         // Task<Costumer?> existingUser = iCostumerGrpc.GetUserAsync(username, password);
@@ -35,15 +35,15 @@ public class AuthService : IAuthService
     }
     
 
-    public Task RegisterUser(Costumer costumer)
+    public Task RegisterUser(Customer customer)
     {
 
-        if (string.IsNullOrEmpty(costumer.UserName))
+        if (string.IsNullOrEmpty(customer.UserName))
         {
             throw new ValidationException("Username cannot be null");
         }
 
-        if (string.IsNullOrEmpty(costumer.Password))
+        if (string.IsNullOrEmpty(customer.Password))
         {
             throw new ValidationException("Password cannot be null");
         }
