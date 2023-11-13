@@ -1,11 +1,13 @@
+using Domain.Models;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
 
 
 namespace Application.gRPCcon.Costumer;
 
-public class CustomerGRPC : ICostumerGrpc
+public class CustomerGRPC : ICustomerGRPC
 {
-    public async Task<Domain.Models.Customer>  CreateAsync(Domain.Models.Customer customer)
+    public async Task<Customer>  CreateAsync(Customer customer)
     {
         GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
         var client = new CustomerService.CustomerServiceClient(channel);
@@ -36,8 +38,44 @@ public class CustomerGRPC : ICostumerGrpc
 
     }
 
-    public Task<Domain.Models.Customer> GetAsync(string username, string password)
+    public Task<Customer> GetAsync(string username, string password)
     {
         throw new NotImplementedException();
+    }
+
+    public async  Task<Customer> GetByUsernameAsync(string username)
+    {
+        GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
+        var client = new CustomerService.CustomerServiceClient(channel);
+
+        GetCustomerByUsername usernameRequest = new GetCustomerByUsername
+        {
+            Username = username
+        };
+        
+        CustomerResponseP customerProto =  await client.getCustomerByUsernameAsync(usernameRequest);
+
+        Address addressForFinalCostumer = new Address
+        {
+            DoorNumber = customerProto.Customer.Address.DoorNumber,
+            Street = customerProto.Customer.Address.Street,
+            City = customerProto.Customer.Address.City,
+            State = customerProto.Customer.Address.State,
+            PostalCode = customerProto.Customer.Address.PostalCode,
+            Country = customerProto.Customer.Address.Country
+        };
+
+        Customer finalCustomer = new Customer
+        {
+            UserName = customerProto.Customer.Username,
+            Password = customerProto.Customer.Password,
+            FirstName = customerProto.Customer.FirstName,
+            LastName = customerProto.Customer.LastName,
+            Address = addressForFinalCostumer
+        };
+
+        channel.ShutdownAsync();
+
+        return finalCustomer;
     }
 }

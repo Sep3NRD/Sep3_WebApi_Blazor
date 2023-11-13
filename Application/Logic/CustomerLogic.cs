@@ -15,35 +15,40 @@ public class CustomerLogic : ICustomerLogic
     public async Task<Customer> CreateAsync(Customer customer)
     {
         ValidateCustomer(customer); // validates customer fields
+        
+        UserLoginDto dto = new UserLoginDto                              //       Checks for an existing user with the same username
+        {
+            Username = customer.UserName,                       
+            Password = ""
+        };
+        Customer tocreate = await GetByUsernameAsync(dto);
+        if (tocreate!=null)
+        {
+            throw new Exception("Username already exists");
+        }
 
-        Customer created = await customerGrpc.CreateAsync(customer);
+        Customer created = await customerGrpc.CreateAsync(customer);  // Creates the customer after all checks
         return created;
     }
 
-    public Task<IEnumerable<Customer>> GetAsync(SearchUserParametersDto searchParameters)
+    public Task<Customer> GetAsync(UserLoginDto dto)
     {
         throw new NotImplementedException();
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public async Task<Customer> GetByUsernameAsync(UserLoginDto userLoginDto)
+    {
+        if (string.IsNullOrEmpty(userLoginDto.Username))
+        {
+            throw new ArgumentException("Username cannot be null or empty.", nameof(userLoginDto.Username));
+        }
+
+        Customer customer = await customerGrpc.GetByUsernameAsync(userLoginDto.Username);
+
+        return customer;
+    }
+
+
     private void ValidateCustomer(Customer customer)
 {
     if (customer == null)

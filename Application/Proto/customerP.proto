@@ -29,6 +29,9 @@ message GetCustomerRequest {
   string username = 1;
   string password = 2;
 }
+message GetCustomerByUsername{
+  string username=1;
+}
 
 message CustomerResponseP {
   CustomerP customer = 1;
@@ -37,6 +40,7 @@ message CustomerResponseP {
 service CustomerService {
   rpc createCustomer(CustomerP) returns (CustomerResponseP){};
   rpc getCustomer(GetCustomerRequest) returns (CustomerResponseP){};
+  rpc getCustomerByUsername(GetCustomerByUsername ) returns (CustomerResponseP){};
   rpc updateCustomer(CustomerP) returns (CustomerResponseP){};
   rpc deleteCustomer(google.protobuf.StringValue) returns (google.protobuf.Empty){};
 }

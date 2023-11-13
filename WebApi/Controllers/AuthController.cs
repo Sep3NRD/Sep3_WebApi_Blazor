@@ -3,9 +3,9 @@ using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Application.LogicInterfaces;
 using Domain.DTOs;
 using Microsoft.IdentityModel.Tokens;
-using WebAPI.Services;
 
 namespace WebAPI.Controllers;
 
@@ -15,12 +15,12 @@ namespace WebAPI.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IConfiguration config;
-    private readonly IAuthService authService;
+    private readonly ICustomerLogic  iCustomerLogic;
 
-    public AuthController(IConfiguration config, IAuthService authService)
+    public AuthController(IConfiguration config, ICustomerLogic iCustomerLogic)
     {
         this.config = config;
-        this.authService = authService;
+        this.iCustomerLogic = iCustomerLogic;
     }
     
     private List<Claim> GenerateClaims(Customer customer)
@@ -63,7 +63,7 @@ public class AuthController : ControllerBase
         
         try
         {
-            Customer customer = await authService.ValidateUser(userLoginDto.Username, userLoginDto.Password);
+            Customer customer = await iCustomerLogic.GetAsync(userLoginDto);
             string token = GenerateJwt(customer);
     
             return Ok(token);

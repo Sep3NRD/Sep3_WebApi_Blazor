@@ -1,3 +1,4 @@
+using Application.gRPCcon.Costumer;
 using Application.gRPCcon.Item;
 using Application.Logic;
 using Application.LogicInterfaces;
@@ -15,6 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IItemGRPC, ItemGRPC>();
 builder.Services.AddScoped<IItemLogic, ItemLogic>();
+builder.Services.AddScoped<ICustomerLogic, CustomerLogic>();
+builder.Services.AddScoped<ICustomerGRPC, CustomerGRPC>();
 
 var app = builder.Build();
 app.UseCors(X => X.AllowAnyMethod()
