@@ -16,8 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IItemGRPC, ItemGRPC>();
 builder.Services.AddScoped<IItemLogic, ItemLogic>();
-builder.Services.AddScoped<ICustomerLogic, CustomerLogic>();
 builder.Services.AddScoped<ICustomerGRPC, CustomerGRPC>();
+builder.Services.AddScoped<ICustomerLogic, CustomerLogic>();
 
 var app = builder.Build();
 app.UseCors(X => X.AllowAnyMethod()

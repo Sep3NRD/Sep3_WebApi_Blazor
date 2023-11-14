@@ -7,10 +7,10 @@ namespace Application.Logic;
 
 public class CustomerLogic : ICustomerLogic
 {
-    private readonly CustomerGRPC customerGrpc;
-    public CustomerLogic(CustomerGRPC customerGrpc)
+    private readonly ICustomerGRPC iCustomerGrpc;
+    public CustomerLogic(ICustomerGRPC iCustomerGrpc)
     {
-        this.customerGrpc = customerGrpc;
+        this.iCustomerGrpc = iCustomerGrpc;
     }
     public async Task<Customer> CreateAsync(Customer customer)
     {
@@ -27,7 +27,7 @@ public class CustomerLogic : ICustomerLogic
             throw new Exception("Username already exists");
         }
 
-        Customer created = await customerGrpc.CreateAsync(customer);  // Creates the customer after all checks
+        Customer created = await iCustomerGrpc.CreateAsync(customer);  // Creates the customer after all checks
         return created;
     }
 
@@ -43,7 +43,7 @@ public class CustomerLogic : ICustomerLogic
             throw new ArgumentException("Username cannot be null or empty.", nameof(userLoginDto.Username));
         }
 
-        Customer customer = await customerGrpc.GetByUsernameAsync(userLoginDto.Username);
+        Customer customer = await iCustomerGrpc.GetByUsernameAsync(userLoginDto.Username);
 
         return customer;
     }
