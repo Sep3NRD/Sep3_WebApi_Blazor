@@ -1,8 +1,11 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Blazor.Auth;
 using Blazor.Data;
+using Blazor.Services;
+using Blazor.Services.Http;
+using Domain.Auth;
 using HttpClients.ClientInterfaces;
 using HttpClients.Implementations;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddScoped<IAuthService, JwtAuthService>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
+
+
 
 builder.Services.AddScoped(
     sp => 
@@ -17,6 +24,8 @@ builder.Services.AddScoped(
             BaseAddress = new Uri("http://localhost:5193") 
         }
 );
+AuthorizationPolicies.AddPolicies(builder.Services);
+
 builder.Services.AddScoped<IItemService, ItemHttpClient>();
 
 var app = builder.Build();
@@ -25,7 +34,8 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    // The default HSTS value is 30 days. You may want to change this for production scenarios,
+    // see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

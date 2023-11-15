@@ -13,7 +13,7 @@ public class UserHttpClient: IUserService
         this.client = client;
     }
     
-    public async Task RegisterUserAsync(UserLoginDto dto)
+    public async Task RegisterUserAsync(CustomerLoginDto dto)
     {
         HttpResponseMessage responseMessage = await client.PostAsJsonAsync("/users", dto);
         string result = await responseMessage.Content.ReadAsStringAsync();

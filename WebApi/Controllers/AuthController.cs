@@ -58,12 +58,12 @@ public class AuthController : ControllerBase
         return serializedToken;
     }
     [HttpPost, Route("login")]
-    public async Task<ActionResult> Login([FromBody] UserLoginDto userLoginDto)
+    public async Task<ActionResult> Login([FromBody] CustomerLoginDto userLoginDto)
     {
         
         try
         {
-            Customer customer = await iCustomerLogic.GetAsync(userLoginDto);
+            Customer customer = await iCustomerLogic.LoginValidation(userLoginDto);
             string token = GenerateJwt(customer);
     
             return Ok(token);

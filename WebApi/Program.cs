@@ -1,10 +1,11 @@
+using System.Text;
 using Application.gRPCcon.Costumer;
 using Application.gRPCcon.Item;
 using Application.Logic;
 using Application.LogicInterfaces;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Domain.Auth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,21 @@ builder.Services.AddScoped<IItemGRPC, ItemGRPC>();
 builder.Services.AddScoped<IItemLogic, ItemLogic>();
 builder.Services.AddScoped<ICustomerGRPC, CustomerGRPC>();
 builder.Services.AddScoped<ICustomerLogic, CustomerLogic>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
+
+AuthorizationPolicies.AddPolicies(builder.Services);
 
 var app = builder.Build();
 app.UseCors(X => X.AllowAnyMethod()
@@ -34,6 +50,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -1,0 +1,76 @@
+﻿@page "/RegisterCustomer"
+@inject IAuthService authService
+@inject NavigationManager navMgr
+@inject ICustomerService customerService;
+@using Domain.Models
+@using Blazor.Services
+<h3>RegisterCustomer</h3>
+
+ <div>
+        <form>
+            <div>
+                <label for="UserName">Username:</label>
+                <input id="UserName" @bind="customer.UserName" />
+            </div>
+            <div>
+                <label for="Password">Password:</label>
+                <input id="Password" type="password" @bind="customer.Password" />
+            </div>
+            <div>
+                <label for="FirstName">First Name:</label>
+                <input id="FirstName" @bind="customer.FirstName" />
+            </div>
+            <div>
+                <label for="LastName">Last Name:</label>
+                <input id="LastName" @bind="customer.LastName" />
+            </div>
+            <div>
+                <label for="DoorNumber">Door Number:</label>
+                <input id="DoorNumber" @bind="customer.Address.DoorNumber" />
+            </div>
+            <div>
+                <label for="Street">Street:</label>
+                <input id="Street" @bind="customer.Address.Street" />
+            </div>
+            <div>
+                <label for="City">City:</label>
+                <input id="City" @bind="customer.Address.City" />
+            </div>
+            <div>
+                <label for="State">State:</label>
+                <input id="State" @bind="customer.Address.State" />
+            </div>
+            <div>
+                <label for="PostalCode">Postal Code:</label>
+                <input id="PostalCode" @bind="customer.Address.PostalCode" />
+            </div>
+            <div>
+                <label for="Country">Country:</label>
+                <input id="Country" @bind="customer.Address.Country" />
+            </div>
+             <div style="color: red; margin-top: 10px;">@errorMessage</div>
+            <div>
+                <button type="button" @onclick="RegisterAsync">Register</button>
+            </div>
+        </form>
+    </div>
+
+@code {
+    private Customer customer = new Customer();
+    private string errorMessage = "";
+    //private bool registrationSuccessful = false;
+
+    private async Task RegisterAsync()
+    {
+        try
+        {
+            await customerService.CreateAsync(customer);
+        }
+        catch (Exception e)
+        {
+            errorMessage = $"Error: {e.Message}";
+            
+        }
+        
+    }
+}

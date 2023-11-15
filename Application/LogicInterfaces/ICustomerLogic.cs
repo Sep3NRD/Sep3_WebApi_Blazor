@@ -6,7 +6,7 @@ namespace Application.LogicInterfaces;
 public interface ICustomerLogic
 {
     Task<Customer> CreateAsync(Customer customer);
-    Task<Customer> GetAsync(UserLoginDto userLoginDto);
-    Task<Customer> GetByUsernameAsync(UserLoginDto userLoginDto);
+    Task<Customer> LoginValidation(CustomerLoginDto userLoginDto);
+    Task<Customer> GetByUsernameAsync(CustomerLoginDto userLoginDto);
     
 }

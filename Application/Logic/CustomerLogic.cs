@@ -15,12 +15,11 @@ public class CustomerLogic : ICustomerLogic
     public async Task<Customer> CreateAsync(Customer customer)
     {
         ValidateCustomer(customer); // validates customer fields
+
         
-        UserLoginDto dto = new UserLoginDto                              //       Checks for an existing user with the same username
-        {
-            Username = customer.UserName,                       
-            Password = ""
-        };
+        //  Checks for an existing user with the same username
+        CustomerLoginDto dto = new CustomerLoginDto(customer.UserName, customer.Password);
+        
         Customer tocreate = await GetByUsernameAsync(dto);
         if (tocreate!=null)
         {
@@ -31,12 +30,13 @@ public class CustomerLogic : ICustomerLogic
         return created;
     }
 
-    public Task<Customer> GetAsync(UserLoginDto dto)
+    public Task<Customer> LoginValidation(CustomerLoginDto userLoginDto)
     {
         throw new NotImplementedException();
     }
+    
 
-    public async Task<Customer> GetByUsernameAsync(UserLoginDto userLoginDto)
+    public async Task<Customer> GetByUsernameAsync(CustomerLoginDto userLoginDto)
     {
         if (string.IsNullOrEmpty(userLoginDto.Username))
         {
