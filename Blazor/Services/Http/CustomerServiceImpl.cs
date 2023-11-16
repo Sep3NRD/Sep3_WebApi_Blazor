@@ -14,14 +14,13 @@ public class CustomerServiceImpl:ICustomerService
         string customerAsJson = JsonSerializer.Serialize(customer);
         StringContent content = new(customerAsJson, Encoding.UTF8, "application/json");
 
-        HttpResponseMessage response = await client.PostAsync("https://localhost:9090/customers", content);
+        HttpResponseMessage response = await client.PostAsync("http://localhost:5193/Customer", content);
         string responseContent = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
         {
             throw new Exception(responseContent);
         }
-        
     }
 
     public Task<Customer> GetAsync(CustomerLoginDto userLoginDto)

@@ -18,6 +18,7 @@ public class CustomerController: ControllerBase
     [HttpPost]
     public async Task<ActionResult<Customer>> CreateAsync(Customer customer)
     {
+        Console.WriteLine(customer.UserName);
         try
         {
             Customer customerToCreate = await customerLogic.CreateAsync(customer);

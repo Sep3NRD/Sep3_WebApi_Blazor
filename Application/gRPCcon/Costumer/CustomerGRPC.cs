@@ -70,7 +70,7 @@ public class CustomerGRPC: ICustomerGRPC
             LastName = customerProto.Customer.LastName,
             Address = addressForFinalCostumer
         };
-        channel.ShutdownAsync();
+       await  channel.ShutdownAsync();
         return finalCustomer;
     }
 
@@ -105,7 +105,7 @@ public class CustomerGRPC: ICustomerGRPC
             Address = addressForFinalCostumer
         };
 
-        channel.ShutdownAsync();
+        await channel.ShutdownAsync();
 
         return finalCustomer;
     }
