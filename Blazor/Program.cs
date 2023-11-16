@@ -26,7 +26,7 @@ builder.Services.AddScoped(
 );
 AuthorizationPolicies.AddPolicies(builder.Services);
 
-builder.Services.AddScoped<IItemService, ItemHttpClient>();
+builder.Services.AddScoped<ICustomerService, CustomerServiceImpl>();
 
 var app = builder.Build();
 

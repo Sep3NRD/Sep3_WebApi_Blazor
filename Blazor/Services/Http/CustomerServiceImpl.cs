@@ -11,10 +11,10 @@ public class CustomerServiceImpl:ICustomerService
     
     public async Task CreateAsync(Customer customer)
     {
-        string userAsJson = JsonSerializer.Serialize(customer);
-        StringContent content = new(userAsJson, Encoding.UTF8, "application/json");
+        string customerAsJson = JsonSerializer.Serialize(customer);
+        StringContent content = new(customerAsJson, Encoding.UTF8, "application/json");
 
-        HttpResponseMessage response = await client.PostAsync("https://localhost:9090/login", content);
+        HttpResponseMessage response = await client.PostAsync("https://localhost:9090/customers", content);
         string responseContent = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)

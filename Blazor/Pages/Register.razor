@@ -1,10 +1,12 @@
-﻿@page "/RegisterCustomer"
+﻿@page "/Register"
+@using Blazor.Services
+@using Domain.Models
 @inject IAuthService authService
 @inject NavigationManager navMgr
 @inject ICustomerService customerService;
-@using Domain.Models
-@using Blazor.Services
-<h3>RegisterCustomer</h3>
+
+
+<h3>Register Customer</h3>
 
  <div>
         <form>
@@ -48,15 +50,17 @@
                 <label for="Country">Country:</label>
                 <input id="Country" @bind="customer.Address.Country" />
             </div>
-             <div style="color: red; margin-top: 10px;">@errorMessage</div>
-            <div>
+             <div class="error-message" style="color: red; margin-top: 10px;">@errorMessage</div>
+            <div class="button-container">
                 <button type="button" @onclick="RegisterAsync">Register</button>
             </div>
         </form>
     </div>
 
 @code {
+
     private Customer customer = new Customer();
+    
     private string errorMessage = "";
     //private bool registrationSuccessful = false;
 
@@ -69,7 +73,6 @@
         catch (Exception e)
         {
             errorMessage = $"Error: {e.Message}";
-            
         }
         
     }
