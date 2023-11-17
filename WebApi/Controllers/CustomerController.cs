@@ -22,7 +22,7 @@ public class CustomerController: ControllerBase
         try
         {
             Customer customerToCreate = await customerLogic.CreateAsync(customer);
-            return Created($"/customers/{customer.Id}", customerToCreate);
+            return Created($"/customer/{customer.Id}", customerToCreate);
         }
         catch (Exception e)
         {

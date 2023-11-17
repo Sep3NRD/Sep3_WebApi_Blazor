@@ -30,9 +30,15 @@ public class CustomerLogic : ICustomerLogic
         return created;
     }
 
-    public Task<Customer> LoginValidation(CustomerLoginDto userLoginDto)
+    public async Task<Customer> LoginValidation(CustomerLoginDto userLoginDto)
     {
-        throw new NotImplementedException();
+        Customer customer = await iCustomerGrpc.ValidateLogin(userLoginDto.Username, userLoginDto.Password);
+        if (customer==null)
+        {
+            throw new Exception("Username or password invalid");
+        }
+
+        return customer;
     }
     
 
@@ -42,7 +48,6 @@ public class CustomerLogic : ICustomerLogic
         {
             throw new ArgumentException("Username cannot be null or empty.", nameof(userLoginDto.Username));
         }
-
         Customer customer = await iCustomerGrpc.GetByUsernameAsync(userLoginDto.Username);
 
         return customer;

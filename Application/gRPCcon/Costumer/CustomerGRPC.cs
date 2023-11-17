@@ -30,11 +30,12 @@ public class CustomerGRPC: ICustomerGRPC
             LastName = customer.LastName,
             Address = customerAdressToSend
         };
+        
+            var response = await client.createCustomerAsync(customerToCreate);
+            channel.ShutdownAsync();
+            customer.Id = response.Customer.Id;
+            return Task.FromResult(customer).Result;
 
-        var response = await client.createCustomerAsync(customerToCreate);
-        channel.ShutdownAsync();
-
-        return customer;
 
     }
 
@@ -83,30 +84,45 @@ public class CustomerGRPC: ICustomerGRPC
         {
             Username = username
         };
-        
-        CustomerResponseP customerProto =  await client.getCustomerByUsernameAsync(usernameRequest);
-
-        Address addressForFinalCostumer = new Address
+        try
         {
-            DoorNumber = customerProto.Customer.Address.DoorNumber,
-            Street = customerProto.Customer.Address.Street,
-            City = customerProto.Customer.Address.City,
-            State = customerProto.Customer.Address.State,
-            PostalCode = customerProto.Customer.Address.PostalCode,
-            Country = customerProto.Customer.Address.Country
-        };
+            CustomerResponseP customerProto = await client.getCustomerByUsernameAsync(usernameRequest);
+            if (customerProto != null)
+            {
+                Address addressForFinalCostumer = new Address
+                {
+                    DoorNumber = customerProto.Customer.Address.DoorNumber,
+                    Street = customerProto.Customer.Address.Street,
+                    City = customerProto.Customer.Address.City,
+                    State = customerProto.Customer.Address.State,
+                    PostalCode = customerProto.Customer.Address.PostalCode,
+                    Country = customerProto.Customer.Address.Country
+                };
 
-        Customer finalCustomer = new Customer
+                Customer finalCustomer = new Customer
+                {
+                    UserName = customerProto.Customer.Username,
+                    Password = customerProto.Customer.Password,
+                    FirstName = customerProto.Customer.FirstName,
+                    LastName = customerProto.Customer.LastName,
+                    Address = addressForFinalCostumer
+                };
+
+                return finalCustomer;
+            }
+        }
+        catch (Exception e)
         {
-            UserName = customerProto.Customer.Username,
-            Password = customerProto.Customer.Password,
-            FirstName = customerProto.Customer.FirstName,
-            LastName = customerProto.Customer.LastName,
-            Address = addressForFinalCostumer
-        };
+            Console.WriteLine(e.Message);
+        }
 
         await channel.ShutdownAsync();
+        return null;
 
-        return finalCustomer;
+
+
+
+
+
     }
 }
