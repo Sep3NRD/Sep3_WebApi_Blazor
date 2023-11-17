@@ -69,6 +69,8 @@
         try
         {
             await customerService.CreateAsync(customer);
+            await authService.LoginAsync(customer.UserName, customer.Password);
+            navMgr.NavigateTo("/");
         }
         catch (Exception e)
         {
