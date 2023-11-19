@@ -14,4 +14,13 @@ public class Item
         Name = name;
         Price = price;
     }
+
+    public Item(string name, string? description, string? category, double price, int? stock)
+    {
+        Name = name;
+        Description = description;
+        Category = category;
+        Price = price;
+        Stock = stock;
+    }
 }
