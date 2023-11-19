@@ -9,7 +9,11 @@ option java_outer_classname = "ItemProto";
 
 message ItemP{
     string name=1;
-    double price = 2;
+    string description = 2;
+    string category = 3;
+    double price = 4;
+    int32 stock = 5;
+    
 }
 
 service ItemService {

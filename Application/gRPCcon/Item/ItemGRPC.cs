@@ -22,7 +22,10 @@ public class ItemGRPC : IItemGRPC
               var itemToSend = new ItemP
               {
                      Name = item.Name,
-                     Price = item.Price
+                     Description = item.Description,
+                     Category = item.Category,
+                     Price = item.Price,
+                     Stock = item.Stock
               }; 
               client.postItem(itemToSend);
               channel.ShutdownAsync();
