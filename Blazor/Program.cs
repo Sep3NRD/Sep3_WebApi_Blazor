@@ -6,6 +6,7 @@ using Domain.Auth;
 using HttpClients.ClientInterfaces;
 using HttpClients.Implementations;
 using Microsoft.AspNetCore.Components.Authorization;
+using IItemService = Blazor.Services.Interfaces.IItemService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,10 @@ builder.Services.AddScoped(
 );
 AuthorizationPolicies.AddPolicies(builder.Services);
 
+
+builder.Services.AddScoped<IItemService, ItemServiceImpl>();
 builder.Services.AddScoped<ICustomerService, CustomerServiceImpl>();
+
 
 var app = builder.Build();
 

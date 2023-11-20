@@ -7,7 +7,7 @@ public class Item
     public string? Description { get; set;}
     public string? Category { get; set; }
     public double Price { get; set; }
-    public int? Stock { get; set; }
+    public int Stock { get; set; }
 
     public Item(string name, double price)
     {
@@ -15,7 +15,7 @@ public class Item
         Price = price;
     }
 
-    public Item(string name, string? description, string? category, double price, int? stock)
+    public Item(string name, string? description, string? category, double price, int stock)
     {
         Name = name;
         Description = description;

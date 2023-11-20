@@ -1,18 +1,10 @@
 ﻿@page "/CreateItem"
 @using Domain.DTOs
+@using Domain.Models
 @using HttpClients.ClientInterfaces
-@inject IItemService ItemService
+@using IItemService = Blazor.Services.Interfaces.IItemService
+@inject IItemService itemService
 @inject NavigationManager navMgr
-
-@if (showModal)
-{
-    <div class="modal-container">
-        <div class="modal-content">
-            <p>@msg</p>
-            <button @onclick="@Proceed">OK</button>
-        </div>
-    </div>
-}
 
 <div class="card">
     <h3>Create a new Item.</h3>
@@ -22,7 +14,18 @@
     </div>
     <div class="field">
         <label style="text-align: center">Category:</label>
-        <input type="text" @bind="ItemCategory" />
+        <select @bind="ItemCategory">
+        <option value="">Select Category</option>
+                <option value="CPU">CPU</option>
+            <option value="Motherboard">Motherboard</option>
+            <option value="RAM">RAM</option>
+            <option value="CPU Cooler">CPU Cooler</option>
+            <option value="SSD">SSD</option>
+            <option value="HDD">HDD</option>
+            <option value="PSU">PSU</option>
+            <option value="Case">Case</option>
+        </select>
+       
     </div>
     <div class="field">
         <label style="text-align: center">Description:</label>
@@ -57,9 +60,8 @@
     private string? ItemDescription = "";
     private string? ItemCategory = "";
     private double ItemPrice;
-    private int? ItemStock;
+    private int ItemStock = 0;
     string msg = "";
-    private bool showModal;
 
     private async Task Create()
     {
@@ -77,9 +79,10 @@
 
         try
         {
-            ItemCreationDto dto = new(ItemName, ItemDescription, ItemCategory, ItemPrice, ItemStock);
-            await ItemService.CreateAsync(dto);
-            showModal = true;
+            Item item = new(ItemName, ItemDescription, 
+                ItemCategory, ItemPrice, ItemStock);
+            await itemService.CreateAsync(item);
+           
             
         }
         catch (Exception e)
@@ -88,10 +91,4 @@
             msg = e.Message;
         }
     }
-    private void Proceed()
-    {
-        showModal = false;
-        navMgr.NavigateTo("/");
-    }
-    
 }
