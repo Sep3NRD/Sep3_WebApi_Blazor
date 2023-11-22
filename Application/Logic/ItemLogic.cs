@@ -16,9 +16,11 @@ public class ItemLogic : IItemLogic
     }
     public async Task<Item> CreateAsync(ItemCreationDto dto)
     {
+        
         ValidateTodo(dto);
         Item item = new Item(dto.Name, dto.Description, dto.Category, dto.Price , dto.Stock);
         Item created = await itemGrpc.CreateAsync(item);
+        Console.WriteLine(">>>>>>>item logic ...."+item.Name);
         return created;
     }
 

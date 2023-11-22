@@ -1,6 +1,6 @@
 @page "/ViewItems"
 @using Domain.Models
-@using HttpClients.ClientInterfaces
+@using Blazor.Services.Interfaces
 @inject IItemService itemService
 
 <h3>Items</h3>
@@ -51,7 +51,7 @@ else
     {
         try
         {
-            items = await itemService.GetAsync(null, null);
+            items = await itemService.GetAsync();
         }
         catch (Exception e)
         {

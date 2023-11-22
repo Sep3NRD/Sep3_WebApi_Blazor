@@ -81,7 +81,7 @@
             Item item = new(ItemName, ItemDescription, 
                 ItemCategory, ItemPrice, ItemStock);
             await itemService.CreateAsync(item);
-           
+           Console.WriteLine(">>>>>Blazor....."+ item.Name);
             
         }
         catch (Exception e)
