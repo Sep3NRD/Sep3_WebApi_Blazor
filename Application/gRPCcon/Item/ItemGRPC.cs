@@ -28,6 +28,7 @@ public class ItemGRPC : IItemGRPC
                      Stock = item.Stock
               }; 
               client.postItem(itemToSend);
+              //hello
               channel.ShutdownAsync();
              return Task.FromResult(item);
        }
