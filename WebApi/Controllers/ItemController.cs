@@ -20,7 +20,6 @@ public class ItemController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Item>> CreateAsync([FromBody] ItemCreationDto dto)
     {
-        
         try
         {
             Item created = await ItemLogic.CreateAsync(dto);

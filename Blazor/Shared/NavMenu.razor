@@ -1,4 +1,5 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Blazor.Services
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">PC Planet</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -15,16 +16,18 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-       <div class="nav-item px-3">
-           <NavLink class="nav-link" href="ViewItems" Match="NavLinkMatch.All">
-               <span class="oi oi-home" aria-hidden="true"></span> View Items
-           </NavLink>
-       </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="CreateItem">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Create Item
+            <NavLink class="nav-link" href="ViewItems" Match="NavLinkMatch.All">
+                <span class="oi oi-list" aria-hidden="true"></span> View Items
             </NavLink>
         </div>
+        <AuthorizeView Roles="admin">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="AdminDashboard" Match="NavLinkMatch.All">
+                <span class="oi oi-person" aria-hidden="true"></span> Admin Dashboard
+            </NavLink>
+        </div>
+        </AuthorizeView>
     </nav>
 </div>
 
