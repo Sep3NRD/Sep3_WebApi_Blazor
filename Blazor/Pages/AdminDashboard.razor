@@ -1,0 +1,20 @@
+@page "/AdminDashboard"
+@using Blazor.Services
+<AuthorizeView Roles="admin">
+<h3>Choose an action :</h3>
+    
+    <div class="field">
+        <NavLink href="CreateItem" class="btn btn-primary">Create Item</NavLink>
+    </div>
+    
+    <div class="field">
+        <NavLink href="ManageItem" class="btn btn-primary">Manage Item</NavLink>
+    </div>
+
+</AuthorizeView>
+
+
+
+@code {
+    
+}

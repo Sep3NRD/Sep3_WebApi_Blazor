@@ -18,7 +18,6 @@ public class ItemGRPC : IItemGRPC
               GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
               var client = new ItemService.ItemServiceClient(channel);
               
-
               var itemToSend = new ItemP
               {
                      Name = item.Name,
@@ -28,7 +27,6 @@ public class ItemGRPC : IItemGRPC
                      Stock = item.Stock
               }; 
               client.postItem(itemToSend);
-              //hello
               channel.ShutdownAsync();
              return Task.FromResult(item);
        }

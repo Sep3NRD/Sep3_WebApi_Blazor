@@ -5,6 +5,8 @@
 @inject IItemService itemService
 @inject NavigationManager navMgr
 
+
+<AuthorizeView Roles="admin">
 <div class="card">
     <h3>Create a new Item.</h3>
     <div class="field">
@@ -14,8 +16,8 @@
     <div class="field">
         <label style="text-align: center">Category:</label>
         <select @bind="ItemCategory">
-        <option value="">Select Category</option>
-                <option value="CPU">CPU</option>
+            <option value="">Select Category</option>
+            <option value="CPU">CPU</option>
             <option value="Motherboard">Motherboard</option>
             <option value="RAM">RAM</option>
             <option value="CPU Cooler">CPU Cooler</option>
@@ -35,9 +37,9 @@
         <input type="text" @bind="ItemPrice" />
     </div>
     <div class="field">
-            <label style="text-align: center">Stock:</label>
-            <input type="text" @bind="ItemStock" />
-        </div>
+        <label style="text-align: center">Stock:</label>
+        <input type="text" @bind="ItemStock" />
+    </div>
     @if (!string.IsNullOrEmpty(msg))
     {
         <div class="field">
@@ -51,6 +53,8 @@
         <button class="createbtn" @onclick="Create">Create</button>
     </div>
 </div>
+
+</AuthorizeView>
 
 
 @code {
@@ -81,7 +85,7 @@
             Item item = new(ItemName, ItemDescription, 
                 ItemCategory, ItemPrice, ItemStock);
             await itemService.CreateAsync(item);
-           Console.WriteLine(">>>>>Blazor....."+ item.Name);
+            navMgr.NavigateTo("/");
             
         }
         catch (Exception e)

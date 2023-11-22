@@ -17,10 +17,9 @@ public class ItemLogic : IItemLogic
     public async Task<Item> CreateAsync(ItemCreationDto dto)
     {
         
-        ValidateTodo(dto);
+        ValidateItem(dto);
         Item item = new Item(dto.Name, dto.Description, dto.Category, dto.Price , dto.Stock);
         Item created = await itemGrpc.CreateAsync(item);
-        Console.WriteLine(">>>>>>>item logic ...."+item.Name);
         return created;
     }
 
@@ -29,7 +28,7 @@ public class ItemLogic : IItemLogic
         return await itemGrpc.GetAsync(searchParameters);
     }
 
-    private void ValidateTodo(ItemCreationDto dto)
+    private void ValidateItem(ItemCreationDto dto)
     {
         if (string.IsNullOrEmpty(dto.Name))
             throw new Exception("Title cannot be empty.");
