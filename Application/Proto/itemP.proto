@@ -13,10 +13,10 @@ message ItemP{
     string category = 3;
     double price = 4;
     int32 stock = 5;
-    
-    
 }
+
 
 service ItemService {
     rpc postItem(ItemP) returns (ItemP){};
+    rpc getItems(google.protobuf.Empty) returns (stream ItemP);
 }

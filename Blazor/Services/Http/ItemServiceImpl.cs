@@ -9,6 +9,7 @@ public class ItemServiceImpl : IItemService
 {
     private readonly HttpClient client = new();
     
+    
     public async Task CreateAsync(Item item)
     {
         string itemAsJson = JsonSerializer.Serialize(item);
@@ -23,8 +24,19 @@ public class ItemServiceImpl : IItemService
         }
     }
 
-    public Task<ICollection<Item>> GetAsync()
+    public async Task<ICollection<Item>> GetAsync()
     {
-        throw new NotImplementedException();
+        HttpResponseMessage responseMessage = await client.GetAsync("http://localhost:5193/Item");
+        string content = await responseMessage.Content.ReadAsStringAsync();
+        if (!responseMessage.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+
+        ICollection<Item> items = JsonSerializer.Deserialize<ICollection<Item>>(content, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return items;
     }
 }

@@ -33,13 +33,14 @@ public class ItemController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Item>>> GetAsync([FromQuery] string? Name, [FromQuery] double? Price)
+    public async Task<ActionResult<IEnumerable<Item>>> GetAsync([FromQuery] string? Name, [FromQuery] double Price)
     {
         try
         {
             SearchItemParametersDto parameters = new(Name, Price);
-            var items = await ItemLogic.GetAsync(parameters);
-            return Ok(items);
+            var items = await ItemLogic.GetAsync().ConfigureAwait(false); // nuri-->  not using filters for now
+            //return Ok(items);
+            return Created($"/items", items);
         }
         catch (Exception e)
         {

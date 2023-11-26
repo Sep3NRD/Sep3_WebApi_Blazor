@@ -119,10 +119,5 @@ public class CustomerGRPC: ICustomerGRPC
         await channel.ShutdownAsync();
         return null;
 
-
-
-
-
-
     }
 }

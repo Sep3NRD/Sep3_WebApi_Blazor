@@ -6,5 +6,5 @@ public interface IItemGRPC
 {
     Task<Domain.Models.Item> CreateAsync(Domain.Models.Item item);
     
-    Task<IEnumerable<Domain.Models.Item>> GetAsync(SearchItemParametersDto searchParameters);
+    Task<IEnumerable<Domain.Models.Item>> GetAsync();
 }

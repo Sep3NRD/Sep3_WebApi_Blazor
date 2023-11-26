@@ -23,9 +23,10 @@ public class ItemLogic : IItemLogic
         return created;
     }
 
-    public async Task<IEnumerable<Item>> GetAsync(SearchItemParametersDto searchParameters)
+    // i will not use filters for now
+    public async Task<IEnumerable<Item>> GetAsync()
     {
-        return await itemGrpc.GetAsync(searchParameters);
+        return await itemGrpc.GetAsync();
     }
 
     private void ValidateItem(ItemCreationDto dto)

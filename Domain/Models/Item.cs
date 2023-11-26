@@ -23,4 +23,9 @@ public class Item
         Price = price;
         Stock = stock;
     }
+
+    public Item()
+    {
+        
+    }
 }
