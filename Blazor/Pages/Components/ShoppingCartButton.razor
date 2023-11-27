@@ -1,0 +1,17 @@
+@namespace ShoppingCart
+@page "/ShoppingCart"
+@inject NavigationManager navMgr
+
+<AuthorizeView>
+    <Authorized>
+        <img class="icon me-2" src="img/Shopping_cart .png" @onclick="ShoppingCart"/>
+    </Authorized>
+</AuthorizeView>
+
+
+@code {
+    private void ShoppingCart()
+    {
+        navMgr.NavigateTo("/ShoppingCart");
+    }
+}
