@@ -32,7 +32,7 @@ public class CustomerLogic : ICustomerLogic
 
     public async Task<Customer> LoginValidation(CustomerLoginDto userLoginDto)
     {
-        Customer customer = await iCustomerGrpc.ValidateLogin(userLoginDto.Username, userLoginDto.Password);
+        Customer customer = await iCustomerGrpc.ValidateLogin(userLoginDto.Username.ToString(), userLoginDto.Password);
         if (customer==null)
         {
             throw new Exception("Username or password invalid");
@@ -44,11 +44,11 @@ public class CustomerLogic : ICustomerLogic
 
     public async Task<Customer> GetByUsernameAsync(CustomerLoginDto userLoginDto)
     {
-        if (string.IsNullOrEmpty(userLoginDto.Username))
+        if (string.IsNullOrEmpty(userLoginDto.Username.ToString()))
         {
             throw new ArgumentException("Username cannot be null or empty.", nameof(userLoginDto.Username));
         }
-        Customer customer = await iCustomerGrpc.GetByUsernameAsync(userLoginDto.Username);
+        Customer customer = await iCustomerGrpc.GetByUsernameAsync(userLoginDto);
 
         return customer;
     }

@@ -1,3 +1,4 @@
+using Domain.DTOs;
 using Domain.Models;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
@@ -75,14 +76,14 @@ public class CustomerGRPC: ICustomerGRPC
         return finalCustomer;
     }
 
-    public async  Task<Customer> GetByUsernameAsync(string username)
+    public async Task<Customer> GetByUsernameAsync(CustomerLoginDto username)
     {
         GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
         var client = new CustomerService.CustomerServiceClient(channel);
 
         GetCustomerByUsername usernameRequest = new GetCustomerByUsername
         {
-            Username = username
+            Username = username.ToString()
         };
         try
         {
