@@ -5,10 +5,11 @@ namespace Blazor.Services.Interfaces;
 public interface IShoppingCartService
 {
     public double CalculateTotal();
-    public List<Item> GetAllItems();
-    public void AddItem();
+    public Task<List<Item>> GetAllItems();
+    public Task AddItem(Item item);
     public void RemoveItem();
 
-    public Task LoadCartFromLocalStorage();
-    public Task SaveCartToLocalStorage();
+
+    event Action onChange;
+    Task AddToCart(Item item);
 }

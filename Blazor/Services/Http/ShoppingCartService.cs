@@ -1,58 +1,77 @@
 using System.Text.Json;
 using Blazor.Services.Interfaces;
+using Blazored.LocalStorage;
+using Blazored.Toast.Services;
 using Domain.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.JSInterop;
 
 namespace Blazor.Services.Http;
 
 public class ShoppingCartService : IShoppingCartService
 {
-    private const string CartKey = "shoppingCart";
-    private IJSRuntime _jsRuntime;
-    public List<Item> shoppingCart { get; set; } = new List<Item>()
-    {
-        new Item("Nvidia","verynice","GPU",100.00,5),
-        new Item("AMD", "awesome", "CPU", 150.00, 3)
-    };
+    private readonly ILocalStorageService localStorage;
+    private readonly IToastService toastService;
 
-    public ShoppingCartService(IJSRuntime jsRuntime)
+    public List<Item> shoppingCart { get; set; } = new List<Item>();
+
+    public ShoppingCartService(ILocalStorageService localStorage,IToastService toastService)
     {
-        _jsRuntime = jsRuntime;
+        this.localStorage = localStorage;
+        this.toastService = toastService;
     }
+    
     
     public double CalculateTotal()
     {
         return shoppingCart.Sum(item => item.Price);
     }
 
-    public List<Item> GetAllItems()
+    public async Task <List<Item>> GetAllItems()
     {
-        return shoppingCart;
+        var result = new List<Item>();
+        var cart = await localStorage.GetItemAsync<List<Item>>("cart");
+        if (cart==null)
+        {
+            return result;
+        }
+
+        foreach (var item in cart )
+        {
+            var cartItem = new Item
+            {
+                Category = item.Category,
+                Description = item.Description,
+                ItemId = item.ItemId,
+                Name = item.Name,
+                Price = item.Price,
+                Stock = item.Stock
+            };
+            result.Add(cartItem);
+        }
+
+        return result;
     }
 
-    public void AddItem()
+    public async Task AddItem(Item item)
     {
-        throw new NotImplementedException();
+        shoppingCart.Add(item);
     }
 
     public void RemoveItem()
     {
         throw new NotImplementedException();
     }
-    
-    public async Task LoadCartFromLocalStorage()
-    {
-        var cartJson = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", CartKey);
 
-        if (!string.IsNullOrEmpty(cartJson))
+    public event Action? onChange;
+    public async Task AddToCart(Item item)
+    {
+        var cart = await localStorage.GetItemAsync<List<Item>>("cart");
+        if (cart==null)
         {
-            shoppingCart = JsonSerializer.Deserialize<List<Item>>(cartJson);
+            cart = new List<Item>();
         }
-    }
-
-    public async Task SaveCartToLocalStorage()
-    {
-        var cartJson = JsonSerializer.Serialize(shoppingCart);
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", CartKey, cartJson);
+        cart.Add(item);
+        await localStorage.SetItemAsync("Cart", cart);
     }
 }

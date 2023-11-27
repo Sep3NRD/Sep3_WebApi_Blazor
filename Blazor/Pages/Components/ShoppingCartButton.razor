@@ -1,5 +1,8 @@
+@using Blazored.LocalStorage
+@using Domain.Models
 @namespace ShoppingCart
 @inject NavigationManager navMgr
+@inject ISyncLocalStorageService localStorage 
 
 <AuthorizeView>
     <Authorized>
@@ -8,9 +11,13 @@
 </AuthorizeView>
 
 
+
+
 @code {
     private void ShoppingCart()
     {
         navMgr.NavigateTo("/ShoppingCart");
     }
+    
+
 }
