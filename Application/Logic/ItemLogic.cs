@@ -14,11 +14,10 @@ public class ItemLogic : IItemLogic
     {
         this.itemGrpc = itemGrpc;
     }
-    public async Task<Item> CreateAsync(ItemCreationDto dto)
+    public async Task<Item> CreateAsync(Item item)
     {
+        ValidateItem(item);
         
-        ValidateItem(dto);
-        Item item = new Item(dto.Name, dto.Description, dto.Category, dto.Price , dto.Stock);
         Item created = await itemGrpc.CreateAsync(item);
         return created;
     }
@@ -29,11 +28,11 @@ public class ItemLogic : IItemLogic
         return await itemGrpc.GetAsync();
     }
 
-    private void ValidateItem(ItemCreationDto dto)
+    private void ValidateItem(Item item)
     {
-        if (string.IsNullOrEmpty(dto.Name))
+        if (string.IsNullOrEmpty(item.Name))
             throw new Exception("Title cannot be empty.");
-        if (dto.Price == 0)
-            throw new Exception("Title cannot be empty.");
+        if (item.Price == 0)
+            throw new Exception("Price cannot be zero.");
     }
 }
