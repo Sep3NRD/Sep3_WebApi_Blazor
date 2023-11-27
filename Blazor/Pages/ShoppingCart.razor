@@ -29,41 +29,23 @@
             </div>
         </div>
     }
-}
-else
-{
-    <h3>Thank you for your order!</h3>
-    <h4>Here's what you'll get:</h4>
-    <div>
-        @foreach (var item in cartItems)
-        {
-            <div class="item-container">
-                <div class="item-name">
-                    <h5>@item.Name</h5>
-                    <span>@item.Description</span><br />
-                </div>
-                <div class="item-price">$@(item.Price)</div>
-            </div>
-        }
-        <div class="item-price">
-            Total (@cartItems.Count): $@cartItems.Sum(item => item.Price)
-        </div>
-    </div>
-}
-
 @code {
     List<Item> cartItems = new List<Item>();
-    bool orderPlaced = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        cartItems = await shoppingCartService.GetAllItems();
+        if (firstRender)
+        {
+            cartItems = await shoppingCartService.GetAllItems();
+            StateHasChanged();
+        }
     }
 
     private async Task DeleteItem(Item item)
     {
-        // await shoppingCartService.DeleteItem(item);
+        await shoppingCartService.DeleteItem(item);
         cartItems = await shoppingCartService.GetAllItems();
+        
     }
 
     

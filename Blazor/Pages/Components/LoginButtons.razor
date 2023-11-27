@@ -1,7 +1,9 @@
 @using Blazor.Services
+@using Blazor.Services.Interfaces
 @namespace Login
 @inject NavigationManager navMgr
 @inject IAuthService authService
+@inject IShoppingCartService ShoppingCart
 
 <AuthorizeView>
     <Authorized>
@@ -21,6 +23,7 @@
     private async Task Logout()
     {
         await authService.LogoutAsync();
+        await ShoppingCart.Clear();
         navMgr.NavigateTo("/");
     }
 }

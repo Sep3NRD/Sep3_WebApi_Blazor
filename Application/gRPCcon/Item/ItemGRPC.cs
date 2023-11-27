@@ -33,7 +33,6 @@ public class ItemGRPC : IItemGRPC
 
        public async Task<IEnumerable<Domain.Models.Item>> GetAsync()
        {
-              Console.WriteLine("GetAsync() <<<<<<< called in ItemGRPC");
               GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
               var client = new ItemService.ItemServiceClient(channel);
               var request = new Google.Protobuf.WellKnownTypes.Empty();
@@ -52,6 +51,7 @@ public class ItemGRPC : IItemGRPC
                                    Description = itemP.Description,
                                    Category = itemP.Category,
                                    Price = itemP.Price,
+                                   ItemId = itemP.ItemId,
                                    Stock = itemP.Stock
                             };
 

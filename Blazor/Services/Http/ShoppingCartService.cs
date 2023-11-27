@@ -21,11 +21,6 @@ public class ShoppingCartService : IShoppingCartService
         this.toastService = toastService;
     }
     
-    
-    public double CalculateTotal()
-    {
-        return shoppingCart.Sum(item => item.Price);
-    }
 
     public async Task <List<Item>> GetAllItems()
     {
@@ -49,19 +44,28 @@ public class ShoppingCartService : IShoppingCartService
             };
             result.Add(cartItem);
         }
-
         return result;
     }
-
-    public async Task AddItem(Item item)
+    
+    public async Task DeleteItem(Item item)
     {
-        shoppingCart.Add(item);
+        var cart = await localStorage.GetItemAsync<List<Item>>("cart");
+        if (cart==null)
+        {
+            return ;
+        }
+
+        var cartItem = cart.Find(c => c.ItemId == item.ItemId);
+        cart.Remove(cartItem);
+
+        await localStorage.SetItemAsync("cart", cart);
     }
 
-    public void RemoveItem()
+    public async Task Clear()
     {
-        throw new NotImplementedException();
+        await localStorage.ClearAsync();
     }
+
 
     public event Action? onChange;
     public async Task AddToCart(Item item)
@@ -72,6 +76,6 @@ public class ShoppingCartService : IShoppingCartService
             cart = new List<Item>();
         }
         cart.Add(item);
-        await localStorage.SetItemAsync("Cart", cart);
+        await localStorage.SetItemAsync("cart", cart);
     }
 }
