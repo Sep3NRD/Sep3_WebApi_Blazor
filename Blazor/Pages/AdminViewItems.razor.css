@@ -14,8 +14,13 @@
     background-color: #f2f2f2;
 }
 
-.manage{
+.manage, .delete{
     padding: 5px 10px;
     cursor: pointer;
     margin-right: 5px;
+}
+
+.managecol {
+    width: 12%;
+    overflow: auto;
 }

@@ -4,11 +4,6 @@
 @inject IItemService itemService
 
 
-
-
-<head>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-</head>
 <h3>Manage Items</h3>
 @if (items == null)
 {
@@ -25,7 +20,7 @@ else
         <tr>
             <th>Name</th>
             <th >Stock</th>
-            <th>Manage</th>
+            <th class = "managecol">Manage</th>
         </tr>
         </thead>
         <tbody>
