@@ -1,13 +1,13 @@
 @page "/ViewItems"
 @using Domain.Models
 @using Blazor.Services.Interfaces
-@using Blazor.Pages.Components
 @inject IItemService itemService
 @inject IShoppingCartService shoppingCartService;
 @using Blazored.Toast.Services
 @inject IToastService toastService;
+@using Components
 
-<h3>Items</h3>
+
 <div class="item-grid">
     @if (items == null)
     {
@@ -21,19 +21,38 @@
     {
         @foreach (var item in items)
         {
-            <div class="item-card" @onclick="() => ShowItemModal(item)">
-                <img src="img/product.png" alt="@item.Name" />
-                <div class="item-details">
-                    <p>@item.Name</p>
-                    <p>Price: @item.Price DKK</p>
-                    <button class="buy-button" @onclick="() => AddToCart(item)">Buy</button>
+                <div class="item-card">
+                    <img src="img/product.png" alt="@item.Name" @onclick="() => ShowItemModal(item)"/>
+                    <div class="item-details">
+                        <p>@item.Name</p>
+                        <p>Price: @item.Price DKK</p>
+                        <button class="buy-button" @onclick="() => AddToCart(item)">Buy</button>
+                    </div>
                 </div>
-            </div>
         }
     }
 </div>
 
-<ItemModal/>
+@if (showModal)
+{
+    <ItemModal ShowModal="showModal">
+        <div class="card">
+            @if(selectedItem!=null)
+            {
+            <h3>@selectedItem.Name</h3>
+            <div class="form-group field">
+                 <p><strong>Description:</strong> @selectedItem.Description</p>
+                <p><strong>Price:</strong> @selectedItem.Price</p>
+            </div>
+            }
+            @if (!string.IsNullOrEmpty(msg))
+            {
+                <label style="color: red">@msg</label>
+            }
+            <button class="btn btn-secondary close-button" @onclick="CloseModal">Close</button>
+        </div>
+    </ItemModal>
+
 
 @if (!string.IsNullOrEmpty(msg))
 {
@@ -43,7 +62,7 @@
 @code {
     private IEnumerable<Item>? items;
     private string msg = "";
-    private bool showModal = false;
+    private bool showModal;
     private Item selectedItem;
 
     protected override async Task OnInitializedAsync()
@@ -51,7 +70,6 @@
         try
         {
             items = await itemService.GetAsync();
-            showModal = true;
         }
         catch (Exception e)
         {
@@ -62,18 +80,23 @@
 
     private void ShowItemModal(Item item)
     {
-        
+
         selectedItem = item;
         showModal = true;
     }
-    private void ShowModalChanged(bool value)
-    {
-        showModal = value;
-    }
 
+    
     private async Task AddToCart(Item item)
     {
+        showModal = false;
         await shoppingCartService.AddToCart(item);
         toastService.ShowSuccess("Item added to cart" + item.Name);
     }
+
+    private void CloseModal()
+    {
+        showModal = false;
+    }
+
+}
 }
