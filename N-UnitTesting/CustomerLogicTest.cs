@@ -79,7 +79,7 @@ public class CustomerLogicTest
     
         
         [Test]
-        public async Task LoginValidation_ValidCredentials_ReturnsCustomer()
+        public async Task LoginValidationTest()
         {
             // Arrange
             CustomerLoginDto validLoginDto = new CustomerLoginDto
@@ -118,7 +118,7 @@ public class CustomerLogicTest
         }
 
         [Test]
-        public async Task GetByUsernameAsync_ValidUsername_ReturnsCustomer()
+        public async Task GetByUsernameAsyncTest()
         {
             // Arrange
             var validUsername = "existingUser";
