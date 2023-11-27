@@ -7,7 +7,12 @@ public class CustomerLoginDto
     
     public CustomerLoginDto(string username, string password)
     {
-        this.Username = username;
+        this.Username = username.ToString();
         Password = password;
+    }
+
+    public CustomerLoginDto()
+    {
+        
     }
 }
