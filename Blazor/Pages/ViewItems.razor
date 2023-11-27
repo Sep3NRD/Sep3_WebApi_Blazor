@@ -4,54 +4,50 @@
 @inject IItemService itemService
 
 <h3>Items</h3>
-
-<div>
-    <button @onclick="LoadItems">Load</button>
-</div>
- 
-@if (items == null)
-{
-    
-}
-else if (!items.Any())
-{
-    <p>No Items to display</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th></th>
-            <th>Price:</th>
-            
-        </tr>
-        </thead>
-        <tbody>
+<div class="item-grid">
+    @if (items == null)
+    {
+        <p>Loading...</p>
+    }
+    else if (!items.Any())
+    {
+        <p>No Items to display</p>
+    }
+    else
+    {
         @foreach (var item in items)
         {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.Price</td>
-            </tr>
+            <div class="item-card" @onclick="() => ShowItemModal(item)">
+                <img src="img/product.png" alt="@item.Name" />
+                <div class="item-details">
+                    <p>@item.Name</p>
+                    <p>Price: @item.Price DKK</p>
+                    <button class="buy-button">Buy</button>
+                </div>
+            </div>
         }
-        </tbody>
-    </table>
-}
+    }
+</div>
+
+<ItemModal showModal="showModal" selectedItem="selectedItem" showModalChanged="ShowModalChanged" />
+
 @if (!string.IsNullOrEmpty(msg))
 {
     <label style="color: red">@msg</label>
 }
 
 @code {
-        private IEnumerable<Item>? items;
+    private IEnumerable<Item>? items;
     private string msg = "";
+    private bool showModal = false;
+    private Item selectedItem;
 
-    private async Task LoadItems()
+    protected override async Task OnInitializedAsync()
     {
         try
         {
             items = await itemService.GetAsync();
+            showModal = true;
         }
         catch (Exception e)
         {
@@ -59,5 +55,14 @@ else
             msg = e.Message;
         }
     }
-}
+
+    private void ShowItemModal(Item item)
+    {
+        selectedItem = item;
+        showModal = true;
+    }
+    private void ShowModalChanged(bool value)
+    {
+        showModal = value;
+    }
 }

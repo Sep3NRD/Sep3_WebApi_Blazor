@@ -5,6 +5,6 @@ namespace Application.LogicInterfaces;
 
 public interface IItemLogic
 {
-    Task<Domain.Models.Item> CreateAsync(ItemCreationDto dto);
+    Task<Domain.Models.Item> CreateAsync(Item item);
     Task<IEnumerable<Item>> GetAsync();
 }

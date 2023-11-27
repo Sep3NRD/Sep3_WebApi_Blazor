@@ -18,11 +18,11 @@ public class ItemController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Item>> CreateAsync([FromBody] ItemCreationDto dto)
+    public async Task<ActionResult<Item>> CreateAsync([FromBody] Item item)
     {
         try
         {
-            Item created = await ItemLogic.CreateAsync(dto);
+            Item created = await ItemLogic.CreateAsync(item);
             return Created($"/items/{created.Name}", created);
         }
         catch (Exception e)

@@ -1,0 +1,45 @@
+@using Domain.Models
+<!-- ItemModal.razor -->
+
+@if (showModal)
+{
+    <div class="modal-overlay show-modal" @onclick="CloseModal" tabindex="0" @onkeydown="HandleKeyDown">
+        <div class="modal-content">
+            <button class="close-button" @onclick="CloseModal">X</button>
+            @if (selectedItem != null)
+            {
+                <div class="item-details-modal">
+                    <h4>@selectedItem.Name</h4>
+                    <p>Price: @selectedItem.Price</p>
+                    <p>Description: @selectedItem.Description</p>
+                    
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool showModal { get; set; }
+
+    [Parameter]
+    public Item selectedItem { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> showModalChanged { get; set; }
+
+    private void CloseModal()
+    {
+        showModal = false;
+        showModalChanged.InvokeAsync(showModal);
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+        {
+            CloseModal();
+        }
+    }
+}

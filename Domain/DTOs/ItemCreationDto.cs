@@ -16,4 +16,9 @@ public class ItemCreationDto
         Price = price;
         Stock = stock;
     }
+
+    public ItemCreationDto()
+    {
+        
+    }
 }
