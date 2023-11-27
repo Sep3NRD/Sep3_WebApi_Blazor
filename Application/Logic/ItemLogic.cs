@@ -28,6 +28,18 @@ public class ItemLogic : IItemLogic
         return await itemGrpc.GetAsync();
     }
 
+    public async Task<Item> GetByIdAsync(int id)
+    {
+        Item? item = await itemGrpc.GetByIdAsync(id);
+        if (item == null)
+        {
+            throw new Exception($"Item with id {id} not found");
+        }
+
+        return new Item(item.Name,item.Description,item.Category, item.Price,item.Stock);
+    }
+
+
     private void ValidateItem(Item item)
     {
         if (string.IsNullOrEmpty(item.Name))

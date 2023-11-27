@@ -71,4 +71,41 @@ public class ItemGRPC : IItemGRPC
               }
               
        }
+
+       
+
+       public async Task<Domain.Models.Item> GetByIdAsync(int id)
+       {
+              GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
+              var client = new ItemService.ItemServiceClient(channel);
+
+              GetItemById idRequest = new GetItemById
+              {
+                     ItemId = id
+              };
+              try
+              {
+                     ItemResponseP itemProto = await client.getItemByIdAsync(idRequest);
+                     if (itemProto != null)
+                     {
+                            Domain.Models.Item finalItem = new Domain.Models.Item
+                            {
+                                   Name = itemProto.Item.Name,
+                                   Description = itemProto.Item.Description,
+                                   Category = itemProto.Item.Category,
+                                   Price = itemProto.Item.Price,
+                                   Stock = itemProto.Item.Stock
+                            };
+                            return finalItem;
+                     }
+              }
+              catch (Exception e)
+              {
+                     Console.WriteLine(e);
+                     throw;
+              }
+              await channel.ShutdownAsync();
+              return null;
+
+       }
 }
