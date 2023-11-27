@@ -1,0 +1,44 @@
+@page "/ShoppingCart"
+@using Blazor.Services.Interfaces
+@inject IShoppingCartService shoppingCartService
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in shoppingCartService.GetAllItems())
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>Total</td>
+            <td>@shoppingCartService.CalculateTotal().ToString("C")</td>
+        </tr>
+    </tfoot>
+</table>
+
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await shoppingCartService.LoadCartFromLocalStorage();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await shoppingCartService.SaveCartToLocalStorage();
+        }
+    }
+}

@@ -2,6 +2,7 @@ using Blazor.Auth;
 using Blazor.Data;
 using Blazor.Services;
 using Blazor.Services.Http;
+using Blazor.Services.Interfaces;
 using Domain.Auth;
 using HttpClients.ClientInterfaces;
 using HttpClients.Implementations;
@@ -16,6 +17,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IAuthService, JwtAuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
+builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 
 
 
