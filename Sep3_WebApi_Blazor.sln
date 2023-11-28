@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpClients", "HttpClients\HttpClients.csproj", "{62E6FB98-D6B8-4DC7-8033-EA27A45ABA1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{5815CBB1-9444-422F-8BC9-311911757445}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N-UnitTesting", "N-UnitTesting\N-UnitTesting.csproj", "{D42DC3EB-39A5-4B2F-9510-B6EC6D4298A3}"
 EndProject
 Global
@@ -40,10 +38,6 @@ Global
 		{62E6FB98-D6B8-4DC7-8033-EA27A45ABA1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62E6FB98-D6B8-4DC7-8033-EA27A45ABA1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62E6FB98-D6B8-4DC7-8033-EA27A45ABA1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5815CBB1-9444-422F-8BC9-311911757445}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5815CBB1-9444-422F-8BC9-311911757445}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5815CBB1-9444-422F-8BC9-311911757445}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5815CBB1-9444-422F-8BC9-311911757445}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D42DC3EB-39A5-4B2F-9510-B6EC6D4298A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D42DC3EB-39A5-4B2F-9510-B6EC6D4298A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D42DC3EB-39A5-4B2F-9510-B6EC6D4298A3}.Release|Any CPU.ActiveCfg = Release|Any CPU

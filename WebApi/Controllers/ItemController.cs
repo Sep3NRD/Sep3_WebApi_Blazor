@@ -48,4 +48,22 @@ public class ItemController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+
+    [HttpGet("id")]
+    public async Task<ActionResult<Item>> GetByIdAsync([FromQuery] int itemId)
+    {
+        try
+        {
+            SearchItemParametersDto parameters = new(itemId);
+            var items = await ItemLogic.GetByIdAsync(itemId);
+            return items;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        } 
+    }
+    
 }

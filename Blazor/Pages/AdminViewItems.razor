@@ -1,0 +1,70 @@
+@page "/AdminViewItems"
+@using Blazor.Services.Interfaces
+@using Domain.Models
+@inject IItemService itemService
+
+
+<h3>Manage Items</h3>
+@if (items == null)
+{
+    <p>Loading...</p>
+}
+else if (!items.Any())
+{
+    <p>No Items to display</p>
+}
+else
+{
+    <table class="item-table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th >Stock</th>
+            <th class = "managecol">Manage</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in items)
+        {
+            <tr @onclick="() => ShowItemModal(item)">
+                <td>@item.Name</td>
+                <td>@item.Stock </td>
+                <td><button class="manage" >Manage</button><button class ="delete">Delete</button></td>
+                
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+}
+
+@code {
+    private IEnumerable<Item>? items;
+    private string msg = "";
+    private bool showModal = false;
+    private Item selectedItem;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            items = await itemService.GetAsync();
+            showModal = true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    private void ShowItemModal(Item item)
+    {
+        selectedItem = item;
+        showModal = true;
+    }
+    private void ShowModalChanged(bool value)
+    {
+        showModal = value;
+    }
+}
