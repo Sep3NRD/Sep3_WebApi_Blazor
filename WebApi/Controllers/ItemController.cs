@@ -56,14 +56,31 @@ public class ItemController : ControllerBase
         try
         {
             SearchItemParametersDto parameters = new(itemId);
-            var items = await ItemLogic.GetByIdAsync(itemId);
-            return items;
+            var item = await ItemLogic.GetByIdAsync(itemId);
+            return item;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
-        } 
+        }
     }
-    
-}
+
+
+
+    [HttpDelete] 
+        public async Task<ActionResult> DeleteAsync([FromRoute] int id)
+        {
+            try
+            {
+                await ItemLogic.DeleteAsync(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, e.Message);
+            }
+        }
+    }
+

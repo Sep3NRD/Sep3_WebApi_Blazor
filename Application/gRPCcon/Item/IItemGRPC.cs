@@ -8,4 +8,6 @@ public interface IItemGRPC
     
     Task<IEnumerable<Domain.Models.Item>> GetAsync();
     Task<Domain.Models.Item> GetByIdAsync(int id);
+    
+    Task DeleteAsync(int id);
 }

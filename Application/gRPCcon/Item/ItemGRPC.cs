@@ -108,4 +108,22 @@ public class ItemGRPC : IItemGRPC
               return null;
 
        }
+
+       public async Task DeleteAsync(int id)
+       {
+              try
+              {
+                     GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
+                     var client = new ItemService.ItemServiceClient(channel);
+
+                     // Call the gRPC service to delete the item
+                     await client.deleteItemByIdAsync(new DeleteItemRequest() { ItemId = id });
+              }
+              catch (RpcException ex)
+              {
+                     // Handle gRPC service errors
+                     Console.WriteLine($"Error deleting item from gRPC service: {ex.Status}");
+                     throw;
+              }
+       }
 }

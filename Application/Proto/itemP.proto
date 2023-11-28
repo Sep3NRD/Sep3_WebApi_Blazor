@@ -23,6 +23,10 @@ message GetItemRequest{
     int32 stock = 5;
 }
 
+message DeleteItemRequest{
+    int32 itemId =1;
+}
+
 message GetItemById{
     int32 itemId= 1;
 }
@@ -32,9 +36,11 @@ message ItemResponseP{
 }
 
 
+
 service ItemService {
     rpc postItem(ItemP) returns (ItemP){};
     rpc getItems(google.protobuf.Empty) returns (stream ItemP);
     rpc getItemById(GetItemById) returns (ItemResponseP){};
     rpc getItem(GetItemRequest) returns (ItemResponseP){};
+    rpc deleteItemById(DeleteItemRequest) returns (google.protobuf.Empty);
 }
