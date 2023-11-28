@@ -39,6 +39,18 @@ public class ItemLogic : IItemLogic
         return new Item(item.Name,item.Description,item.Category, item.Price,item.Stock);
     }
 
+    public async Task DeleteAsync(int id)
+    {
+        Item? item = await itemGrpc.GetByIdAsync(id);
+        if (item == null)
+        {
+            throw new Exception($"Item with id {id} was not found!");
+        }
+        
+
+        await itemGrpc.DeleteAsync(id);
+    }
+
 
     private void ValidateItem(Item item)
     {

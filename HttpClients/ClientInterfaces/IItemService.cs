@@ -11,7 +11,9 @@ public interface IItemService
         string? Name,
         double? Price);
 
-    
+    Task<Item> GetItemById(int id);
+
+
 
 
 }

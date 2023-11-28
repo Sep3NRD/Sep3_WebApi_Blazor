@@ -14,6 +14,10 @@
         <input type="text" @bind="ItemName" />
     </div>
     <div class="field">
+            <label style="text-align: center">Description:</label>
+            <input type="text" @bind="ItemDescription" />
+        </div>
+    <div class="field">
         <label style="text-align: center">Category:</label>
         <select @bind="ItemCategory">
             <option value="">Select Category</option>
@@ -27,12 +31,8 @@
             <option value="PSU">PSU</option>
             <option value="Case">Case</option>
         </select>
-       
     </div>
-    <div class="field">
-        <label style="text-align: center">Description:</label>
-        <input type="text" @bind="ItemDescription" />
-    </div>
+    
     <div class="field">
         <label style="text-align: center">Price:</label>
         <input type="text" @bind="ItemPrice" />
