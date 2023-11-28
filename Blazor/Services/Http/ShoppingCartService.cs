@@ -1,81 +1,90 @@
-using System.Text.Json;
+
 using Blazor.Services.Interfaces;
 using Blazored.LocalStorage;
 using Blazored.Toast.Services;
 using Domain.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.JSInterop;
 
-namespace Blazor.Services.Http;
-
-public class ShoppingCartService : IShoppingCartService
+namespace Blazor.Services.Http
 {
-    private readonly ILocalStorageService localStorage;
-    private readonly IToastService toastService;
-
-    public List<Item> shoppingCart { get; set; } = new List<Item>();
-
-    public ShoppingCartService(ILocalStorageService localStorage,IToastService toastService)
+    // Service responsible for managing the shopping cart functionality.
+    public class ShoppingCartService : IShoppingCartService
     {
-        this.localStorage = localStorage;
-        this.toastService = toastService;
-    }
-    
+        private readonly ILocalStorageService localStorage; // Service for interacting with local storage.
+        private readonly IToastService toastService; // Service for displaying toast notifications.
 
-    public async Task <List<Item>> GetAllItems()
-    {
-        var result = new List<Item>();
-        var cart = await localStorage.GetItemAsync<List<Item>>("cart");
-        if (cart==null)
+        // Constructor to initialize the ShoppingCartService with required services.
+        public ShoppingCartService(ILocalStorageService localStorage, IToastService toastService)
         {
+            this.localStorage = localStorage;
+            this.toastService = toastService;
+        }
+
+        // Retrieves all items in the shopping cart.
+        public async Task<List<Item>> GetAllItems()
+        {
+            var result = new List<Item>();
+            var cart = await localStorage.GetItemAsync<List<Item>>("cart");
+
+            // If the cart is empty, return an empty list.
+            if (cart == null)
+            {
+                return result;
+            }
+
+            // Create new Item instances  and return the list of items.
+            foreach (var item in cart)
+            {
+                var cartItem = new Item
+                {
+                    Category = item.Category,
+                    Description = item.Description,
+                    ItemId = item.ItemId,
+                    Name = item.Name,
+                    Price = item.Price,
+                    Stock = item.Stock
+                };
+                result.Add(cartItem);
+            }
             return result;
         }
 
-        foreach (var item in cart )
+        // Deletes a specified item from the shopping cart.
+        public async Task DeleteItem(Item item)
         {
-            var cartItem = new Item
+            var cart = await localStorage.GetItemAsync<List<Item>>("cart");
+
+            // If the cart is empty, return without making any changes.
+            if (cart == null)
             {
-                Category = item.Category,
-                Description = item.Description,
-                ItemId = item.ItemId,
-                Name = item.Name,
-                Price = item.Price,
-                Stock = item.Stock
-            };
-            result.Add(cartItem);
+                return;
+            }
+
+            // Find and remove the specified item from the cart, then update local storage.
+            var cartItem = cart.Find(c => c.ItemId == item.ItemId);
+            cart.Remove(cartItem);
+            await localStorage.SetItemAsync("cart", cart);
         }
-        return result;
-    }
-    
-    public async Task DeleteItem(Item item)
-    {
-        var cart = await localStorage.GetItemAsync<List<Item>>("cart");
-        if (cart==null)
+
+        // Clears the entire shopping cart.
+        public async Task Clear()
         {
-            return ;
+            await localStorage.ClearAsync();
         }
-
-        var cartItem = cart.Find(c => c.ItemId == item.ItemId);
-        cart.Remove(cartItem);
-
-        await localStorage.SetItemAsync("cart", cart);
-    }
-
-    public async Task Clear()
-    {
-        await localStorage.ClearAsync();
-    }
-
-
-    public event Action? onChange;
-    public async Task AddToCart(Item item)
-    {
-        var cart = await localStorage.GetItemAsync<List<Item>>("cart");
-        if (cart==null)
+        
+        // Adds a specified item to the shopping cart.
+        public async Task AddToCart(Item item)
         {
-            cart = new List<Item>();
+            var cart = await localStorage.GetItemAsync<List<Item>>("cart");
+
+            // If the cart is empty, initialize it as a new list.
+            if (cart == null)
+            {
+                cart = new List<Item>();
+            }
+
+            // Add the specified item to the cart and update local storage.
+            cart.Add(item);
+            await localStorage.SetItemAsync("cart", cart);
         }
-        cart.Add(item);
-        await localStorage.SetItemAsync("cart", cart);
     }
 }
