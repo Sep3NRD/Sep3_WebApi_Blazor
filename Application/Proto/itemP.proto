@@ -37,7 +37,6 @@ message ItemResponseP{
 }
 
 
-
 service ItemService {
     rpc postItem(ItemP) returns (ItemP){};
     rpc getItems(google.protobuf.Empty) returns (stream ItemP);

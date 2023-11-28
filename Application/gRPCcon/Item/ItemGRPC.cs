@@ -90,6 +90,7 @@ public class ItemGRPC : IItemGRPC
                      {
                             Domain.Models.Item finalItem = new Domain.Models.Item
                             {
+                                   ItemId = itemProto.Item.ItemId,
                                    Name = itemProto.Item.Name,
                                    Description = itemProto.Item.Description,
                                    Category = itemProto.Item.Category,
