@@ -50,6 +50,14 @@ public class ItemLogic : IItemLogic
 
         await itemGrpc.DeleteAsync(id);
     }
+    
+    public async Task<UpdateItemDto> UpdateItemAsync(UpdateItemDto item)
+    {
+        ValidateUpdate(item);
+        
+        UpdateItemDto updateItemDto = await itemGrpc.UpdateItemAsync(item);
+        return updateItemDto;
+    }
 
 
     private void ValidateItem(Item item)
@@ -59,4 +67,12 @@ public class ItemLogic : IItemLogic
         if (item.Price == 0)
             throw new Exception("Price cannot be zero.");
     }
+    
+    private void ValidateUpdate(UpdateItemDto dto)
+    {
+        if (dto.Price == 0)
+            throw new Exception("Price cannot be zero.");
+    }
+    
+    
 }
