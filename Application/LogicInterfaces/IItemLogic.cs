@@ -10,5 +10,4 @@ public interface IItemLogic
 
     Task<Item> GetByIdAsync(int id);
     Task DeleteAsync(int id);
-    Task<UpdateItemDto> UpdateItemAsync(UpdateItemDto item);
 }

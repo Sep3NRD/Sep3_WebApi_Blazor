@@ -28,12 +28,6 @@ message DeleteItemRequest{
     int32 itemId =1;
 }
 
-message UpdateItemRequest{
-    int32 itemId = 1;
-    double price = 2;
-    int32 stock = 3;
-}
-
 message GetItemById{
     int32 itemId= 1;
 }
@@ -43,13 +37,10 @@ message ItemResponseP{
 }
 
 
-
-
 service ItemService {
     rpc postItem(ItemP) returns (ItemP){};
     rpc getItems(google.protobuf.Empty) returns (stream ItemP);
     rpc getItemById(GetItemById) returns (ItemResponseP){};
     rpc getItem(GetItemRequest) returns (ItemResponseP){};
     rpc deleteItemById(DeleteItemRequest) returns (google.protobuf.Empty);
-    rpc updateItem(UpdateItemRequest) returns (google.protobuf.Empty);
 }

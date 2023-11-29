@@ -50,11 +50,12 @@ public class ItemController : ControllerBase
     }
 
 
-    [HttpGet("{itemId:int}")]
-    public async Task<ActionResult<Item>> GetByIdAsync([FromRoute]int itemId)
+    [HttpGet("id")]
+    public async Task<ActionResult<Item>> GetByIdAsync([FromQuery] int itemId)
     {
         try
         {
+            SearchItemParametersDto parameters = new(itemId);
             var item = await ItemLogic.GetByIdAsync(itemId);
             return item;
         }
@@ -64,7 +65,6 @@ public class ItemController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-
 
 
 
@@ -82,22 +82,5 @@ public class ItemController : ControllerBase
                 return StatusCode(500, e.Message);
             }
         }
-    
-
-    [HttpPut]
-    public async Task<ActionResult<UpdateItemDto>>UpdateAsync([FromRoute] int itemId, [FromQuery]double price, [FromQuery] int stock)
-    {
-        try
-        {
-            UpdateItemDto updated = new UpdateItemDto(itemId, price, stock);
-            var items = await ItemLogic.UpdateItemAsync(updated);
-            return Ok(items);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine();
-            return StatusCode(500, e.Message);
-        }
     }
-    
-}
+

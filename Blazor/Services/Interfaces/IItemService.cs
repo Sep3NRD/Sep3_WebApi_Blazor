@@ -9,8 +9,4 @@ public interface IItemService
 
     Task<ICollection<Item>> GetAsync();
     Task<Item> GetItemById(int id);
-
-    Task<UpdateItemDto> UpdateItem(UpdateItemDto dto);
-
-    Task DeleteItem(int id);
 }
