@@ -10,4 +10,5 @@ public interface IItemGRPC
     Task<Domain.Models.Item> GetByIdAsync(int id);
     
     Task DeleteAsync(int id);
+    Task<Domain.DTOs.UpdateItemDto> UpdateItemAsync(Domain.DTOs.UpdateItemDto item);
 }

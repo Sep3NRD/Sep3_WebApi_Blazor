@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Domain.DTOs;
@@ -48,17 +49,24 @@ public class ItemHttpClient : IItemService
     {
         HttpResponseMessage response = await client.GetAsync($"/items/{id}");
         string content = await response.Content.ReadAsStringAsync();
-        
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception(content);
-        }
-        
-        Item item = JsonSerializer.Deserialize<Item>(content,new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        })!;
 
-        return item;
+        if (response.IsSuccessStatusCode)
+        {
+            Item item = JsonSerializer.Deserialize<Item>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return item;
+        }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+        else
+        {
+            throw new Exception(
+                $"Failed to retrieve item with ID {id}. Status code: {response.StatusCode}. Content: {content}");
+        }
     }
 }

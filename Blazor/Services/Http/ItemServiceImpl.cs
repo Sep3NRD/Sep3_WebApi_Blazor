@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using Blazor.Services.Interfaces;
@@ -8,7 +9,10 @@ namespace Blazor.Services.Http;
 
 public class ItemServiceImpl : IItemService
 {
-    private readonly HttpClient client = new();
+    private readonly HttpClient client = new HttpClient()
+    {
+        BaseAddress = new Uri("http://localhost:5193")
+    };
     
     
     public async Task CreateAsync(Item item)
@@ -44,19 +48,23 @@ public class ItemServiceImpl : IItemService
 
     public async Task<Item> GetItemById(int id)
     {
-        HttpResponseMessage response = await client.GetAsync($"http://localhost:5193/Item/{id}");
+        HttpResponseMessage response = await client.GetAsync($"/Item/{id}");
         string content = await response.Content.ReadAsStringAsync();
-
-        if (!response.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            Item item = JsonSerializer.Deserialize<Item>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return item;
         }
-        
-        Item item = JsonSerializer.Deserialize<Item>(content,new JsonSerializerOptions
+        else if (response.StatusCode == HttpStatusCode.NotFound)
         {
-            PropertyNameCaseInsensitive = true
-        })!;
-
-        return item;
+            return null;
+        }
+        else
+        {
+            throw new Exception($"Failed to retrieve item with ID {id}. Status code: {response.StatusCode}. Content: {content}");
+        }
     }
 }

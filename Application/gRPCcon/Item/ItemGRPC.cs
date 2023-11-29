@@ -127,4 +127,32 @@ public class ItemGRPC : IItemGRPC
                      throw;
               }
        }
+
+       public async Task<Domain.DTOs.UpdateItemDto> UpdateItemAsync(Domain.DTOs.UpdateItemDto item)
+       {
+              try
+              {
+                     using (var channel = GrpcChannel.ForAddress("http://localhost:9090"))
+                     {
+                            var client = new ItemService.ItemServiceClient(channel);
+
+                            var itemToUpdate = new UpdateItemRequest
+                            {
+                                   ItemId = item.ItemId,
+                                   Price = item.Price,
+                                   Stock = item.Stock
+                            };
+                            
+                            var response = await client.updateItemAsync(itemToUpdate);
+                            return await Task.FromResult(item);
+                            
+                     }
+              }
+              catch (RpcException ex)
+              {
+                     Console.WriteLine($"gRPC call failed: {ex}");
+                     throw;
+              }
+       }
+
 }
