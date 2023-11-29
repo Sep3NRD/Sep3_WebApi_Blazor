@@ -13,6 +13,12 @@ public class ItemServiceImpl : IItemService
     {
         BaseAddress = new Uri("http://localhost:5193")
     };
+    private readonly ILogger<ItemServiceImpl> _logger;
+
+    public ItemServiceImpl(ILogger<ItemServiceImpl> logger)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
     
     
     public async Task CreateAsync(Item item)
@@ -66,5 +72,55 @@ public class ItemServiceImpl : IItemService
         {
             throw new Exception($"Failed to retrieve item with ID {id}. Status code: {response.StatusCode}. Content: {content}");
         }
+    }
+
+    public async Task<UpdateItemDto> UpdateItem(UpdateItemDto dto)
+    {
+        try
+        {
+            string itemAsJson = JsonSerializer.Serialize(dto);
+            StringContent content = new(itemAsJson, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PatchAsync($"/Item/{dto.ItemId}", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                string errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to update item. Status Code: {response.StatusCode}, Error: {errorMessage}");
+                throw new Exception($"Failed to update item. Status Code: {response.StatusCode}, Error: {errorMessage}");
+            }
+
+            // Assuming the response contains the updated item, you may need to adjust based on your API
+            string updatedItemAsJson = await response.Content.ReadAsStringAsync();
+            UpdateItemDto updatedItem = JsonSerializer.Deserialize<UpdateItemDto>(updatedItemAsJson);
+
+            return updatedItem;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in UpdateItem: {ex}");
+            throw;
+        }
+    }
+
+    public async Task DeleteItem(int id)
+    {
+        try
+        {
+            HttpResponseMessage response = await client.DeleteAsync($"http://localhost:5193/Item/{id}");
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(responseContent);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            _logger.LogError($"Error deleting item with ID {id}: {e}");
+            throw;
+        }
+        
     }
 }

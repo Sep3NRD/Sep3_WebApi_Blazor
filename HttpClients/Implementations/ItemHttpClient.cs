@@ -45,28 +45,5 @@ public class ItemHttpClient : IItemService
         return items;
     }
 
-    public async Task<Item> GetItemById(int id)
-    {
-        HttpResponseMessage response = await client.GetAsync($"/items/{id}");
-        string content = await response.Content.ReadAsStringAsync();
-
-        if (response.IsSuccessStatusCode)
-        {
-            Item item = JsonSerializer.Deserialize<Item>(content, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            return item;
-        }
-        else if (response.StatusCode == HttpStatusCode.NotFound)
-        {
-            return null;
-        }
-        else
-        {
-            throw new Exception(
-                $"Failed to retrieve item with ID {id}. Status code: {response.StatusCode}. Content: {content}");
-        }
-    }
+    
 }

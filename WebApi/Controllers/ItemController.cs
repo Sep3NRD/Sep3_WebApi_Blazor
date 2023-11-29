@@ -82,5 +82,22 @@ public class ItemController : ControllerBase
                 return StatusCode(500, e.Message);
             }
         }
-    }
+    
 
+    [HttpPut]
+    public async Task<ActionResult<UpdateItemDto>>UpdateAsync([FromRoute] int itemId, [FromQuery]double price, [FromQuery] int stock)
+    {
+        try
+        {
+            UpdateItemDto updated = new UpdateItemDto(itemId, price, stock);
+            var items = await ItemLogic.UpdateItemAsync(updated);
+            return Ok(items);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine();
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+}

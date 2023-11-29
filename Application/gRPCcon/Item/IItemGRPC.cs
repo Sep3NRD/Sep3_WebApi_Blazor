@@ -11,4 +11,5 @@ public interface IItemGRPC
     
     Task DeleteAsync(int id);
     Task<Domain.DTOs.UpdateItemDto> UpdateItemAsync(Domain.DTOs.UpdateItemDto item);
+    
 }

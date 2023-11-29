@@ -128,7 +128,7 @@ public class ItemGRPC : IItemGRPC
               }
        }
 
-       public async Task<Domain.DTOs.UpdateItemDto> UpdateItemAsync(Domain.DTOs.UpdateItemDto item)
+       public async Task<UpdateItemDto> UpdateItemAsync(UpdateItemDto item)
        {
               try
               {
@@ -154,5 +154,7 @@ public class ItemGRPC : IItemGRPC
                      throw;
               }
        }
+       
+       
 
 }

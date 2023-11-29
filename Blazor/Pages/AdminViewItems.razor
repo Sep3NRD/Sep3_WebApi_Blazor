@@ -4,6 +4,11 @@
 @using Domain.Models
 @inject IItemService itemService
 @using Components
+@using Blazored.Toast.Services
+@inject IToastService toastService;
+@inject NavigationManager navMgr
+
+
 
 
 <h3>Manage Items</h3>
@@ -33,7 +38,7 @@ else
                 <td>@item.Stock </td>
                 <td>
                     <button class="manage" @onclick="(e) => OpenManage(item.ItemId)">Manage</button>
-                    <button class="delete" @onclick="(e) => Delete()">Delete</button>
+                    <button class="delete" @onclick="(e) => Delete(item.ItemId)">Delete</button>
                 </td>
             </tr>
         }
@@ -64,7 +69,7 @@ else
              {
                  <label style="color: red">@msg</label>
              }
-             
+             <button class="btn btn-secondary confirm-button" @onclick="ConfirmUpdate">Confirm</button>
              <button class="btn btn-secondary close-button" @onclick="CloseModal">Close</button>
          </div>
      </Modal>
@@ -121,9 +126,53 @@ else
         showModal = false;
     }
 
-    private void Delete()
+    private async Task Delete(int itemId)
     {
-        
+        msg = "";
+        try
+        {
+            if (itemId != null)
+            {
+                await itemService.DeleteItem(itemId);
+            }
+            else
+            {
+                Console.WriteLine($"Item with ID {itemId} not found");
+            }
+          
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    private async Task ConfirmUpdate()
+    {
+        msg = "";
+        if (selectedItem.Price == null)
+        {
+            msg = "Price cannot be empty!";
+            return;
+        }
+        if (selectedItem.Stock == null)
+        {
+            msg = "Stock cannot be empty!";
+        }
+        try
+        {
+            UpdateItemDto item = new(selectedItem.ItemId,selectedItem.Price, 
+                selectedItem.Stock);
+            await itemService.UpdateItem(item);
+            toastService.ShowSuccess("Item details changed succesfully: " + selectedItem.Name);
+            showModal = false;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
     }
     
 }
