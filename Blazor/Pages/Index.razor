@@ -1,9 +1,54 @@
 ﻿@page "/"
-
+@using Domain.Models
+@using System.Security.Claims
+@using Blazor.Services
+@using Domain.DTOs
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ICustomerService customerService
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+@if (customer != null && !string.IsNullOrEmpty(customer.UserName))
+{
+    <h1>Hello, @customer.UserName !</h1>
+}
+else
+{
+    <h1>Hello, world!</h1>
+}
 
-Welcome to your new app.
+Welcome to PC Planet.
 
-<SurveyPrompt Title="How is Blazor working for you?"/>
+
+
+@code
+{
+    private Customer customer; // Ensure customer is initialized to avoid null reference
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    private IEnumerable<Claim> userClaims;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            AuthenticationState authState = await AuthState;
+            ClaimsPrincipal user = authState.User;
+            userClaims = user?.Claims;
+            Claim usernameClaim = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+
+            if (usernameClaim != null)
+            {
+                CustomerLoginDto dto = new CustomerLoginDto(usernameClaim.Value, "");
+                customer = await customerService.GetByUsernameAsync(dto);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error in OnInitializedAsync: {e.Message}");
+        }
+
+        StateHasChanged();
+    }
+}

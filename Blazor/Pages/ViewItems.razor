@@ -24,9 +24,9 @@
                 <div class="item-card">
                     <img src="img/product.png" alt="@item.Name" @onclick="() => ShowItemModal(item)"/>
                     <div class="item-details">
-                        <p>@item.Name</p>
+                        <h4>@item.Name</h4>
                         <p>Price: @item.Price DKK</p>
-                        <button class="buy-button" @onclick="() => AddToCart(item)">Buy</button>
+                        <button class="buy-button" @onclick="() => AddToCart(item)">Add To Cart</button>
                     </div>
                 </div>
         }

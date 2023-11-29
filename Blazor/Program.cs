@@ -33,7 +33,6 @@ builder.Services.AddScoped(
 );
 AuthorizationPolicies.AddPolicies(builder.Services);
 
-
 builder.Services.AddScoped<IItemService, ItemServiceImpl>();
 builder.Services.AddScoped<ICustomerService, CustomerServiceImpl>();
 

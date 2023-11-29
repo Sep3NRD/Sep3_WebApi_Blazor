@@ -7,7 +7,15 @@
 @using Blazored.Toast.Services
 @inject IToastService toastService;
 
- @if (cartItems == null || cartItems.Count <= 0)
+<div class="cart-title-container">
+    <div class="cart-title">
+        <h2>Shopping Cart</h2>
+    </div>
+    
+</div>
+
+
+@if (cartItems == null || cartItems.Count <= 0)
     {
         <span>You have no items in your cart.</span>
     }
@@ -20,7 +28,7 @@
                     <div class="item-name">
                         <h5>@item.Name</h5>
                         <span>@item.Description</span><br />
-                        <span>@item.Price</span><br />
+                        
                         <button class="btn-delete" @onclick="@(() => DeleteItem(item))">Delete</button>
                     </div>
                     <div class="item-price">$@(item.Price)</div>
@@ -29,6 +37,7 @@
             <div class="item-price">
                 Total (@cartItems.Count): $@cartItems.Sum(item => item.Price)
             </div>
+             <button class="order-button">Order</button>
         </div>
     }
 @code {
