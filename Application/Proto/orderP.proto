@@ -1,8 +1,8 @@
 syntax = "proto3";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
-import "itemP.proto";
-import "customerP.proto";
+import "Proto/itemP.proto";
+import "Proto/customerP.proto";
 
 option csharp_namespace = "Application";
 option java_multiple_files = true;

@@ -12,7 +12,8 @@ public class CustomerGRPC: ICustomerGRPC
     {
         GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
         var client = new CustomerService.CustomerServiceClient(channel);
-
+        
+        
         var customerAdressToSend = new AddressP
         {
             DoorNumber = customer.Address.DoorNumber,

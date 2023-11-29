@@ -3,6 +3,7 @@
 @using Blazor.Services
 @using Domain.DTOs
 @inject ICustomerService customerService;
+@inject IAuthService authService;
 
 <div class="container rounded bg-white">
     <div class="row">
@@ -68,6 +69,7 @@
         try
         {
             CustomerLoginDto dto = new CustomerLoginDto();
+            authService.GetAuthAsync()
             customerService.GetByUsernameAsync(dto);
         }
         catch (Exception e)
