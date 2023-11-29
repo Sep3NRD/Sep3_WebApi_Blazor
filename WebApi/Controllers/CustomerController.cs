@@ -32,12 +32,12 @@ public class CustomerController: ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<Customer>> GetAsync([FromQuery] string username, string password)
+    public async Task<ActionResult<Customer>> GetAsync([FromQuery] string username)
     {
         try
         {
-            CustomerLoginDto loginDto = new(username,password);
-            Customer customer = await customerLogic.LoginValidation(loginDto);
+            CustomerLoginDto loginDto = new(username,"");
+            var customer = await customerLogic.GetByUsernameAsync(loginDto);
             return Ok(customer);
         }
         catch (Exception e)
