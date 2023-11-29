@@ -30,6 +30,7 @@ public class ItemLogic : IItemLogic
 
     public async Task<Item> GetByIdAsync(int id)
     {
+        Console.WriteLine(id);
         Item? item = await itemGrpc.GetByIdAsync(id);
         if (item == null)
         {
@@ -41,6 +42,7 @@ public class ItemLogic : IItemLogic
 
     public async Task DeleteAsync(int id)
     {
+        
         Item? item = await itemGrpc.GetByIdAsync(id);
         if (item == null)
         {

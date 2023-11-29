@@ -94,7 +94,7 @@ public class ItemGRPC : IItemGRPC
                                    Price = itemProto.Item.Price,
                                    Stock = itemProto.Item.Stock
                             };
-                            Console.WriteLine(finalItem.ItemId);
+                            
                             return finalItem;
                      }
               }

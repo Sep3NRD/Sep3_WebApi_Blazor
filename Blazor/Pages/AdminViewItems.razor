@@ -1,3 +1,4 @@
+@page "/AdminViewItems"
 @using Domain.DTOs
 @using Domain.Models
 @inject IItemService itemService
@@ -40,8 +41,9 @@ else
 }
 </tbody>
 </table>
-    
 }
+
+
 @if (showModal)
 {
     <Modal ShowModal="showModal">
@@ -52,11 +54,11 @@ else
                 <div class="form-group field">
                     <div class="field">
                         <label style="text-align: center">Price:</label>
-                        <input type="text" @bind="selectedItem.Price"/>
+                        <input type="number" @bind="selectedItem.Price"/>
                     </div>
                     <div class="field">
                         <label style="text-align: center">Stock:</label>
-                        <input type="text" @bind="selectedItem.Stock"/>
+                        <input type="number" @bind="selectedItem.Stock"/>
                     </div>
                 </div>
             }
@@ -73,7 +75,7 @@ else
     private IEnumerable<Item>? items;
     private string msg = "";
     private bool showModal = false;
-    private Item selectedItem;
+    private Item selectedItem = new Item();
 
 
     protected override async Task OnInitializedAsync()
@@ -96,7 +98,6 @@ else
         try
         {
             Item item = await itemService.GetItemById(itemId);
-
             if (item != null)
             {
                 selectedItem = item;
@@ -111,6 +112,7 @@ else
         catch (Exception e)
         {
             showModal = false;
+            Console.WriteLine($"Error in OpenManage: {e.Message}");
         }
     }
 
