@@ -4,6 +4,8 @@
 @using IItemService = Blazor.Services.Interfaces.IItemService
 @inject IItemService itemService
 @inject NavigationManager navMgr
+@using Blazored.Toast.Services
+@inject IToastService toastService;
 
 
 <AuthorizeView Roles="admin">
@@ -86,6 +88,7 @@
             Item item = new(ItemName, ItemDescription, 
                 ItemCategory, ItemPrice, ItemStock);
             await itemService.CreateAsync(item);
+            toastService.ShowSuccess("Item created: " + item.Name);
             navMgr.NavigateTo("/");
             
         }

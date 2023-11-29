@@ -10,9 +10,7 @@ public interface IItemService
     Task<ICollection<Item>> GetAsync(
         string? Name,
         double? Price);
-
-    Task<Item> GetItemById(int id);
-
+    
 
 
 

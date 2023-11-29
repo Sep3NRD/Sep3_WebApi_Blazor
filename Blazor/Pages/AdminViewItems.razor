@@ -3,6 +3,12 @@
 @using Domain.DTOs
 @using Domain.Models
 @inject IItemService itemService
+@using Components
+@using Blazored.Toast.Services
+@inject IToastService toastService;
+@inject NavigationManager navMgr
+
+
 
 
 <h3>Manage Items</h3>
@@ -31,8 +37,8 @@ else
                 <td>@item.Name</td>
                 <td>@item.Stock </td>
                 <td>
-                    <button class="manage" @onclick="(e) => OpenManage(item)">Manage</button>
-                    <button class="delete" @onclick="(e) => Delete()">Delete</button>
+                    <button class="manage" @onclick="(e) => OpenManage(item.ItemId)">Manage</button>
+                    <button class="delete" @onclick="(e) => Delete(item.ItemId)">Delete</button>
                 </td>
             </tr>
         }
@@ -45,50 +51,25 @@ else
  {
      <Modal ShowModal="showModal">
          <div class="card">
-             @if (items == null)
+             @if(selectedItem!=null)
              {
-                 <label>Loading items...</label>
-             }
-             else if (!items.Any())
-             {
-                 <label>No items</label>
-             }
-             else if (Item == null)
-             {
-                 <label>Loading Items data..</label>
-             }
-             else
-             {
-                 <div class = "item-modal">
-                 <h3>@Item.Name</h3>
-                     <div class="form-group field">
-                         <label>@Item.Description</label>
-                         <div class="field">
-                             <label>@Item.Category</label>
-                             <select>
-                                     <option value="">Select Category</option>
-                                     <option value="CPU">CPU</option>
-                                     <option value="GPU">GPU</option>
-                                     <option value="Motherboard">Motherboard</option>
-                                     <option value="RAM">RAM</option>
-                                     <option value="CPU Cooler">CPU Cooler</option>
-                                     <option value="SSD">SSD</option>
-                                     <option value="HDD">HDD</option>
-                                     <option value="PSU">PSU</option>
-                                     <option value="Case">Case</option>
-                         </select>
-                             </div>
-                         
-                         <label>@Item.Price</label>
-                         <label>@Item.Stock</label>
-                     </div>
+                 <h3>@selectedItem.Name</h3>
+                 <div class = "form-group field">
+                        <div class="field">
+                                <label style="text-align: center">Price:</label>
+                                <input type="text" @bind="selectedItem.Price" />
+                            </div>
+                            <div class="field">
+                                <label style="text-align: center">Stock:</label>
+                                <input type="text" @bind="selectedItem.Stock" />
+                            </div>
                      </div>
              }
              @if (!string.IsNullOrEmpty(msg))
              {
                  <label style="color: red">@msg</label>
              }
-             
+             <button class="btn btn-secondary confirm-button" @onclick="ConfirmUpdate">Confirm</button>
              <button class="btn btn-secondary close-button" @onclick="CloseModal">Close</button>
          </div>
      </Modal>
@@ -99,7 +80,8 @@ else
     private IEnumerable<Item>? items;
     private string msg = "";
     private bool showModal = false;
-    private Item Item = null!;
+    private Item selectedItem;
+    
     
     protected override async Task OnInitializedAsync()
     {
@@ -114,13 +96,23 @@ else
         }
     }
 
-    private async Task OpenManage(Item item)
+    private async Task OpenManage(int itemId)
     {
         msg = "";
         try
         {
-            Item result = await itemService.GetItemById(item.ItemId);
-            showModal = true;
+            Item item = await itemService.GetItemById(itemId);
+            
+            if (item != null)
+            {
+                selectedItem = item;
+                showModal = true;
+            }
+            else
+            {
+                Console.WriteLine($"Item with ID {itemId} not found");
+            }
+          
         }
         catch (Exception e)
         {
@@ -134,9 +126,53 @@ else
         showModal = false;
     }
 
-    private void Delete()
+    private async Task Delete(int itemId)
     {
-        
+        msg = "";
+        try
+        {
+            if (itemId != null)
+            {
+                await itemService.DeleteItem(itemId);
+            }
+            else
+            {
+                Console.WriteLine($"Item with ID {itemId} not found");
+            }
+          
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    private async Task ConfirmUpdate()
+    {
+        msg = "";
+        if (selectedItem.Price == null)
+        {
+            msg = "Price cannot be empty!";
+            return;
+        }
+        if (selectedItem.Stock == null)
+        {
+            msg = "Stock cannot be empty!";
+        }
+        try
+        {
+            UpdateItemDto item = new(selectedItem.ItemId,selectedItem.Price, 
+                selectedItem.Stock);
+            await itemService.UpdateItem(item);
+            toastService.ShowSuccess("Item details changed succesfully: " + selectedItem.Name);
+            showModal = false;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
     }
     
 }

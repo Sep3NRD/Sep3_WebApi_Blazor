@@ -35,7 +35,6 @@ public class ItemLogic : IItemLogic
         {
             throw new Exception($"Item with id {id} not found");
         }
-
         return new Item(item.Name,item.Description,item.Category, item.Price,item.Stock);
     }
 
@@ -46,9 +45,15 @@ public class ItemLogic : IItemLogic
         {
             throw new Exception($"Item with id {id} was not found!");
         }
-        
-
         await itemGrpc.DeleteAsync(id);
+    }
+
+    public async Task<UpdateItemDto> UpdateItemAsync(UpdateItemDto item)
+    {
+        ValidateUpdate(item);
+        
+        UpdateItemDto updateItemDto = await itemGrpc.UpdateItemAsync(item);
+        return updateItemDto;
     }
 
 
@@ -57,6 +62,12 @@ public class ItemLogic : IItemLogic
         if (string.IsNullOrEmpty(item.Name))
             throw new Exception("Title cannot be empty.");
         if (item.Price == 0)
+            throw new Exception("Price cannot be zero.");
+    }
+
+    private void ValidateUpdate(UpdateItemDto dto)
+    {
+        if (dto.Price == 0)
             throw new Exception("Price cannot be zero.");
     }
 }
