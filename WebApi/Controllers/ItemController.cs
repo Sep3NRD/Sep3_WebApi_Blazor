@@ -69,9 +69,10 @@ public class ItemController : ControllerBase
 
 
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteAsync([FromRoute] int id)
     {
+        Console.WriteLine(id);
         try
         {
             await ItemLogic.DeleteAsync(id);
@@ -85,9 +86,9 @@ public class ItemController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<ActionResult<UpdateItemDto>> UpdateAsync([FromRoute] int itemId, [FromQuery] double price,
-        [FromQuery] int stock)
+    public async Task<ActionResult<UpdateItemDto>> UpdateAsync(int itemId, double price, int stock)
     {
+        Console.WriteLine(itemId + " " + price + " " + stock);
         try
         {
             UpdateItemDto updated = new UpdateItemDto(itemId, price, stock);

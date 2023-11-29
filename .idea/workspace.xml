@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="908a418e-0049-478c-893b-9d2fd181f012" name="Changes" comment="" />
+    <list default="true" id="908a418e-0049-478c-893b-9d2fd181f012" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Application/Logic/ItemLogic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Logic/ItemLogic.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/gRPCcon/Item/ItemGRPC.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/gRPCcon/Item/ItemGRPC.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blazor/Pages/AdminViewItems.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Blazor/Pages/AdminViewItems.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blazor/Services/Http/ItemServiceImpl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blazor/Services/Http/ItemServiceImpl.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blazor/Services/Interfaces/IItemService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blazor/Services/Interfaces/IItemService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebApi/Controllers/ItemController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebApi/Controllers/ItemController.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,6 +40,7 @@
       <updated>1698788501077</updated>
       <workItem from="1698788502210" duration="100000" />
       <workItem from="1701230004486" duration="20000" />
+      <workItem from="1701291516409" duration="4000" />
     </task>
     <servers />
   </component>
