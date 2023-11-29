@@ -88,7 +88,6 @@ public class ItemController : ControllerBase
     [HttpPatch]
     public async Task<ActionResult<UpdateItemDto>> UpdateAsync(int itemId, double price, int stock)
     {
-        Console.WriteLine(itemId + " " + price + " " + stock);
         try
         {
             UpdateItemDto updated = new UpdateItemDto(itemId, price, stock);

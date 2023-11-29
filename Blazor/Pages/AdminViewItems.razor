@@ -46,17 +46,17 @@ else
 {
     <Modal ShowModal="showModal">
         <div class="card">
-            @if(selectedItem!=null)
+            @if (selectedItem != null)
             {
                 <h3>@selectedItem.Name</h3>
-                <div class = "form-group field">
+                <div class="form-group field">
                     <div class="field">
                         <label style="text-align: center">Price:</label>
-                        <input type="text" @bind="selectedItem.Price" />
+                        <input type="text" @bind="selectedItem.Price"/>
                     </div>
                     <div class="field">
                         <label style="text-align: center">Stock:</label>
-                        <input type="text" @bind="selectedItem.Stock" />
+                        <input type="text" @bind="selectedItem.Stock"/>
                     </div>
                 </div>
             }
@@ -68,53 +68,53 @@ else
             <button class="btn btn-secondary close-button" @onclick="CloseModal">Close</button>
         </div>
     </Modal>
-    
-    @code{
+
+@code{
     private IEnumerable<Item>? items;
     private string msg = "";
     private bool showModal = false;
     private Item selectedItem;
 
 
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
+    {
+        try
         {
-            try
-            {
-                items = await itemService.GetAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                msg = e.Message;
-            }
+            items = await itemService.GetAsync();
         }
-
-
-        private async Task OpenManage(int itemId)
+        catch (Exception e)
         {
-            msg = "";
-            try
-            {
-                Item item = await itemService.GetItemById(itemId);
-
-                if (item != null)
-                {
-                    selectedItem = item;
-                    showModal = true;
-                }
-                else
-                {
-                    Console.WriteLine($"Item with ID {itemId} not found");
-                }
-
-            }
-            catch (Exception e)
-            {
-                showModal = false;
-            }
+            Console.WriteLine(e);
+            msg = e.Message;
         }
+    }
 
-        private async Task Delete(int itemId)
+
+    private async Task OpenManage(int itemId)
+    {
+        msg = "";
+        try
+        {
+            Item item = await itemService.GetItemById(itemId);
+
+            if (item != null)
+            {
+                selectedItem = item;
+                showModal = true;
+            }
+            else
+            {
+                Console.WriteLine($"Item with ID {itemId} not found");
+            }
+
+        }
+        catch (Exception e)
+        {
+            showModal = false;
+        }
+    }
+
+    private async Task Delete(int itemId)
     {
         msg = "";
         try
@@ -127,7 +127,7 @@ else
             {
                 Console.WriteLine($"Item with ID {itemId} not found");
             }
-          
+
         }
         catch (Exception e)
         {
@@ -135,6 +135,7 @@ else
             throw;
         }
     }
+
     private async Task ConfirmUpdate()
     {
         msg = "";
@@ -149,7 +150,7 @@ else
         }
         try
         {
-            UpdateItemDto item = new(selectedItem.ItemId,selectedItem.Price, 
+            UpdateItemDto item = new(selectedItem.ItemId, selectedItem.Price,
                 selectedItem.Stock);
             await itemService.UpdateItem(item);
             toastService.ShowSuccess("Item details changed succesfully: " + selectedItem.Name);
@@ -161,4 +162,10 @@ else
             msg = e.Message;
         }
     }
-    
+    private void CloseModal()
+    {
+        showModal = false;
+    }
+
+    }
+}
