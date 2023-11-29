@@ -1,6 +1,7 @@
 using System.Text;
 using Application.gRPCcon.Costumer;
 using Application.gRPCcon.Item;
+using Application.gRPCcon.Order;
 using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.Auth;
@@ -19,6 +20,10 @@ builder.Services.AddScoped<IItemGRPC, ItemGRPC>();
 builder.Services.AddScoped<IItemLogic, ItemLogic>();
 builder.Services.AddScoped<ICustomerGRPC, CustomerGRPC>();
 builder.Services.AddScoped<ICustomerLogic, CustomerLogic>();
+builder.Services.AddScoped<IOrderGRPC, OrderGRPC>();
+builder.Services.AddScoped<IOrderLogic, OrderLogic>();
+
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;

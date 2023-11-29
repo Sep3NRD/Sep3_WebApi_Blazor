@@ -1,4 +1,5 @@
-﻿using Application.LogicInterfaces;
+﻿using Application.Logic;
+using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ public class ItemController : ControllerBase
 
     public ItemController(IItemLogic itemLogic)
     {
-      ItemLogic = itemLogic;
+        ItemLogic = itemLogic;
     }
 
     [HttpPost]
@@ -31,7 +32,7 @@ public class ItemController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Item>>> GetAsync([FromQuery] string? Name, [FromQuery] double Price)
     {
@@ -68,19 +69,36 @@ public class ItemController : ControllerBase
 
 
 
-    [HttpDelete] 
-        public async Task<ActionResult> DeleteAsync([FromRoute] int id)
+    [HttpDelete]
+    public async Task<ActionResult> DeleteAsync([FromRoute] int id)
+    {
+        try
         {
-            try
-            {
-                await ItemLogic.DeleteAsync(id);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return StatusCode(500, e.Message);
-            }
+            await ItemLogic.DeleteAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
         }
     }
+
+    [HttpPatch]
+    public async Task<ActionResult<UpdateItemDto>> UpdateAsync([FromRoute] int itemId, [FromQuery] double price,
+        [FromQuery] int stock)
+    {
+        try
+        {
+            UpdateItemDto updated = new UpdateItemDto(itemId, price, stock);
+            var items = await ItemLogic.UpdateItemAsync(updated);
+            return Ok(items);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine();
+            return StatusCode(500, e.Message);
+        }
+    }
+}
 
