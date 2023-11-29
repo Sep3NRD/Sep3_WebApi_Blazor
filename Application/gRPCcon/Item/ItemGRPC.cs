@@ -10,14 +10,11 @@ namespace Application.gRPCcon.Item;
 
 public class ItemGRPC : IItemGRPC
 {
-
-
-
        public  Task<Domain.Models.Item> CreateAsync(Domain.Models.Item item)
        {
               GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
               var client = new ItemService.ItemServiceClient(channel);
-
+              
               var itemToSend = new ItemP
               {
                      Name = item.Name,

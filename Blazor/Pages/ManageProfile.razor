@@ -70,7 +70,7 @@
         try
         {
             CustomerLoginDto dto = new CustomerLoginDto();
-            authService.GetAuthAsync()
+            authService.GetAuthAsync();
             customerService.GetByUsernameAsync(dto);
         }
         catch (Exception e)
