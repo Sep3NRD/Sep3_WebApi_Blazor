@@ -2,6 +2,8 @@ using Application.gRPCcon.Costumer;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Logic;
 
@@ -51,6 +53,14 @@ public class CustomerLogic : ICustomerLogic
         Customer customer = await iCustomerGrpc.GetByUsernameAsync(userLoginDto);
 
         return customer;
+    }
+
+    public async Task UpdateAsync(Customer customer)
+    {
+        ValidateCustomer(customer);
+
+       await iCustomerGrpc.UpdateAsync(customer);
+        
     }
 
 

@@ -47,4 +47,18 @@ public class CustomerServiceImpl:ICustomerService
         return customer;
 
     }
+
+    public async Task UpdateCustomerAsync(Customer customer)
+    {
+        string customerAsJson = JsonSerializer.Serialize(customer);
+        StringContent content = new(customerAsJson, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await client.PatchAsync("http://localhost:5193/Customer", content);
+        string responseContent = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(responseContent);
+        }
+    }
 }

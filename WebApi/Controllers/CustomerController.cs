@@ -18,7 +18,6 @@ public class CustomerController: ControllerBase
     [HttpPost]
     public async Task<ActionResult<Customer>> CreateAsync(Customer customer)
     {
-        Console.WriteLine(customer.UserName);
         try
         {
             Customer customerToCreate = await customerLogic.CreateAsync(customer);
@@ -39,6 +38,21 @@ public class CustomerController: ControllerBase
             CustomerLoginDto loginDto = new(username,"");
             var customer = await customerLogic.GetByUsernameAsync(loginDto);
             return Ok(customer);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpPatch]
+    public async Task<ActionResult> UpdateAsync(Customer customer)
+    {
+        try
+        {
+            await customerLogic.UpdateAsync(customer);
+            return Ok();
         }
         catch (Exception e)
         {

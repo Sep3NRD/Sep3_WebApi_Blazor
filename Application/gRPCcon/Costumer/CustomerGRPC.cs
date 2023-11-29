@@ -1,7 +1,10 @@
+using System.Net;
 using Domain.DTOs;
 using Domain.Models;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace Application.gRPCcon.Costumer;
@@ -125,7 +128,39 @@ public class CustomerGRPC: ICustomerGRPC
         }
 
         await channel.ShutdownAsync();
-        return null;
+        return null ;
 
+    }
+
+    public async Task UpdateAsync(Customer customer)
+    {
+        GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
+        var client = new CustomerService.CustomerServiceClient(channel);
+        
+        
+        var customerAdressToSend = new AddressP
+        {
+            DoorNumber = customer.Address.DoorNumber,
+            Street = customer.Address.Street,
+            City = customer.Address.City,
+            State = customer.Address.State,
+            PostalCode = customer.Address.PostalCode,
+            Country = customer.Address.Country
+        };
+        
+        var customerToCreate = new CustomerP
+        {
+            Id=customer.Id,
+            Username = customer.UserName,
+            Password = customer.Password,
+            FirstName = customer.FirstName,
+            LastName = customer.LastName,
+            Address = customerAdressToSend,
+            Role = customer.Role
+        };
+        
+        var response = await client.updateCustomerAsync(customerToCreate);
+        channel.ShutdownAsync();
+        
     }
 }
