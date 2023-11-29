@@ -10,6 +10,7 @@ public class Customer
     public string Password { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public Address Address { get; set; } = new Address();
+    public string Role { get; set; }
+    public Address Address { get; init; } = new Address();
 
 }

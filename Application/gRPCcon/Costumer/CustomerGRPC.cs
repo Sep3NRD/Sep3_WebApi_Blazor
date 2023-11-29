@@ -29,7 +29,8 @@ public class CustomerGRPC: ICustomerGRPC
             Password = customer.Password,
             FirstName = customer.FirstName,
             LastName = customer.LastName,
-            Address = customerAdressToSend
+            Address = customerAdressToSend,
+            Role = customer.Role
         };
         
             var response = await client.createCustomerAsync(customerToCreate);
@@ -42,6 +43,7 @@ public class CustomerGRPC: ICustomerGRPC
 
     public async Task<Customer> ValidateLogin(string username, string password)
     {
+        
         GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
         var client = new CustomerService.CustomerServiceClient(channel);
 
@@ -70,7 +72,8 @@ public class CustomerGRPC: ICustomerGRPC
             Password = customerProto.Customer.Password,
             FirstName = customerProto.Customer.FirstName,
             LastName = customerProto.Customer.LastName,
-            Address = addressForFinalCostumer
+            Address = addressForFinalCostumer,
+            Role=customerProto.Customer.Role
         };
        await  channel.ShutdownAsync();
         return finalCustomer;
@@ -106,7 +109,8 @@ public class CustomerGRPC: ICustomerGRPC
                     Password = customerProto.Customer.Password,
                     FirstName = customerProto.Customer.FirstName,
                     LastName = customerProto.Customer.LastName,
-                    Address = addressForFinalCostumer
+                    Address = addressForFinalCostumer,
+                    Role=customerProto.Customer.Role
                 };
 
                 return finalCustomer;

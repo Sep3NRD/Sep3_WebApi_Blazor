@@ -4,6 +4,8 @@
 @inject IAuthService authService
 @inject NavigationManager navMgr
 @inject ICustomerService customerService;
+@using Blazored.Toast.Services
+@inject IToastService toastService;
 
 
 <h3>Register Customer</h3>
@@ -68,8 +70,11 @@
     {
         try
         {
+            customer.Role = "customer";
             await customerService.CreateAsync(customer);
             await authService.LoginAsync(customer.UserName, customer.Password);
+            toastService.ShowSuccess("You have been registered , " +
+                                           "you are automatically logged in!");
             navMgr.NavigateTo("/");
         }
         catch (Exception e)

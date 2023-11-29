@@ -4,6 +4,8 @@
 @using Domain.Models
 @inject IShoppingCartService shoppingCartService
 @inject ISyncLocalStorageService localStorage
+@using Blazored.Toast.Services
+@inject IToastService toastService;
 
  @if (cartItems == null || cartItems.Count <= 0)
     {
@@ -45,7 +47,7 @@
     {
         await shoppingCartService.DeleteItem(item);
         cartItems = await shoppingCartService.GetAllItems();
-        
+        toastService.ShowSuccess("Item with name :" + item.Name + " has been deleted");
     }
 
     
