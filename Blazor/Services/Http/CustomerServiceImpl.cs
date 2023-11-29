@@ -28,8 +28,23 @@ public class CustomerServiceImpl:ICustomerService
         throw new NotImplementedException();
     }
 
-    public Task<Customer> GetByUsernameAsync(CustomerLoginDto userLoginDto)
+    public async Task<Customer> GetByUsernameAsync(CustomerLoginDto userLoginDto)
     {
-        throw new NotImplementedException();
+        string username = userLoginDto.Username;
+        HttpResponseMessage response = await client.GetAsync($"http://localhost:5193/Customer?username={username}");
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(responseContent);
+        }
+
+        var customer = JsonSerializer.Deserialize<Customer>(responseContent, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return customer;
+
     }
 }

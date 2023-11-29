@@ -82,12 +82,13 @@ public class CustomerGRPC: ICustomerGRPC
 
     public async Task<Customer> GetByUsernameAsync(CustomerLoginDto username)
     {
+        Console.WriteLine(username.Username);
         GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
         var client = new CustomerService.CustomerServiceClient(channel);
 
         GetCustomerByUsername usernameRequest = new GetCustomerByUsername
         {
-            Username = username.ToString()
+            Username = username.Username
         };
         try
         {
@@ -106,6 +107,7 @@ public class CustomerGRPC: ICustomerGRPC
 
                 Customer finalCustomer = new Customer
                 {
+                    Id=customerProto.Customer.Id,
                     UserName = customerProto.Customer.Username,
                     Password = customerProto.Customer.Password,
                     FirstName = customerProto.Customer.FirstName,
