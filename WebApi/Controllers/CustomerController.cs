@@ -47,4 +47,19 @@ public class CustomerController: ControllerBase
         }
     }
     
+    [HttpPatch]
+    public async Task<ActionResult> UpdateAsync(Customer customer)
+    {
+        try
+        {
+            await customerLogic.UpdateAsync(customer);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
 }

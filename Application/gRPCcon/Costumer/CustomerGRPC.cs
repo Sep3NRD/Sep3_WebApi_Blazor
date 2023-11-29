@@ -85,7 +85,6 @@ public class CustomerGRPC: ICustomerGRPC
 
     public async Task<Customer> GetByUsernameAsync(CustomerLoginDto username)
     {
-        Console.WriteLine(username.Username);
         GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
         var client = new CustomerService.CustomerServiceClient(channel);
 
