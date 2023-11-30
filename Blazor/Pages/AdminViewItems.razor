@@ -66,8 +66,10 @@ else
             {
                 <label style="color: red">@msg</label>
             }
-            <button class="btn btn-secondary confirm-button" @onclick="ConfirmUpdate">Confirm</button>
-            <button class="btn btn-secondary close-button" @onclick="CloseModal">Close</button>
+            <div><button class="btn btn-secondary confirm-button" @onclick="ConfirmUpdate">Confirm</button>
+                <button class="btn btn-secondary close-button" @onclick="CloseModal">Close</button>
+                </div>
+            
         </div>
     </Modal>
 
@@ -75,7 +77,7 @@ else
     private IEnumerable<Item>? items;
     private string msg = "";
     private bool showModal = false;
-    private Item selectedItem = new Item();
+    private Item selectedItem;
 
 
     protected override async Task OnInitializedAsync()

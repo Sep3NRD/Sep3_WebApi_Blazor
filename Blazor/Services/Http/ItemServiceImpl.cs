@@ -73,15 +73,13 @@ public class ItemServiceImpl : IItemService
 
     public async Task<UpdateItemDto> UpdateItem(UpdateItemDto dto)
     {
-        
         try
         {
             string itemAsJson = JsonSerializer.Serialize(dto);
             StringContent content = new(itemAsJson, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PatchAsync($"/Item/{dto.ItemId}", content);
+            HttpResponseMessage response = await client.PatchAsync($"http://localhost:5193/Item/{dto.ItemId}?price={dto.Price}&stock={dto.Stock}", content);
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine("aaaaaaaaa");
                 string errorMessage = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Failed to update item. Status Code: {response.StatusCode}, Error: {errorMessage}");
                 throw new Exception(

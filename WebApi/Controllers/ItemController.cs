@@ -85,7 +85,7 @@ public async Task<ActionResult<Item>> GetByIdAsync(int id)
         }
     }
 
-    [HttpPatch("{itemId}")]
+    [HttpPatch("{ItemId}")]
     public async Task<ActionResult<UpdateItemDto>> UpdateAsync(int itemId, double price, int stock)
     {
         try
