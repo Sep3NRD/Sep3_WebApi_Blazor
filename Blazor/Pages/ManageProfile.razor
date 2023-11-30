@@ -69,15 +69,16 @@
 }
 
 @code {
-    private Customer? customer;
+    private Customer? customer;  // Nullable Customer object
     [CascadingParameter]
-    public Task<AuthenticationState> AuthState { get; set; } = null!;
-    private IEnumerable<Claim>? userClaims;
+    public Task<AuthenticationState> AuthState { get; set; } = null!;  // Cascading parameter for authentication state
+    private IEnumerable<Claim>? userClaims;  // Nullable collection of claims
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
+            // Retrieve authentication state
             AuthenticationState authState = await AuthState;
             ClaimsPrincipal user = authState.User;
             userClaims = user?.Claims;  // Perform null check
@@ -85,35 +86,37 @@
 
             if (username != null)
             {
+                // If username claim exists, create a CustomerLoginDto and fetch customer data
                 CustomerLoginDto dto = new CustomerLoginDto(username.Value, "");
                 customer = await customerService.GetByUsernameAsync(dto);
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            toastService.ShowError("Something went wrong");
+            Console.WriteLine(e);  // Log exception
         }
     }
 
+    // Method to update customer profile
     private async Task UpdateProfile()
     {
-        
         try
         {
+            // Update customer data through the service
             await customerService.UpdateCustomerAsync(customer);
             toastService.ShowSuccess("Your profile has been updated");
         }
         catch (Exception e)
         {
-            toastService.ShowError(e.Message);
+            toastService.ShowError(e.Message);  // Display error message
         }
     }
 
-
+    // Methods to update specific properties of the customer object based on user input
     private void UpdateCity(ChangeEventArgs e)
     {
         customer.Address.City = e.Value.ToString();
-
     }
 
     private void UpdatePostalCode(ChangeEventArgs e)
@@ -155,5 +158,6 @@
     {
         customer.Password = e.Value.ToString();
     }
+}
 
 }

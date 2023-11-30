@@ -9,15 +9,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Application.gRPCcon.Costumer;
 
-public class CustomerGRPC: ICustomerGRPC
+public class CustomerGRPC : ICustomerGRPC
 {
-    public async Task<Customer>  CreateAsync(Customer customer)
+    // Method to create a customer asynchronously
+    public async Task<Customer> CreateAsync(Customer customer)
     {
+        // Create a gRPC channel for communication
         GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
         var client = new CustomerService.CustomerServiceClient(channel);
-        
-        
-        var customerAdressToSend = new AddressP
+
+        // Convert the customer's address to the gRPC address format
+        var customerAddressToSend = new AddressP
         {
             DoorNumber = customer.Address.DoorNumber,
             Street = customer.Address.Street,
@@ -26,41 +28,48 @@ public class CustomerGRPC: ICustomerGRPC
             PostalCode = customer.Address.PostalCode,
             Country = customer.Address.Country
         };
-        
+
+        // Convert the customer to the gRPC customer format
         var customerToCreate = new CustomerP
         {
             Username = customer.UserName,
             Password = customer.Password,
             FirstName = customer.FirstName,
             LastName = customer.LastName,
-            Address = customerAdressToSend,
+            Address = customerAddressToSend,
             Role = customer.Role
         };
-        
-            var response = await client.createCustomerAsync(customerToCreate);
-            channel.ShutdownAsync();
-            customer.Id = response.Customer.Id;
-            return Task.FromResult(customer).Result;
 
+        // Call the gRPC service to create a customer
+        var response = await client.createCustomerAsync(customerToCreate);
 
+        // Shutdown the gRPC channel
+        channel.ShutdownAsync();
+
+        // Set the customer ID from the response and return the customer
+        customer.Id = response.Customer.Id;
+        return customer;
     }
 
+    // Method to validate customer login
     public async Task<Customer> ValidateLogin(string username, string password)
     {
-        
+        // Create a gRPC channel for communication
         GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
         var client = new CustomerService.CustomerServiceClient(channel);
 
+        // Create a gRPC request for customer login validation
         GetCustomerRequest customerRequest = new GetCustomerRequest
         {
             Username = username,
             Password = password
         };
 
+        // Call the gRPC service to validate customer login
         CustomerResponseP customerProto = await client.getCustomerAsync(customerRequest);
-        
-        
-        Address addressForFinalCostumer = new Address
+
+        // Convert the gRPC customer to the application's customer format
+        Address addressForFinalCustomer = new Address
         {
             DoorNumber = customerProto.Customer.Address.DoorNumber,
             Street = customerProto.Customer.Address.Street,
@@ -76,28 +85,39 @@ public class CustomerGRPC: ICustomerGRPC
             Password = customerProto.Customer.Password,
             FirstName = customerProto.Customer.FirstName,
             LastName = customerProto.Customer.LastName,
-            Address = addressForFinalCostumer,
-            Role=customerProto.Customer.Role
+            Address = addressForFinalCustomer,
+            Role = customerProto.Customer.Role
         };
-       await  channel.ShutdownAsync();
+
+        // Shutdown the gRPC channel
+        await channel.ShutdownAsync();
+
+        // Return the validated customer
         return finalCustomer;
     }
 
+    // Method to get a customer by username asynchronously
     public async Task<Customer> GetByUsernameAsync(CustomerLoginDto username)
     {
+        // Create a gRPC channel for communication
         GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
         var client = new CustomerService.CustomerServiceClient(channel);
 
+        // Create a gRPC request for getting a customer by username
         GetCustomerByUsername usernameRequest = new GetCustomerByUsername
         {
             Username = username.Username
         };
+
         try
         {
+            // Call the gRPC service to get a customer by username
             CustomerResponseP customerProto = await client.getCustomerByUsernameAsync(usernameRequest);
+
+            // If the customer exists, convert it to the application's customer format
             if (customerProto != null)
             {
-                Address addressForFinalCostumer = new Address
+                Address addressForFinalCustomer = new Address
                 {
                     DoorNumber = customerProto.Customer.Address.DoorNumber,
                     Street = customerProto.Customer.Address.Street,
@@ -109,15 +129,16 @@ public class CustomerGRPC: ICustomerGRPC
 
                 Customer finalCustomer = new Customer
                 {
-                    Id=customerProto.Customer.Id,
+                    Id = customerProto.Customer.Id,
                     UserName = customerProto.Customer.Username,
                     Password = customerProto.Customer.Password,
                     FirstName = customerProto.Customer.FirstName,
                     LastName = customerProto.Customer.LastName,
-                    Address = addressForFinalCostumer,
-                    Role=customerProto.Customer.Role
+                    Address = addressForFinalCustomer,
+                    Role = customerProto.Customer.Role
                 };
 
+                // Return the retrieved customer
                 return finalCustomer;
             }
         }
@@ -126,18 +147,22 @@ public class CustomerGRPC: ICustomerGRPC
             Console.WriteLine(e.Message);
         }
 
+        // Shutdown the gRPC channel
         await channel.ShutdownAsync();
-        return null ;
 
+        // Return null if the customer does not exist
+        return null;
     }
 
+    // Method to update customer information asynchronously
     public async Task UpdateAsync(Customer customer)
     {
+        // Create a gRPC channel for communication
         GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
         var client = new CustomerService.CustomerServiceClient(channel);
-        
-        
-        var customerAdressToSend = new AddressP
+
+        // Convert the customer's address to the gRPC address format
+        var customerAddressToSend = new AddressP
         {
             DoorNumber = customer.Address.DoorNumber,
             Street = customer.Address.Street,
@@ -146,20 +171,23 @@ public class CustomerGRPC: ICustomerGRPC
             PostalCode = customer.Address.PostalCode,
             Country = customer.Address.Country
         };
-        
+
+        // Convert the customer to the gRPC customer format
         var customerToCreate = new CustomerP
         {
-            Id=customer.Id,
+            Id = customer.Id,
             Username = customer.UserName,
             Password = customer.Password,
             FirstName = customer.FirstName,
             LastName = customer.LastName,
-            Address = customerAdressToSend,
+            Address = customerAddressToSend,
             Role = customer.Role
         };
-        
-        var response = await client.updateCustomerAsync(customerToCreate);
-        channel.ShutdownAsync();
-        
+
+        // Call the gRPC service to update customer information
+        await client.updateCustomerAsync(customerToCreate);
+
+        // Shutdown the gRPC channel
+        await channel.ShutdownAsync();
     }
 }
