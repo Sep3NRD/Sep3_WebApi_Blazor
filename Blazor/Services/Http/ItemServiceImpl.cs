@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using Blazor.Services.Interfaces;
@@ -8,7 +9,10 @@ namespace Blazor.Services.Http;
 
 public class ItemServiceImpl : IItemService
 {
-    private readonly HttpClient client = new();
+    private readonly HttpClient client = new HttpClient()
+    {
+        BaseAddress = new Uri("http://localhost:5193")
+    };
     
     
     public async Task CreateAsync(Item item)
@@ -44,19 +48,74 @@ public class ItemServiceImpl : IItemService
 
     public async Task<Item> GetItemById(int id)
     {
-        HttpResponseMessage response = await client.GetAsync($"http://localhost:5193/Item/{id}");
-        string content = await response.Content.ReadAsStringAsync();
-
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception(content);
-        }
         
-        Item item = JsonSerializer.Deserialize<Item>(content,new JsonSerializerOptions
+        HttpResponseMessage response = await client.GetAsync($"/Item/{id}");
+        string content = await response.Content.ReadAsStringAsync();
+        
+        if (response.IsSuccessStatusCode)
         {
-            PropertyNameCaseInsensitive = true
-        })!;
-
-        return item;
+            Item item = JsonSerializer.Deserialize<Item>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            
+            return item;
+        }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+        else
+        {
+            throw new Exception($"Failed to retrieve item with ID {id}. Status code: {response.StatusCode}. Content: {content}");
+        }
     }
-}
+
+    public async Task<UpdateItemDto> UpdateItem(UpdateItemDto dto)
+    {
+        
+        try
+        {
+            string itemAsJson = JsonSerializer.Serialize(dto);
+            StringContent content = new(itemAsJson, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PatchAsync($"/Item/{dto.ItemId}", content);
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("aaaaaaaaa");
+                string errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to update item. Status Code: {response.StatusCode}, Error: {errorMessage}");
+                throw new Exception(
+                    $"Failed to update item. Status Code: {response.StatusCode}, Error: {errorMessage}");
+            }
+            Console.WriteLine(content);
+
+            string updatedItemAsJson = await response.Content.ReadAsStringAsync();
+            UpdateItemDto updatedItem = JsonSerializer.Deserialize<UpdateItemDto>(updatedItemAsJson);
+            return updatedItem;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in UpdateItem: {ex}");
+            throw;
+        }
+    }
+
+    public async Task DeleteItem(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.DeleteAsync($"http://localhost:5193/Item/{id}");
+                string responseContent = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(responseContent);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        
+        }
+    }

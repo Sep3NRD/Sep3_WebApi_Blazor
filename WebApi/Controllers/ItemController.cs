@@ -51,13 +51,13 @@ public class ItemController : ControllerBase
     }
 
 
-    [HttpGet("id")]
-    public async Task<ActionResult<Item>> GetByIdAsync([FromQuery] int itemId)
+    [HttpGet("{id}")]
+
+public async Task<ActionResult<Item>> GetByIdAsync(int id)
     {
         try
         {
-            SearchItemParametersDto parameters = new(itemId);
-            var item = await ItemLogic.GetByIdAsync(itemId);
+            var item = await ItemLogic.GetByIdAsync(id);
             return item;
         }
         catch (Exception e)
@@ -69,9 +69,10 @@ public class ItemController : ControllerBase
 
 
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteAsync([FromRoute] int id)
     {
+        Console.WriteLine(id);
         try
         {
             await ItemLogic.DeleteAsync(id);
@@ -84,14 +85,14 @@ public class ItemController : ControllerBase
         }
     }
 
-    [HttpPatch]
-    public async Task<ActionResult<UpdateItemDto>> UpdateAsync([FromRoute] int itemId, [FromQuery] double price,
-        [FromQuery] int stock)
+    [HttpPatch("{itemId}")]
+    public async Task<ActionResult<UpdateItemDto>> UpdateAsync(int itemId, double price, int stock)
     {
         try
         {
             UpdateItemDto updated = new UpdateItemDto(itemId, price, stock);
             var items = await ItemLogic.UpdateItemAsync(updated);
+            
             return Ok(items);
         }
         catch (Exception e)

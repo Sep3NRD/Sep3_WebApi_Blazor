@@ -30,24 +30,25 @@ public class ItemLogic : IItemLogic
 
     public async Task<Item> GetByIdAsync(int id)
     {
+        Console.WriteLine(id);
         Item? item = await itemGrpc.GetByIdAsync(id);
         if (item == null)
         {
             throw new Exception($"Item with id {id} not found");
         }
 
-        return new Item(item.Name,item.Description,item.Category, item.Price,item.Stock);
+        return item;
     }
 
     public async Task DeleteAsync(int id)
     {
+        
         Item? item = await itemGrpc.GetByIdAsync(id);
         if (item == null)
         {
             throw new Exception($"Item with id {id} was not found!");
         }
         
-
         await itemGrpc.DeleteAsync(id);
     }
     

@@ -94,6 +94,7 @@ public class ItemGRPC : IItemGRPC
                                    Price = itemProto.Item.Price,
                                    Stock = itemProto.Item.Stock
                             };
+                            
                             return finalItem;
                      }
               }
