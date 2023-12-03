@@ -55,4 +55,32 @@ public class ItemLogicTest
             throw;
         }
     }
+    
+    
+    [Test]
+    public async Task GetByIdAsyncTest()
+    {
+        // Arrange
+        var id = 1;
+
+        _mockItemGRPC.Setup(x => x.GetByIdAsync(It.IsAny<int>()))
+            .ReturnsAsync(new Item
+            {
+                ItemId = id,
+                Name = "Nvidia GTX 3060",
+                Description = "Gaming graphics card",
+                Category = "GPU",
+                Price = 200.0,
+                Stock = 10
+                
+            });
+
+        // Act
+        var result = await _itemLogic.GetByIdAsync(id);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(id, result.ItemId);
+        //I THINK THERE SHOULD BE 1 MORE BUT IM NOT SURE HAT
+    }
 }
