@@ -1,11 +1,19 @@
 @page "/ShoppingCart"
 @using Blazor.Services.Interfaces
-@using Blazored.LocalStorage
+
 @using Domain.Models
 @inject IShoppingCartService shoppingCartService
-@inject ISyncLocalStorageService localStorage
+@inject IOrderService orderService
+
 @using Blazored.Toast.Services
+
+@using Blazor.Services
+@using System.Security.Claims
+@using Domain.DTOs
 @inject IToastService toastService;
+
+@inject ICustomerService customerService;
+
 
 <div class="cart-title-container">
     <div class="cart-title">
@@ -37,10 +45,15 @@
             <div class="item-price">
                 Total (@cartItems.Count): $@cartItems.Sum(item => item.Price)
             </div>
-             <button class="order-button">Order</button>
+             <button class="order-button"  @onclick="PlaceOrderAsync">Order</button>
         </div>
     }
 @code {
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    private IEnumerable<Claim> userClaims;
     List<Item> cartItems = new List<Item>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -52,13 +65,93 @@
         }
     }
 
+    private async Task PlaceOrderAsync()
+    {
+        // Check if there are items in the cart before placing an order
+        if (cartItems == null || cartItems.Count <= 0)
+        {
+        toastService.ShowError("Cannot place an order with an empty cart.");
+        return;
+        }
+       
+        try
+        {
+            Customer customer = await GetCurrentCustomer();
+            Console.WriteLine(">>>>>>>>>>>>"+customer);
+            Order orderFinal = new Order
+            {
+                Customer = customer,
+                Items = cartItems,
+                Address = customer.Address,
+                OrderDate = DateTime.Now.ToString(),
+                DeliveryDate = DateTime.Now.AddDays(3).ToString(),
+                IsConfirmed = false,
+                TotalPrice = getTotalPrice()
+            };
+       
+            await orderService.CreateAsync(orderFinal);
+        
+           // await shoppingCartService.Clear();
+       
+            toastService.ShowSuccess("Order placed successfully!");
+            
+            cartItems = await shoppingCartService.GetAllItems();
+        }
+        catch
+        (Exception e)
+        {
+            // Log the exception details
+            Console.WriteLine(e);
+
+            // Display an error message to the user
+            toastService.ShowError("Failed to place the order. Please try again later.");
+        }
+    }
+    
+
     private async Task DeleteItem(Item item)
     {
         await shoppingCartService.DeleteItem(item);
         cartItems = await shoppingCartService.GetAllItems();
         toastService.ShowSuccess("Item with name :" + item.Name + " has been deleted");
     }
-
     
+    private async Task<Customer> GetCurrentCustomer()
+    {
+        Customer customer1 = null;
+        try
+        {
+            AuthenticationState authState = await AuthState;
+            ClaimsPrincipal user = authState.User;
+            userClaims = user?.Claims;
+            
+            Claim usernameClaim = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+
+            if (usernameClaim != null)
+            {
+                CustomerLoginDto dto = new CustomerLoginDto(usernameClaim.Value, "");
+                customer1 = await customerService.GetByUsernameAsync(dto);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error in OnInitializedAsync: {e.Message}");
+        }
+
+        return customer1;
+
+    }
+    
+    
+
+    private double getTotalPrice()
+    {
+        double price = 0;
+        foreach (var item in cartItems)
+        {
+            price += item.Price;
+        }
+        return price;
+    }
 
 }

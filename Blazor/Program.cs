@@ -6,10 +6,9 @@ using Blazor.Services.Interfaces;
 using Blazored.LocalStorage;
 using Blazored.Toast;
 using Domain.Auth;
-using HttpClients.ClientInterfaces;
-using HttpClients.Implementations;
 using Microsoft.AspNetCore.Components.Authorization;
 using IItemService = Blazor.Services.Interfaces.IItemService;
+using IOrderService = Blazor.Services.Interfaces.IOrderService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +19,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IAuthService, JwtAuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddScoped<IOrderService, OrderServiceImpl>();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredToast();
 

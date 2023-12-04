@@ -19,7 +19,7 @@ public class OrderGRPC: IOrderGRPC
         // Prepare a gRPC request to create an order
         OrderPRequest orderToCreate = new OrderPRequest()
         {
-            Customer = orderP.Customer,
+            CustomerUsername = orderP.Customer.Username,
             Items = {orderP.Items}, // Assuming Items is a repeated field
             Oder = orderP // its oder but if make it order the rebuild doesnt work !?!? 
         };
