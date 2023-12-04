@@ -77,7 +77,7 @@
         try
         {
             Customer customer = await GetCurrentCustomer();
-            Console.WriteLine(">>>>>>>>>>>>"+customer);
+            
             Order orderFinal = new Order
             {
                 Customer = customer,
@@ -91,14 +91,13 @@
        
             await orderService.CreateAsync(orderFinal);
         
-           // await shoppingCartService.Clear();
+            await shoppingCartService.Clear();
        
             toastService.ShowSuccess("Order placed successfully!");
             
             cartItems = await shoppingCartService.GetAllItems();
         }
-        catch
-        (Exception e)
+        catch (Exception e)
         {
             // Log the exception details
             Console.WriteLine(e);
