@@ -25,7 +25,8 @@ public class ItemServiceImpl : IItemService
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(responseContent);
+            string errorMessage = $"Failed to create item. Status code: {response.StatusCode}, Content: {responseContent}";
+            throw new Exception(errorMessage);
         }
     }
 
