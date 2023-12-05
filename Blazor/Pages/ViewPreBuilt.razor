@@ -1,4 +1,4 @@
-@page "/ViewItems"
+@page "/ViewPreBuilt"
 @using Domain.Models
 @using Blazor.Services.Interfaces
 @inject IItemService itemService
@@ -41,7 +41,16 @@
             {
             <h3>@selectedItem.Name</h3>
             <div class="form-group field">
-                 <p><strong>Description:</strong> @selectedItem.Description</p>
+                <p><strong>Description:</strong></p>
+                <ul>
+                                        @foreach (var line in selectedItem.Description.Split('\n'))
+                                        {
+                                            <li>@line</li>
+                                        }
+                                    </ul>
+                
+                
+                
                 <p><strong>Price:</strong> @selectedItem.Price $</p>
             </div>
             }
@@ -83,7 +92,7 @@
     private List<Item> ExcludeItems(IEnumerable<Item> allItems)
     {
         return allItems
-            .Where(item => !item.Category.Contains("Pre-Built", StringComparison.OrdinalIgnoreCase))
+            .Where(item => item.Category.Contains("Pre-Built", StringComparison.OrdinalIgnoreCase))
             .ToList();
     }
 
