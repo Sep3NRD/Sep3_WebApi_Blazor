@@ -22,7 +22,7 @@ public class OrderLogic: IOrderLogic
             throw new Exception("Order is null");
         }
 
-         await iOrderGrpc.CreateAsync(dto);
+        await iOrderGrpc.CreateAsync(dto);
         // ConfirmAsync(dto); // just a check if it works
         
     }
@@ -34,7 +34,7 @@ public class OrderLogic: IOrderLogic
             throw new Exception("Order is null");
         }
 
-         await iOrderGrpc.ConfirmAsync(order);
+        await iOrderGrpc.ConfirmAsync(order);
         
     }
 }

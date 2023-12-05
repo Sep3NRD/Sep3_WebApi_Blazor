@@ -73,11 +73,11 @@
         toastService.ShowError("Cannot place an order with an empty cart.");
         return;
         }
-       
+      
+        
         try
         {
             Customer customer = await GetCurrentCustomer();
-
             CreateOrderDto dto = new CreateOrderDto()
             {
                 addressId = customer.Address.id,

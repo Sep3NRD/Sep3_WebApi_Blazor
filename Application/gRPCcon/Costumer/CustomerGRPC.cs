@@ -124,7 +124,8 @@ public class CustomerGRPC : ICustomerGRPC
                     City = customerProto.Customer.Address.City,
                     State = customerProto.Customer.Address.State,
                     PostalCode = customerProto.Customer.Address.PostalCode,
-                    Country = customerProto.Customer.Address.Country
+                    Country = customerProto.Customer.Address.Country,
+                    id = customerProto.Customer.Address.Id
                 };
 
                 Customer finalCustomer = new Customer
