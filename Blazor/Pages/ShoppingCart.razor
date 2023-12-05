@@ -77,19 +77,19 @@
         try
         {
             Customer customer = await GetCurrentCustomer();
-            
-            Order orderFinal = new Order
+
+            CreateOrderDto dto = new CreateOrderDto()
             {
-                Customer = customer,
+                addressId = customer.Address.id,
                 Items = cartItems,
-                Address = customer.Address,
                 OrderDate = DateTime.Now.ToString(),
-                DeliveryDate = "",
-                IsConfirmed = false,
-                TotalPrice = getTotalPrice()
+                totalPrice = getTotalPrice(),
+                username = customer.UserName
             };
+            
+            
        
-            await orderService.CreateAsync(orderFinal);
+            await orderService.CreateAsync(dto);
         
             await shoppingCartService.Clear();
        

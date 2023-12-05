@@ -5,6 +5,6 @@ namespace HttpClients.ClientInterfaces;
 
 public interface IOrderService
 {
-    Task CreateAsync(OrderCreationDto dto);
+    // Task CreateAsync(OrderCreationDto dto);
     Task ConfirmAsync(Order order);
 }

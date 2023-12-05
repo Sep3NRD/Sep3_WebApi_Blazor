@@ -1,5 +1,6 @@
 using Application.gRPCcon.Order;
 using Application.LogicInterfaces;
+using Domain.DTOs;
 using Domain.Models;
 
 namespace Application.Logic;
@@ -14,17 +15,16 @@ public class OrderLogic: IOrderLogic
         this.iOrderGrpc = iOrderGrpc;
     }
 
-    public async Task<Order> CreateAsync(Order order)
+    public async Task CreateAsync(CreateOrderDto dto)
     {
-        if (order == null)
+        if (dto == null)
         {
             throw new Exception("Order is null");
         }
 
-        Order created = await iOrderGrpc.CreateAsync(order);
-        ConfirmAsync(order); // just a check if it works
+         await iOrderGrpc.CreateAsync(dto);
+        // ConfirmAsync(dto); // just a check if it works
         
-        return created;
     }
 
     public async Task ConfirmAsync(Order order)

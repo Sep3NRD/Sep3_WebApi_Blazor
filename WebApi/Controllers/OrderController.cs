@@ -1,4 +1,5 @@
 using Application.LogicInterfaces;
+using Domain.DTOs;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,13 +18,13 @@ public class OrderController: ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Order>> CreateAsync(Order order)
+    public async Task<ActionResult<Order>> CreateAsync(CreateOrderDto dto)
     {
         
         try
         {
-            Order orderToCreate = await orderLogic.CreateAsync(order);
-            return Created($"/order/{order.Id}", orderToCreate);
+            await orderLogic.CreateAsync(dto);
+            return Ok();
         }
         catch (Exception e)
         {

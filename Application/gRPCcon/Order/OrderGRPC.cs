@@ -1,40 +1,44 @@
-using Application.Logic;
-using Application.LogicInterfaces;
+using Domain.DTOs;
 using Grpc.Net.Client;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.gRPCcon.Order;
 
 public class OrderGRPC: IOrderGRPC
 {
-    public async Task<Domain.Models.Order> CreateAsync(Domain.Models.Order order)
+    public async Task CreateAsync(CreateOrderDto dto)
     {
         // Establish a gRPC channel to the server at the specified address
         GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
         // Create a client for the OrderService using the gRPC channel
         var client = new OrderService.OrderServiceClient(channel);
         
-        // Convert the domain model Order to the gRPC OrderP
-        OrderP orderP = ConvertToOrderP(order);
-        
         // Prepare a gRPC request to create an order
-        OrderPRequest orderToCreate = new OrderPRequest()
+        List<ItemP> itemsToSend = ConvertToItemPList(dto.Items); 
+        
         {
-            CustomerUsername = orderP.Customer.Username,
-            Items = {orderP.Items}, // Assuming Items is a repeated field
-            Oder = orderP // its oder but if make it order the rebuild doesnt work !?!? 
-        };
+            CreateOrderP createOrderP = new CreateOrderP()
+            {
+                AddressId = dto.addressId,
+                CustomerUsername = dto.username,
+                OrderDate = dto.OrderDate,
+                TotalPrice = dto.totalPrice,
+                Items = { itemsToSend }
+            };
         
-        // Call the gRPC service method asynchronously to create the order
-        var response = await client.createOrderAsync(orderToCreate);
         
-        // Shutdown the gRPC channel once the operation is completed
-        channel.ShutdownAsync();
         
-        // Update the domain model Order with the returned order ID
-        order.Id = response.Order.Id; 
+            // Call the gRPC service method asynchronously to create the order
+            var response = await client.createOrderAsync(createOrderP);
         
+            // Shutdown the gRPC channel once the operation is completed
+            channel.ShutdownAsync();
+        
+            // Update the domain model Order with the returned order ID
+            // order.Id = response.Order.Id;
+        }
+
         // Return a completed task with the original order as a result
-        return Task.FromResult(order).Result;
     }
 
     public async Task ConfirmAsync(Domain.Models.Order order)

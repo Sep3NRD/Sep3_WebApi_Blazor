@@ -8,6 +8,7 @@ public class Address
     public string? State { get; set; }
     public int PostalCode { get; set; }
     public string? Country { get; set; }
+    public int id { get; }
     
     public Address(int doorNumber, string street, string city, string state, int postalCode, string country)
     {

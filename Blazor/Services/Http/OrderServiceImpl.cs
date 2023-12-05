@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using Blazor.Services.Interfaces;
+using Domain.DTOs;
 using Domain.Models;
 
 namespace Blazor.Services.Http;
@@ -9,9 +10,9 @@ public class OrderServiceImpl: IOrderService
 {
     private readonly HttpClient client = new();
     
-    public async Task CreateAsync(Order order)
+    public async Task CreateAsync(CreateOrderDto dto)
     {
-        string orderJson = JsonSerializer.Serialize(order);
+        string orderJson = JsonSerializer.Serialize(dto);
         StringContent content = new(orderJson, Encoding.UTF8, "application/json");
         
         HttpResponseMessage response = await client.PostAsync("http://localhost:5193/Order", content);
