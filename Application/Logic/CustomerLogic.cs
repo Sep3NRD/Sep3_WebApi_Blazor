@@ -73,8 +73,26 @@ public class CustomerLogic : ICustomerLogic
         await iCustomerGrpc.UpdateAsync(customer);
     }
 
+    public async Task AddNewAddress(AddNewAddressDTO dto)
+    {
+        Address address = new Address
+        {
+            Street = dto.Street,
+            City = dto.City,
+            DoorNumber = dto.DoorNumber,
+            PostalCode = dto.PostalCode,
+            Country = dto.Country,
+            State = dto.State
+        };
+        ValidateAddress(address);
 
-   private void ValidateCustomer(Customer customer)
+        await iCustomerGrpc.AddNewAddress(dto);
+    }
+    
+    
+
+
+    private void ValidateCustomer(Customer customer)
 {
     // Check if the customer object is null
     if (customer == null)

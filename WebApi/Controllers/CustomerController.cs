@@ -60,13 +60,32 @@ public class CustomerController : ControllerBase
     }
 
     // Action method to update customer information
-    [HttpPatch]
+    [HttpPatch("update")]
     public async Task<ActionResult> UpdateAsync(Customer customer)
     {
         try
         {
             // Call the business logic to update customer information
             await customerLogic.UpdateAsync(customer);
+
+            // Return a 200 OK response
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);  // Log the exception
+            // Return a 500 Internal Server Error response with the exception message
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpPatch("addNewAddress")]
+    public async Task<ActionResult> AddNewAddress(AddNewAddressDTO dto)
+    {
+        try
+        {
+            // Call the business logic to update customer information
+            await customerLogic.AddNewAddress(dto);
 
             // Return a 200 OK response
             return Ok();

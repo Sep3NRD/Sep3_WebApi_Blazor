@@ -9,4 +9,5 @@ public interface ICustomerService
     Task<Customer> GetAsync(CustomerLoginDto userLoginDto);
     Task<Customer> GetByUsernameAsync(CustomerLoginDto userLoginDto);
     Task UpdateCustomerAsync(Customer customer);
+    Task AddNewAddress(AddNewAddressDTO dto);
 }

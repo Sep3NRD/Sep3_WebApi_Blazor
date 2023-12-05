@@ -66,7 +66,23 @@ public class CustomerServiceImpl:ICustomerService
         StringContent content = new(customerAsJson, Encoding.UTF8, "application/json");
 
         // Send a PATCH request to update customer information
-        HttpResponseMessage response = await client.PatchAsync("http://localhost:5193/Customer", content);
+        HttpResponseMessage response = await client.PatchAsync("http://localhost:5193/Customer/update", content);
+        string responseContent = await response.Content.ReadAsStringAsync();
+
+        // Check if the request was successful; if not, throw an exception
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(responseContent);
+        }
+    }
+
+    public async Task AddNewAddress(AddNewAddressDTO dto)
+    {
+        string dtoAsJson = JsonSerializer.Serialize(dto);
+        StringContent content = new(dtoAsJson, Encoding.UTF8, "application/json");
+
+        // Send a PATCH request to update customer information
+        HttpResponseMessage response = await client.PatchAsync("http://localhost:5193/Customer/addNewAddress", content);
         string responseContent = await response.Content.ReadAsStringAsync();
 
         // Check if the request was successful; if not, throw an exception

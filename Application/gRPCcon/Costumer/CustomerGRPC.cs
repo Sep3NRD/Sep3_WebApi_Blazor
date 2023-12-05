@@ -190,4 +190,24 @@ public class CustomerGRPC : ICustomerGRPC
         // Shutdown the gRPC channel
         await channel.ShutdownAsync();
     }
+
+    public async Task AddNewAddress(AddNewAddressDTO dto)
+    {
+        GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
+        var client = new CustomerService.CustomerServiceClient(channel);
+
+        // Convert the customer's address to the gRPC address format
+        var newAddress = new NewAddressP()
+        {
+            DoorNumber = dto.DoorNumber,
+            Street = dto.Street,
+            City = dto.City,
+            State = dto.State,
+            PostalCode = dto.PostalCode,
+            Country = dto.Country,
+            Username = dto.username
+        };
+        await client.addNewAddressAsync(newAddress);
+        await channel.ShutdownAsync();
+    }
 }

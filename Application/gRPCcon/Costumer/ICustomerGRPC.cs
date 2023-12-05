@@ -11,5 +11,6 @@ public interface ICustomerGRPC
     Task<Domain.Models.Customer> ValidateLogin(string username, string password);
     Task<Customer> GetByUsernameAsync(CustomerLoginDto username);
     Task UpdateAsync(Customer customer);
+    Task AddNewAddress(AddNewAddressDTO dto);
 
 }

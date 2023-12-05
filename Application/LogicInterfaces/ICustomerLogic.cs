@@ -10,5 +10,6 @@ public interface ICustomerLogic
     Task<Customer> LoginValidation(CustomerLoginDto userLoginDto);
     Task<Customer> GetByUsernameAsync(CustomerLoginDto userLoginDto);
     Task UpdateAsync(Customer customer);
+    Task AddNewAddress(AddNewAddressDTO dto);
 
 }
