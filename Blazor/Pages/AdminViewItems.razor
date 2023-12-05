@@ -23,6 +23,7 @@ else
         <thead>
         <tr>
             <th>Name</th>
+            <th>Category</th>
             <th >Stock</th>
             <th class = "managecol">Manage</th>
         </tr>
@@ -32,6 +33,7 @@ else
 {
     <tr>
         <td>@item.Name</td>
+        <td>@item.Category</td>
         <td>@item.Stock </td>
         <td>
             <button class="manage" @onclick="(e) => OpenManage(item.ItemId)">Manage</button>

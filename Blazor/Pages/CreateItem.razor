@@ -7,16 +7,18 @@
 
 
 <AuthorizeView Roles="admin">
-<div class="card">
     <h3>Create a new Item.</h3>
     <div class="field">
-        <label>Item name:</label>
+        <label style="text-align:center;" >Item name:</label>
         <input type="text" @bind="ItemName" />
     </div>
     <div class="field">
-            <label style="text-align: center">Description:</label>
-            <input type="text" @bind="ItemDescription" />
-        </div>
+            <label style="text-align:center; ">Description:</label>
+        <textarea type="text" @bind="ItemDescription" @oninput="UpdateDescriptionCharCount"></textarea>  
+        <div style="color: #888; font-size: 12px;">
+                Characters: <span id="currentCharCount">@ItemDescription.Length</span> / @MaxDescriptionLength
+            </div>
+    </div>
     <div class="field">
         <label style="text-align: center">Category:</label>
         <select @bind="ItemCategory">
@@ -30,6 +32,7 @@
             <option value="HDD">HDD</option>
             <option value="PSU">PSU</option>
             <option value="Case">Case</option>
+            <option value="Pre-Built">Pre-Built</option>
         </select>
     </div>
     
@@ -53,7 +56,6 @@
     <div class="field">
         <button class="createbtn" @onclick="Create">Create</button>
     </div>
-</div>
 
 </AuthorizeView>
 
@@ -66,6 +68,7 @@
     private double ItemPrice;
     private int ItemStock = 0;
     string msg = "";
+    private int MaxDescriptionLength = 250;
 
     private async Task Create()
     {
@@ -93,6 +96,16 @@
         {
             Console.WriteLine(e);
             msg = e.Message;
+        }
+    }
+    
+    private void UpdateDescriptionCharCount(ChangeEventArgs e)
+    {
+        ItemDescription = e.Value.ToString();
+    
+        if (ItemDescription.Length > MaxDescriptionLength)
+        {
+            Console.WriteLine("Exceeded max character count!");
         }
     }
 }
