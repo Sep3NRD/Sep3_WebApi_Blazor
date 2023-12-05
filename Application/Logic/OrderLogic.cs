@@ -22,6 +22,19 @@ public class OrderLogic: IOrderLogic
         }
 
         Order created = await iOrderGrpc.CreateAsync(order);
+        ConfirmAsync(order); // just a check if it works
+        
         return created;
+    }
+
+    public async Task ConfirmAsync(Order order)
+    {
+        if (order == null)
+        {
+            throw new Exception("Order is null");
+        }
+
+         await iOrderGrpc.ConfirmAsync(order);
+        
     }
 }

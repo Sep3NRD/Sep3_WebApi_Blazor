@@ -37,6 +37,29 @@ public class OrderGRPC: IOrderGRPC
         return Task.FromResult(order).Result;
     }
 
+    public async Task ConfirmAsync(Domain.Models.Order order)
+    {
+        try
+        {
+            // Establish a gRPC channel to the server at the specified address
+            GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
+            // Create a client for the OrderService using the gRPC channel
+            var client = new OrderService.OrderServiceClient(channel);
+            OrderP orderToConfirm = ConvertToOrderP(order);
+            var response = await client.confirmOrderAsync(orderToConfirm);
+
+            channel.ShutdownAsync();
+
+            order.IsConfirmed = response.Success;
+            order.DeliveryDate = response.DeliveryDate;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
     private OrderP ConvertToOrderP(Domain.Models.Order order)
     {
         // Convert the customer information from domain model to gRPC model
