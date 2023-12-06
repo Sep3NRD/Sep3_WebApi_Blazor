@@ -32,4 +32,40 @@ public class OrderController: ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Order>>> GetAsync()
+    {
+        try
+        {
+            var orders = await orderLogic.GetAllAsync();
+            return Ok(orders);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpPatch("confirm")]
+    public async Task<ActionResult> ConfirmAsync(int orderId)
+    {
+        try
+        {
+            // Call the business logic to update customer information
+            await orderLogic.ConfirmAsync(orderId);
+
+            // Return a 200 OK response
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);  // Log the exception
+            // Return a 500 Internal Server Error response with the exception message
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    
 }

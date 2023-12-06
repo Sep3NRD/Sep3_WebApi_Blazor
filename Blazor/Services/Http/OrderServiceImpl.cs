@@ -24,4 +24,30 @@ public class OrderServiceImpl: IOrderService
             throw new Exception(responseContent);
         }
     }
+
+    public async Task<ICollection<Order>> GetAllAsync()
+    {
+        HttpResponseMessage responseMessage = await client.GetAsync("http://localhost:5193/Order");
+        string content = await responseMessage.Content.ReadAsStringAsync();
+        if (!responseMessage.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+        
+        ICollection<Order> orders = JsonSerializer.Deserialize<ICollection<Order>>(content, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return orders;
+    }
+    public async Task ConfirmAsync(int orderId)
+    {
+        HttpResponseMessage responseMessage = await client.PatchAsJsonAsync("/confirm", orderId);
+        string result = await responseMessage.Content.ReadAsStringAsync();    
+        if (!responseMessage.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+    }
+    
 }

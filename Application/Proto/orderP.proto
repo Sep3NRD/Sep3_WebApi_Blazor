@@ -47,10 +47,17 @@ message ConfirmationResponse {
   string deliveryDate=2;
 }
 
+message AllOrdersResponse{
+  repeated OrderP ordersP =1;
+}
 
+message OrderIdToConfirm{
+  int32 orderId=1;
+}
 
 service OrderService{
   rpc createOrder(CreateOrderP) returns (SuccessMessage){};
-  rpc confirmOrder(OrderP) returns (ConfirmationResponse){};
+  rpc confirmOrder(OrderIdToConfirm) returns (ConfirmationResponse){};
+  rpc getAllOrders(google.protobuf.Empty) returns (AllOrdersResponse){};
 
 }
