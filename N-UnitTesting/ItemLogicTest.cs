@@ -81,6 +81,7 @@ public class ItemLogicTest
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(id, result.ItemId);
-        //I THINK THERE SHOULD BE 1 MORE BUT IM NOT SURE HAT
+        Assert.AreEqual("Nvidia GTX 3060", result.Name);
+        
     }
 }
