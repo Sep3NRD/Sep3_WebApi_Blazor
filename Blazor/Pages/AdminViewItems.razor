@@ -9,11 +9,29 @@
 @inject NavigationManager navMgr
 
 <h3>Manage Items</h3>
-@if (items == null)
+
+<div class = "search-bar">
+    <input type="text" @bind="searchItem" placeholder="Search items" />
+    <select @bind="selectedCategory">
+            <option value="">All</option>
+            <option value="CPU">CPU</option>
+            <option value="GPU">GPU</option>
+            <option value="Motherboard">Motherboard</option>
+            <option value="RAM">RAM</option>
+            <option value="CPU Cooler">CPU Cooler</option>
+            <option value="SSD">SSD</option>
+            <option value="HDD">HDD</option>
+            <option value="PSU">PSU</option>
+            <option value="Case">Case</option>
+        </select>
+    <button @onclick="Search">Search</button>
+</div>
+
+@if (filteredItems == null)
 {
     <p>Loading...</p>
 }
-else if (!items.Any())
+else if (!filteredItems.Any())
 {
     <p>No Items to display</p>
 }
@@ -29,7 +47,7 @@ else
         </tr>
 </thead>
 <tbody>
-@foreach (var item in items)
+@foreach (var item in filteredItems)
 {
     <tr>
         <td>@item.Name</td>
@@ -80,6 +98,9 @@ else
     private string msg = "";
     private bool showModal = false;
     private Item selectedItem;
+    private IEnumerable<Item>? filteredItems;
+    private string searchItem= "";
+    private string selectedCategory = "";
 
 
     protected override async Task OnInitializedAsync()
@@ -87,6 +108,7 @@ else
         try
         {
             items = await itemService.GetAsync();
+            UpdateFilteredItems();
         }
         catch (Exception e)
         {
@@ -171,6 +193,22 @@ else
     private void CloseModal()
     {
         showModal = false;
+    }
+    
+    private void Search()
+    {
+        filteredItems = items
+            .Where(item => 
+                (string.IsNullOrEmpty(selectedCategory) || item.Category.Equals(selectedCategory, StringComparison.OrdinalIgnoreCase)) &&
+                item.Name.Contains(searchItem, StringComparison.OrdinalIgnoreCase)
+            )
+            .ToList();
+        
+    }
+    
+    private void UpdateFilteredItems()
+    {
+        filteredItems = items.ToList();
     }
 
     }
