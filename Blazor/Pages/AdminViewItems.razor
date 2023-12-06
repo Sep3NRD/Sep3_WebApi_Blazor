@@ -25,24 +25,24 @@ else
             <th>Name</th>
             <th>Category</th>
             <th >Stock</th>
-            <th class = "managecol">Manage</th>
+            <th class="managecol">Manage</th>
         </tr>
-</thead>
-<tbody>
-@foreach (var item in items)
-{
-    <tr>
-        <td>@item.Name</td>
-        <td>@item.Category</td>
-        <td>@item.Stock </td>
-        <td>
-            <button class="manage" @onclick="(e) => OpenManage(item.ItemId)">Manage</button>
-            <button class="delete" @onclick="(e) => Delete(item.ItemId)">Delete</button>
-        </td>
-    </tr>
-}
-</tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var item in items)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Category</td>
+                <td>@item.Stock </td>
+                <td>
+                    <button class="manage" @onclick="(e) => OpenManage(item.ItemId)">Manage</button>
+                    <button class="delete" @onclick="(e) => Delete(item.ItemId)">Delete</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
 }
 
 
@@ -68,13 +68,13 @@ else
             {
                 <label style="color: red">@msg</label>
             }
-            <div><button class="btn btn-secondary confirm-button" @onclick="ConfirmUpdate">Confirm</button>
+            <div>
+                <button class="btn btn-secondary confirm-button" @onclick="ConfirmUpdate">Confirm</button>
                 <button class="btn btn-secondary close-button" @onclick="CloseModal">Close</button>
-                </div>
-            
+            </div>
+
         </div>
     </Modal>
-
 @code{
     private IEnumerable<Item>? items;
     private string msg = "";
@@ -111,7 +111,6 @@ else
             {
                 Console.WriteLine($"Item with ID {itemId} not found");
             }
-
         }
         catch (Exception e)
         {
@@ -133,7 +132,6 @@ else
             {
                 Console.WriteLine($"Item with ID {itemId} not found");
             }
-
         }
         catch (Exception e)
         {
@@ -168,10 +166,10 @@ else
             msg = e.Message;
         }
     }
+
     private void CloseModal()
     {
         showModal = false;
     }
 
-    }
-}
+}}

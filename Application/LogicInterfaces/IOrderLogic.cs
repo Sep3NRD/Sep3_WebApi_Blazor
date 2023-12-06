@@ -6,5 +6,6 @@ namespace Application.LogicInterfaces;
 public interface IOrderLogic
 {
     Task CreateAsync(CreateOrderDto dto);
-    Task ConfirmAsync(Order order);
+    Task ConfirmAsync(int orderId);
+    Task<IEnumerable<Order>> GetAllAsync();
 }

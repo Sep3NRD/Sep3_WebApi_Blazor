@@ -1,0 +1,179 @@
+@page "/AdminViewOrders"
+@using Domain.Models
+@using Blazored.Toast.Services
+@using Blazor.Services.Interfaces
+@inject IToastService toastService;
+@inject IOrderService orderservice;
+@using Components
+
+<h3>AdminViewOrders</h3>
+
+
+@if (orders == null)
+{
+    <p>Loading...</p>
+}
+else if (!orders.Any())
+{
+    <p>No Items to display</p>
+}
+else
+{
+    <table class="item-table">
+        <thead>
+        <tr>
+            <th>Customer username</th>
+            <th>Address</th>
+            <th>Id</th>
+            <th>Is confirmed</th>
+            <th class="managecol">Manage</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var order in orders)
+        {
+            <tr>
+                <td>@order.Customer.UserName</td>
+                <td>@order.Address.ToString()</td>
+                <td>@order.Id</td>
+                <td>@order.IsConfirmed</td>
+                <td>
+                    <button class="manage" @onclick="(e) => OpenManage(order.Id)">Details</button>
+                    <button class="Confirm" @onclick="(e) => ConfirmOrder(order)">Confirm</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@if (showModal)
+{
+    <Modal ShowModal="showModal">
+        <div class="card">
+            @if (selectedoOrder != null)
+            {
+                <h3>Order id : @selectedoOrder.Id</h3>
+                <div class="form-group field">
+                    <div class="field">
+                        <label style="text-align: center">Customer Name:</label>
+                        <p>@selectedoOrder.Customer.FirstName</p>
+                        <p>@selectedoOrder.Customer.LastName</p>
+                    </div>
+                    <div class="field">
+                        <label style="text-align: center">Order Date:</label>
+                        <p>@selectedoOrder.OrderDate</p>
+                    </div>
+                    <div class="field">
+                        <label style="text-align: center">Is Confirmed:</label>
+                        <p>@selectedoOrder.IsConfirmed</p>
+                    </div>
+                    <div class="field">
+                        <label style="text-align: center">Items:</label>
+                        @foreach (var item in selectedoOrder.Items)
+                        {
+                            <p>Item Name: @item.Name</p>
+                            <p>Item Price: @item.Price</p>
+                            <p>Item Price: @item.quantity</p>
+                            <hr/>
+                        }
+
+                    </div>
+                    <div class="field">
+                        <label style="text-align: center">Total Price:</label>
+                        <p>@selectedoOrder.TotalPrice</p>
+                    </div>
+                </div>
+            }
+            <div>
+                <button class="btn btn-secondary close-button" @onclick="CloseModal">Close</button>
+            </div>
+
+        </div>
+    </Modal>
+@code
+{
+
+    private IEnumerable<Order>? orders;
+    private bool showModal = false;
+    private Order selectedoOrder;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        
+        
+        try
+        {
+         orders = await orderservice.GetAllAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            toastService.ShowError("Something went wrong!");
+        }
+    }
+
+    private void OpenManage(int orderId)
+    {
+        try
+        {
+            Order order = orders.FirstOrDefault(o => o.Id == orderId);
+            if (order != null)
+            {
+                selectedoOrder = order;
+                showModal = true;
+            }
+            else
+            {
+                toastService.ShowError($"Order with ID {orderId} not found");
+            }
+        }
+        catch (Exception e)
+        {
+            showModal = false;
+            toastService.ShowError($"Error in OpenManage: {e.Message}");
+            Console.WriteLine($"Error in OpenManage: {e.Message}");
+        }
+    }
+
+    private void CloseModal()
+    {
+        showModal = false;
+    }
+
+    private async Task ConfirmOrder(Order order)
+    {
+        try
+        {
+            if (order.IsConfirmed)
+            {
+                toastService.ShowInfo($"Order with ID {order.Id} is already confirmed");
+            }
+            else
+            {
+                await orderservice.ConfirmAsync(order.Id);
+                toastService.ShowSuccess($"Order with id : {order.Id} confirmed with success");
+                toastService.ShowInfo($"Expected delivery date : {CalculateExpectedDeliveryDate()}");
+            }
+            
+            
+            
+        }
+        catch (Exception e)
+        {
+            toastService.ShowError("Something went wrong");
+            Console.WriteLine(e);
+        }
+    }
+    
+    private string CalculateExpectedDeliveryDate()
+    {
+        DateTime localNow = DateTime.Now;
+        DateTime expectedDelivery = localNow.AddDays(3);
+
+    // Format the date according to your preference
+        return expectedDelivery.ToString("yyyy-MM-dd");
+    }
+}}

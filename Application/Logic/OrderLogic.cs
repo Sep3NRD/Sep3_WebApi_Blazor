@@ -27,14 +27,15 @@ public class OrderLogic: IOrderLogic
         
     }
 
-    public async Task ConfirmAsync(Order order)
+    public async Task ConfirmAsync(int orderId)
     {
-        if (order == null)
-        {
-            throw new Exception("Order is null");
-        }
 
-        await iOrderGrpc.ConfirmAsync(order);
+        await iOrderGrpc.ConfirmAsync(orderId);
         
+    }
+
+    public async Task<IEnumerable<Order>> GetAllAsync()
+    {
+        return await iOrderGrpc.GetAllAsync();
     }
 }

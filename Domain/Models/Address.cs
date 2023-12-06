@@ -24,4 +24,9 @@ public class Address
     public Address()
     {
     }
+
+    public override string ToString()
+    {
+        return Street + ", " + DoorNumber + ", " + PostalCode + ", " + City + ", " + Country;
+    }
 }

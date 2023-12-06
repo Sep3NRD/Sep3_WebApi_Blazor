@@ -1,4 +1,7 @@
 using Domain.DTOs;
+using Domain.Models;
+using Google.Protobuf.Collections;
+using Grpc.Core;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,7 +36,7 @@ public class OrderGRPC: IOrderGRPC
             
         
             // Shutdown the gRPC channel once the operation is completed
-            channel.ShutdownAsync();
+           await  channel.ShutdownAsync();
         
             // Update the domain model Order with the returned order ID
             // order.Id = response.Order.Id;
@@ -42,7 +45,7 @@ public class OrderGRPC: IOrderGRPC
         // Return a completed task with the original order as a result
     }
 
-    public async Task ConfirmAsync(Domain.Models.Order order)
+    public async Task ConfirmAsync(int orderId)
     {
         try
         {
@@ -50,13 +53,13 @@ public class OrderGRPC: IOrderGRPC
             GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
             // Create a client for the OrderService using the gRPC channel
             var client = new OrderService.OrderServiceClient(channel);
-            OrderP orderToConfirm = ConvertToOrderP(order);
-            var response = await client.confirmOrderAsync(orderToConfirm);
-
-            channel.ShutdownAsync();
-
-            order.IsConfirmed = response.Success;
-            order.DeliveryDate = response.DeliveryDate;
+            var request = new OrderIdToConfirm()
+            {
+                OrderId = orderId
+            };
+            var response = await client.confirmOrderAsync(request);
+        
+            await  channel.ShutdownAsync();
         }
         catch (Exception e)
         {
@@ -64,6 +67,95 @@ public class OrderGRPC: IOrderGRPC
             throw;
         }
     }
+
+    public async Task<IEnumerable<Domain.Models.Order>> GetAllAsync()
+    {
+        GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
+        var client = new OrderService.OrderServiceClient(channel);
+        // Prepare a gRPC request (in this case, an empty request)
+        var request = new Google.Protobuf.WellKnownTypes.Empty();
+        try
+        {
+            // Call the gRPC service method to get a stream of items
+            var responseStream = client.getAllOrdersAsync(request);
+            // Create a list to store the converted domain model items
+            var orders = new List<Domain.Models.Order>();
+                     
+            // Iterate over the response stream asynchronously and convert each item
+            foreach (var orderP in responseStream.ResponseAsync.Result.OrdersP)
+            {
+                var order = new Domain.Models.Order()
+                {
+                    IsConfirmed = orderP.IsConfirmed,
+                    Id = orderP.Id,
+                    OrderDate =orderP.OrderDate,
+                    DeliveryDate = orderP.DeliveryDate,
+                    TotalPrice = orderP.TotalPrice,
+                   
+                    Customer = new Customer()
+                    {
+                        FirstName = orderP.Customer.FirstName,
+                        Id = orderP.Customer.Id,
+                        LastName = orderP.Customer.LastName,
+                        UserName = orderP.Customer.Username
+                    },
+                    Address = new Address()
+                    {
+                        Country = orderP.Address.Country,
+                        City = orderP.Address.City,
+                        DoorNumber = orderP.Address.DoorNumber,
+                        id = orderP.Address.Id,
+                        PostalCode = orderP.Address.PostalCode,
+                        State = orderP.Address.State,
+                        Street = orderP.Address.Street
+                    },
+                    Items =ConvertItemPListToDomainModelList(orderP.Items)
+                    
+                    
+                };
+                // Add the converted item to the list
+                orders.Add(order);
+            }
+            // Return the list of domain model orders
+            
+            return orders;
+        }
+        catch (RpcException ex)
+        {
+            // Handle gRPC exceptions, log the error, and rethrow
+            Console.WriteLine($"gRPC error: {ex.Status}");
+            throw; 
+        }
+        finally
+        {
+          await channel.ShutdownAsync();
+        }
+        
+    }
+    
+    private List<Domain.Models.Item> ConvertItemPListToDomainModelList(RepeatedField<ItemP> itemPList)
+    {
+        var itemList = new List<Domain.Models.Item>();
+
+        foreach (var itemP in itemPList)
+        {
+            var item = new Domain.Models.Item
+            {
+                Name = itemP.Name,
+                Description = itemP.Description,
+                ItemId = itemP.ItemId,
+                Price = itemP.Price,
+                Category = itemP.Category,
+                quantity = itemP.Quantity,
+                Stock = itemP.Stock
+            };
+
+            itemList.Add(item);
+        }
+
+        return itemList;
+    }
+    
 
     private OrderP ConvertToOrderP(Domain.Models.Order order)
     {
@@ -79,7 +171,7 @@ public class OrderGRPC: IOrderGRPC
         {
             Id = order.Id,
             Customer = customer,
-            Items = { itemsP },
+            Items =  {itemsP} ,
             Address = address,
             OrderDate = order.OrderDate,
             DeliveryDate = order.DeliveryDate,
@@ -88,7 +180,7 @@ public class OrderGRPC: IOrderGRPC
         };
     }
     
-    private CustomerP ConvertToCustomerP(Domain.Models.Customer customer)
+    private CustomerP ConvertToCustomerP(Customer customer)
     {
         // Create a new gRPC AddressP object and populate it with address information from the domain model
         AddressP address = new AddressP
