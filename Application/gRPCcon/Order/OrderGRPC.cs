@@ -30,6 +30,7 @@ public class OrderGRPC: IOrderGRPC
         
             // Call the gRPC service method asynchronously to create the order
             var response = await client.createOrderAsync(createOrderP);
+            
         
             // Shutdown the gRPC channel once the operation is completed
             channel.ShutdownAsync();
@@ -141,7 +142,8 @@ public class OrderGRPC: IOrderGRPC
                 Price = item.Price,
                 Category = item.Category,
                 Stock = item.Stock,
-                Description = item.Description
+                Description = item.Description,
+                Quantity = item.quantity
             };
             // Add the converted item to the list
             itemsP.Add(itemP);

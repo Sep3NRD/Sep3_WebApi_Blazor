@@ -39,6 +39,7 @@
                         
                         <button class="btn-delete" @onclick="@(() => DeleteItem(item))">Delete</button>
                     </div>
+                    <div>Quantity: @((item.quantity))</div>
                     <div class="item-price">$@((item.Price))</div>
                 </div>
             }
@@ -155,5 +156,5 @@
        
         return totalPrice;
     }
-
+    
 }
