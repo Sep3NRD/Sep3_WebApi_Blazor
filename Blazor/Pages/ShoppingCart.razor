@@ -39,11 +39,11 @@
                         
                         <button class="btn-delete" @onclick="@(() => DeleteItem(item))">Delete</button>
                     </div>
-                    <div class="item-price">$@(item.Price)</div>
+                    <div class="item-price">$@((item.Price))</div>
                 </div>
             }
             <div class="item-price">
-                Total (@cartItems.Count): $@cartItems.Sum(item => item.Price)
+                Total (@cartItems.Count): $@GetTotalPrice()
             </div>
              <button class="order-button"  @onclick="PlaceOrderAsync">Order</button>
         </div>
@@ -64,6 +64,7 @@
             StateHasChanged();
         }
     }
+    
 
     private async Task PlaceOrderAsync()
     {
@@ -83,12 +84,12 @@
                 addressId = customer.Address.id,
                 Items = cartItems,
                 OrderDate = DateTime.Now.ToString(),
-                totalPrice = getTotalPrice(),
+                totalPrice = GetTotalPrice(),
                 username = customer.UserName
             };
             
-            
-       
+            Console.WriteLine(cartItems.FirstOrDefault().quantity);
+        
             await orderService.CreateAsync(dto);
         
             await shoppingCartService.Clear();
@@ -143,14 +144,16 @@
     
     
 
-    private double getTotalPrice()
+    private double GetTotalPrice()
     {
-        double price = 0;
+        double totalPrice = 0;
+        
         foreach (var item in cartItems)
         {
-            price += item.Price;
+            totalPrice += item.Price * item.quantity;
         }
-        return price;
+       
+        return totalPrice;
     }
 
 }

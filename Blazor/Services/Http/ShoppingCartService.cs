@@ -41,10 +41,12 @@ namespace Blazor.Services.Http
                     ItemId = item.ItemId,
                     Name = item.Name,
                     Price = item.Price,
-                    Stock = item.Stock
+                    Stock = item.Stock,
+                    quantity = item.quantity
                 };
                 result.Add(cartItem);
             }
+
             return result;
         }
 
@@ -70,10 +72,11 @@ namespace Blazor.Services.Http
         {
             await localStorage.ClearAsync();
         }
-        
+
         // Adds a specified item to the shopping cart.
         public async Task AddToCart(Item item)
         {
+            // Retrieve the current cart from local storage
             var cart = await localStorage.GetItemAsync<List<Item>>("cart");
 
             // If the cart is empty, initialize it as a new list.
@@ -82,9 +85,27 @@ namespace Blazor.Services.Http
                 cart = new List<Item>();
             }
 
-            // Add the specified item to the cart and update local storage.
-            cart.Add(item);
+            // Check if the item is already in the cart
+            var existingItem = cart.FirstOrDefault(i => i.ItemId == item.ItemId);
+
+            if (existingItem != null)
+            {
+                // If the item is already in the cart, increment its quantity
+                existingItem.quantity++;
+
+            }
+            else
+            {
+                // If the item is not in the cart, add it to the cart
+                item.quantity = 1; // Assuming you have a "Quantity" property in your Item class
+                cart.Add(item);
+            }
+
+            // Update the cart in local storage
             await localStorage.SetItemAsync("cart", cart);
+            
         }
     }
 }
+
+
