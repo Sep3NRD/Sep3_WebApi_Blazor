@@ -55,7 +55,7 @@ public class ItemServiceImpl : IItemService
         
         if (response.IsSuccessStatusCode)
         {
-            Item item = JsonSerializer.Deserialize<Item>(content, new JsonSerializerOptions
+            Item? item = JsonSerializer.Deserialize<Item>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });

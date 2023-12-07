@@ -88,8 +88,25 @@ public class CustomerLogic : ICustomerLogic
 
         await iCustomerGrpc.AddNewAddress(dto);
     }
-    
-    
+
+    public async Task<ICollection<Address>> GetAddressesByUsername(string username)
+    {
+        CustomerLoginDto dto = new CustomerLoginDto()
+        {
+            Username = username
+        };
+        var customer = await iCustomerGrpc.GetByUsernameAsync(dto);
+
+        
+            var addresses = await iCustomerGrpc.GetAddressesByUsername(username);
+            return addresses;
+        
+        // else
+        // {
+        //     throw new Exception("Something went wrong");
+        // }
+        //
+    }
 
 
     private void ValidateCustomer(Customer customer)

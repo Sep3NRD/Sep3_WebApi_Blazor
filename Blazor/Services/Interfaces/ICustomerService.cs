@@ -10,4 +10,5 @@ public interface ICustomerService
     Task<Customer> GetByUsernameAsync(CustomerLoginDto userLoginDto);
     Task UpdateCustomerAsync(Customer customer);
     Task AddNewAddress(AddNewAddressDTO dto);
+    Task<ICollection<Address>> GetAddressesByUsername(string username);
 }

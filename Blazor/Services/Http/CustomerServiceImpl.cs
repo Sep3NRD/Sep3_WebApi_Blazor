@@ -91,4 +91,20 @@ public class CustomerServiceImpl:ICustomerService
             throw new Exception(responseContent);
         }
     }
+
+    public async Task<ICollection<Address>> GetAddressesByUsername(string username)
+    {
+        HttpResponseMessage responseMessage = await client.GetAsync($"http://localhost:5193/Customer/{username}");
+        string content = await responseMessage.Content.ReadAsStringAsync();
+        if (!responseMessage.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+
+        ICollection<Address> addresses = JsonSerializer.Deserialize<ICollection<Address>>(content, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return addresses;
+    }
 }

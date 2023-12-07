@@ -170,7 +170,8 @@ public class CustomerGRPC : ICustomerGRPC
             City = customer.Address.City,
             State = customer.Address.State,
             PostalCode = customer.Address.PostalCode,
-            Country = customer.Address.Country
+            Country = customer.Address.Country,
+            Id = customer.Address.id
         };
 
         // Convert the customer to the gRPC customer format
@@ -210,5 +211,40 @@ public class CustomerGRPC : ICustomerGRPC
         };
         await client.addNewAddressAsync(newAddress);
         await channel.ShutdownAsync();
+    }
+
+    public async Task<ICollection<Address>> GetAddressesByUsername(string username)
+    {
+        GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:9090");
+        var client = new CustomerService.CustomerServiceClient(channel);
+
+        var usernameToSend = new GetCustomerByUsername()
+        {
+            Username = username
+        };
+
+        var response = await client.GetAddressesAsync(usernameToSend);
+        if (response.Response.Equals("ERROR"))
+        {
+            throw new Exception("Error , you dont have more addresses");
+        }
+
+        var addresses = new List<Address>();
+
+         foreach (var addressP in response.Addresses)
+        {
+            addresses.Add(new Address()
+            {
+                Street = addressP.Street,
+                City = addressP.City,
+                Country = addressP.Country,
+                DoorNumber = addressP.DoorNumber,
+                id = addressP.Id,
+                PostalCode = addressP.PostalCode,
+                State = addressP.State
+            });
+        }
+
+         return addresses;
     }
 }
