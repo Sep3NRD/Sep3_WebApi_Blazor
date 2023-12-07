@@ -4,6 +4,7 @@
 @using Blazor.Services.Interfaces
 @inject IToastService toastService;
 @inject IOrderService orderservice;
+@inject NavigationManager NavigationManager
 @using Components
 
 <h3>AdminViewOrders</h3>
@@ -15,7 +16,7 @@
 }
 else if (!orders.Any())
 {
-    <p>No Items to display</p>
+    <p>No Orders to display</p>
 }
 else
 {
@@ -65,6 +66,12 @@ else
                         <p>@selectedoOrder.OrderDate</p>
                     </div>
                     <div class="field">
+                        <label style="text-align: center">Delivery Date:</label>
+                        <p>
+                            @selectedoOrder.DeliveryDate
+                        </p>
+                    </div>
+                    <div class="field">
                         <label style="text-align: center">Is Confirmed:</label>
                         <p>@selectedoOrder.IsConfirmed</p>
                     </div>
@@ -74,11 +81,20 @@ else
                         {
                             <p>Item Name: @item.Name</p>
                             <p>Item Price: @item.Price</p>
-                            <p>Item Price: @item.quantity</p>
                             <hr/>
                         }
-
                     </div>
+                    <div class="field">
+                        <label style="text-align: center">Address:</label>
+                        <p>City: @selectedoOrder.Address.City</p>
+                        <p>Street: @selectedoOrder.Address.Street</p>
+                        <p>Postal Code: @selectedoOrder.Address.PostalCode</p>
+                        <p>Door Number: @selectedoOrder.Address.DoorNumber</p>
+                        <p>Country: @selectedoOrder.Address.Country</p>
+                        <p>State: @selectedoOrder.Address.State</p>
+                    </div>
+
+
                     <div class="field">
                         <label style="text-align: center">Total Price:</label>
                         <p>@selectedoOrder.TotalPrice</p>
@@ -101,12 +117,9 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        
-        
-        
         try
         {
-         orders = await orderservice.GetAllAsync();
+            orders = await orderservice.GetAllAsync();
         }
         catch (Exception e)
         {
@@ -156,10 +169,9 @@ else
                 await orderservice.ConfirmAsync(order.Id);
                 toastService.ShowSuccess($"Order with id : {order.Id} confirmed with success");
                 toastService.ShowInfo($"Expected delivery date : {CalculateExpectedDeliveryDate()}");
+                StateHasChanged();
+                NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
             }
-            
-            
-            
         }
         catch (Exception e)
         {
@@ -167,7 +179,7 @@ else
             Console.WriteLine(e);
         }
     }
-    
+
     private string CalculateExpectedDeliveryDate()
     {
         DateTime localNow = DateTime.Now;
