@@ -18,10 +18,6 @@ else if (!ownerOrders.Any())
 }
 else
     
-//name
-//dates
-//price
-//isConfirmed
 {
     <table class="item-table">
         <thead>
@@ -37,7 +33,7 @@ else
         @foreach (var order in ownerOrders)
         {
             <tr>
-                <td>@order.Items</td>
+                <td>@order.Items.</td>
                 <td>@order.TotalPrice</td>
                 <td>@order.OrderDate</td>
                 <td>@order.DeliveryDate</td>

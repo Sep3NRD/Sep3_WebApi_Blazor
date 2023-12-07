@@ -15,4 +15,15 @@ public class Order
     {
         
     }
+
+    public string ItemNames()
+    {
+       string itemNames = "";
+       foreach (var Item in Items)
+       {
+           itemNames += Item.Name + "\n";
+       }
+
+       return itemNames;
+    }
 }
