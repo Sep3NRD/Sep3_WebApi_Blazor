@@ -7,19 +7,28 @@
 @inject IToastService toastService;
 @using Components
 
-
+<div class = "search-bar">
+    <input type="text" @bind="searchItem" placeholder="Search items" />
+    <select @bind="orderBy">
+            <option value = "">Order By</option>
+            <option value="maxPrice">Max Price</option>
+            <option value="minPrice">Min Price</option>
+            <option value="mostRecent">Most Recent</option>
+        </select>
+ <button @onclick="Search">Search</button>
+</div>
 <div class="item-grid">
-    @if (items == null)
+    @if (filteredItems == null)
     {
         <p>Loading...</p>
     }
-    else if (!items.Any())
+    else if (!filteredItems.Any())
     {
         <p>No Items to display</p>
     }
     else
     {
-        @foreach (var item in items)
+        @foreach (var item in filteredItems)
         {
                 <div class="item-card">
                     <img src="img/product.png" alt="@item.Name" @onclick="() => ShowItemModal(item)"/>
@@ -73,6 +82,9 @@
     private string msg = "";
     private bool showModal;
     private Item selectedItem;
+    private string searchItem = "";
+    private IEnumerable<Item>? filteredItems;
+    private string orderBy = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -81,6 +93,7 @@
             var allItems = await itemService.GetAsync();
 
             items = ExcludeItems(allItems);
+            UpdateFilteredItems();
         }
         catch (Exception e)
         {
@@ -113,6 +126,39 @@
     private void CloseModal()
     {
         showModal = false;
+    }
+    
+    private void Search()
+    {
+        filteredItems = items
+            .Where(item => 
+                item.Name.Contains(searchItem, StringComparison.OrdinalIgnoreCase) || 
+                item.Description.Contains(searchItem,StringComparison.OrdinalIgnoreCase)
+            )
+            .ToList();
+        
+        if (!string.IsNullOrEmpty(orderBy))
+        {
+            switch (orderBy)
+            {
+                case "maxPrice":
+                    filteredItems = filteredItems.OrderByDescending(item => item.Price).ToList();
+                    break;
+                case "minPrice":
+                    filteredItems = filteredItems.OrderBy(item => item.Price).ToList();
+                    break;
+                case "mostRecent":
+                    filteredItems = filteredItems.OrderByDescending(item => item.ItemId).ToList();
+                    break;
+    //We can add more if we want!!
+            }
+        }
+        
+    }
+    
+    private void UpdateFilteredItems()
+    {
+        filteredItems = items.ToList();
     }
 
 }

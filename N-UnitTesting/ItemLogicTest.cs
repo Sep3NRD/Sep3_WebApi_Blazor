@@ -81,6 +81,72 @@ public class ItemLogicTest
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(id, result.ItemId);
-        //I THINK THERE SHOULD BE 1 MORE BUT IM NOT SURE HAT
+        Assert.AreEqual("Nvidia GTX 3060", result.Name);
+        
     }
+    
+    [Test]
+    public async Task UpdateAsyncTesting()
+    {
+        _mockItemGRPC.Setup(x => x.UpdateItemAsync(It.IsAny<UpdateItemDto>())).ReturnsAsync(new UpdateItemDto
+        {
+            Price = 20.0,
+            Stock = 10
+        });
+
+        var item = new UpdateItemDto 
+        {
+            Price = 20.0,
+            Stock = 10
+        };
+
+        try
+        {
+            //Act
+            var updatedItem = await _itemLogic.UpdateItemAsync(item);
+            
+            //Assert
+            Assert.IsNotNull(updatedItem);
+            Assert.AreEqual(0, updatedItem.ItemId);
+            Assert.AreEqual(item.Price, updatedItem.Price);
+            Assert.AreEqual(item.Stock, updatedItem.Stock);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Exception during test: {e}");
+            throw;
+        }
+    }
+
+    [Test]
+    public async Task DeleteAsyncTesting()
+    {
+        
+        const int itemId = 1;
+        _mockItemGRPC.Setup(x => x.GetByIdAsync(itemId)).ReturnsAsync(new Item
+        {
+            ItemId = itemId,
+            Name = "Nvidia GTX 3060",
+            Description = "Gaming graphics card",
+            Category = "GPU",
+            Price = 200.0,
+            Stock = 10
+             
+        });
+        _mockItemGRPC.Setup(x => x.DeleteAsync(itemId)).Returns(Task.CompletedTask);
+
+        try
+        {
+            await _itemLogic.DeleteAsync(itemId);
+            
+            _mockItemGRPC.Verify(x => x.GetByIdAsync(itemId), Times.Once);
+            _mockItemGRPC.Verify(x => x.DeleteAsync(itemId), Times.Once);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Exception during test: {e}");
+            throw;
+        }
+    }
+
 }

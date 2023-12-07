@@ -9,11 +9,29 @@
 @inject NavigationManager navMgr
 
 <h3>Manage Items</h3>
-@if (items == null)
+
+<div class = "search-bar">
+    <input type="text" @bind="searchItem" placeholder="Search items" />
+    <select @bind="selectedCategory">
+            <option value="">All</option>
+            <option value="CPU">CPU</option>
+            <option value="GPU">GPU</option>
+            <option value="Motherboard">Motherboard</option>
+            <option value="RAM">RAM</option>
+            <option value="CPU Cooler">CPU Cooler</option>
+            <option value="SSD">SSD</option>
+            <option value="HDD">HDD</option>
+            <option value="PSU">PSU</option>
+            <option value="Case">Case</option>
+        </select>
+    <button @onclick="Search">Search</button>
+</div>
+
+@if (filteredItems == null)
 {
     <p>Loading...</p>
 }
-else if (!items.Any())
+else if (!filteredItems.Any())
 {
     <p>No Items to display</p>
 }
@@ -25,24 +43,24 @@ else
             <th>Name</th>
             <th>Category</th>
             <th >Stock</th>
-            <th class="managecol">Manage</th>
+            <th class = "managecol">Manage</th>
         </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in items)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.Category</td>
-                <td>@item.Stock </td>
-                <td>
-                    <button class="manage" @onclick="(e) => OpenManage(item.ItemId)">Manage</button>
-                    <button class="delete" @onclick="(e) => Delete(item.ItemId)">Delete</button>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+</thead>
+<tbody>
+@foreach (var item in filteredItems)
+{
+    <tr>
+        <td>@item.Name</td>
+        <td>@item.Category</td>
+        <td>@item.Stock </td>
+        <td>
+            <button class="manage" @onclick="(e) => OpenManage(item.ItemId)">Manage</button>
+            <button class="delete" @onclick="(e) => Delete(item.ItemId)">Delete</button>
+        </td>
+    </tr>
+}
+</tbody>
+</table>
 }
 
 
@@ -68,18 +86,21 @@ else
             {
                 <label style="color: red">@msg</label>
             }
-            <div>
-                <button class="btn btn-secondary confirm-button" @onclick="ConfirmUpdate">Confirm</button>
+            <div><button class="btn btn-secondary confirm-button" @onclick="ConfirmUpdate">Confirm</button>
                 <button class="btn btn-secondary close-button" @onclick="CloseModal">Close</button>
-            </div>
-
+                </div>
+            
         </div>
     </Modal>
+
 @code{
     private IEnumerable<Item>? items;
     private string msg = "";
     private bool showModal = false;
     private Item selectedItem;
+    private IEnumerable<Item>? filteredItems;
+    private string searchItem= "";
+    private string selectedCategory = "";
 
 
     protected override async Task OnInitializedAsync()
@@ -87,6 +108,7 @@ else
         try
         {
             items = await itemService.GetAsync();
+            UpdateFilteredItems();
         }
         catch (Exception e)
         {
@@ -111,6 +133,7 @@ else
             {
                 Console.WriteLine($"Item with ID {itemId} not found");
             }
+
         }
         catch (Exception e)
         {
@@ -132,6 +155,7 @@ else
             {
                 Console.WriteLine($"Item with ID {itemId} not found");
             }
+
         }
         catch (Exception e)
         {
@@ -166,10 +190,26 @@ else
             msg = e.Message;
         }
     }
-
     private void CloseModal()
     {
         showModal = false;
     }
+    
+    private void Search()
+    {
+        filteredItems = items
+            .Where(item => 
+                (string.IsNullOrEmpty(selectedCategory) || item.Category.Equals(selectedCategory, StringComparison.OrdinalIgnoreCase)) &&
+                item.Name.Contains(searchItem, StringComparison.OrdinalIgnoreCase)
+            )
+            .ToList();
+        
+    }
+    
+    private void UpdateFilteredItems()
+    {
+        filteredItems = items.ToList();
+    }
 
-}}
+    }
+}
