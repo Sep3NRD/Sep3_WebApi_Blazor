@@ -42,7 +42,10 @@ public class OrderServiceImpl: IOrderService
     }
     public async Task ConfirmAsync(int orderId)
     {
-        HttpResponseMessage responseMessage = await client.PatchAsJsonAsync("/confirm", orderId);
+        var apiUrl = new Uri($"http://localhost:5193/Order/Confirm/{orderId}");
+        
+        HttpResponseMessage responseMessage = await client.PatchAsJsonAsync(apiUrl,orderId);
+
         string result = await responseMessage.Content.ReadAsStringAsync();    
         if (!responseMessage.IsSuccessStatusCode)
         {

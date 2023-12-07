@@ -47,6 +47,7 @@ public class OrderGRPC: IOrderGRPC
 
     public async Task ConfirmAsync(int orderId)
     {
+        
         try
         {
             // Establish a gRPC channel to the server at the specified address
@@ -114,6 +115,7 @@ public class OrderGRPC: IOrderGRPC
                     
                 };
                 // Add the converted item to the list
+                Console.WriteLine(order.Items.FirstOrDefault().quantity);
                 orders.Add(order);
             }
             // Return the list of domain model orders

@@ -48,8 +48,8 @@ public class OrderController: ControllerBase
         }
     }
     
-    [HttpPatch("confirm")]
-    public async Task<ActionResult> ConfirmAsync(int orderId)
+    [HttpPatch("Confirm/{orderId}")]
+    public async Task<ActionResult> ConfirmAsync([FromRoute] int orderId)
     {
         try
         {
