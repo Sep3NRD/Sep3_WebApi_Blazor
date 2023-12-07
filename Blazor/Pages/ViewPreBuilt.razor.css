@@ -162,6 +162,13 @@ label {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+.search-bar select {
+    width: 20%;
+    margin-right: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
 .search-bar button {
     padding: 8px 15px;

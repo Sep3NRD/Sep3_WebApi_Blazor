@@ -155,8 +155,16 @@ label {
     align-items: center;
 }
 
-.search-bar input, select {
+.search-bar input {
     flex: 1;
+    margin-right: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-bar select {
+    width: 20%;
     margin-right: 10px;
     padding: 8px;
     border: 1px solid #ccc;
