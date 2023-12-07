@@ -224,6 +224,10 @@ public class CustomerGRPC : ICustomerGRPC
         };
 
         var response = await client.GetAddressesAsync(usernameToSend);
+        if (response.Response.Equals("ERROR"))
+        {
+            throw new Exception("Error , you dont have more addresses");
+        }
 
         var addresses = new List<Address>();
 
