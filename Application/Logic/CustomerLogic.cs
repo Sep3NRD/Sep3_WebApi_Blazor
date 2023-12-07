@@ -97,16 +97,15 @@ public class CustomerLogic : ICustomerLogic
         };
         var customer = await iCustomerGrpc.GetByUsernameAsync(dto);
 
-        if (customer!=null)
-        {
+        
             var addresses = await iCustomerGrpc.GetAddressesByUsername(username);
             return addresses;
-        }
-        else
-        {
-            throw new Exception("Something went wrong");
-        }
         
+        // else
+        // {
+        //     throw new Exception("Something went wrong");
+        // }
+        //
     }
 
 

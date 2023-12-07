@@ -207,6 +207,7 @@
         catch (Exception a)
         {
             Console.WriteLine(a);
+            toastService.ShowError("ZIP needs to be a number");
         }
     }
 
@@ -219,6 +220,7 @@
         catch (Exception a)
         {
             Console.WriteLine(a);
+            toastService.ShowError("Door no. needs to be a number");
         }
     }
 
