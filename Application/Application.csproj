@@ -14,6 +14,7 @@
         <Protobuf Include="Proto\itemP.proto" GrpcServices="Client" />
         <Protobuf Include="Proto\customerP.proto" GrpcServices="Client" />
         <Protobuf Include="Proto\orderP.proto" GrpcServices="Client" />
+        <Protobuf Include="Proto\wishListP.proto" GrpcServices="Client" />
     </ItemGroup>
 
     <ItemGroup>
@@ -31,6 +32,9 @@
     <ItemGroup>
       <Compile Include="obj\Debug\net7.0\Proto\ItemP.cs" />
     </ItemGroup>
+
+
+
 
 
 
