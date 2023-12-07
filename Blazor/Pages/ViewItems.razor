@@ -8,7 +8,7 @@
 @using Components
 
 <div class = "search-bar">
-    <input type="text" @bind="searchItem" placeholder="Search items" />
+    <input type="text" @bind="searchItem" placeholder="Search products" />
     <select @bind="orderBy">
         <option value = "">Order By</option>
         <option value="maxPrice">Max Price</option>
@@ -99,7 +99,7 @@
         try
         {
             var allItems = await itemService.GetAsync();
-            items = ExcludeItems(allItems);
+            items = FilterItems(allItems);
             UpdateFilteredItems();
         }
         catch (Exception e)
@@ -109,7 +109,7 @@
         }
     }
     
-    private List<Item> ExcludeItems(IEnumerable<Item> allItems)
+    private List<Item> FilterItems(IEnumerable<Item> allItems)
     {
         return allItems
             .Where(item => !item.Category.Contains("Pre-Built", StringComparison.OrdinalIgnoreCase))

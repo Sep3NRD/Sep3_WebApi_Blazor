@@ -35,6 +35,7 @@ AuthorizationPolicies.AddPolicies(builder.Services);
 
 builder.Services.AddScoped<IItemService, ItemServiceImpl>();
 builder.Services.AddScoped<ICustomerService, CustomerServiceImpl>();
+builder.Services.AddScoped<IOrderService, OrderServiceImpl>();
 
 
 var app = builder.Build();

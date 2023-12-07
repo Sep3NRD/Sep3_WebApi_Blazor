@@ -1,0 +1,117 @@
+@page "/CustomerViewOrders"
+@using Domain.Models
+@using Blazor.Services.Interfaces
+@using Domain.DTOs
+@using System.Security.Claims
+@using Blazor.Services
+@inject IOrderService orderservice;
+@inject ICustomerService customerService;
+<h3>My Orders</h3>
+
+@if (ownerOrders == null)
+{
+    <p>Loading...</p>
+}
+else if (!ownerOrders.Any())
+{
+    <p>No Orders to display</p>
+}
+else
+{
+    <table class="item-table">
+        <thead>
+        <tr>
+            <th>Customer username</th>
+            <th>Address</th>
+            <th>Id</th>
+            <th>Status</th>
+            <th class="managecol">Manage</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var order in ownerOrders)
+        {
+            <tr>
+                <td>@order.Customer.UserName</td>
+                <td>@order.Address.ToString()</td>
+                <td>@order.Id</td>
+                <td>@status</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+
+@code {
+     private IEnumerable<Order>? orders;
+    private IEnumerable<Order>? ownerOrders;
+    private Order selectedoOrder;
+    private string status = "";
+    private string msg = "";
+    private Customer currentCustomer;
+    
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    private IEnumerable<Claim> userClaims;
+    
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            GetCurrentCustomer();
+            var allOrders = await orderservice.GetAllAsync();
+            orders = FilterOwnerOrders(allOrders);
+            UpdateOwnerOrders();
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+    
+    private List<Order> FilterOwnerOrders(IEnumerable<Order> allOrders)
+    {
+        
+        return allOrders
+            .Where(order => order.Customer.Id == currentCustomer.Id)
+            .ToList();
+    }
+    
+    private void UpdateOwnerOrders()
+    {
+        ownerOrders = orders.ToList();
+    }
+    
+    private async Task<Customer> GetCurrentCustomer()
+    {
+        Customer customer1 = null;
+        try
+        {
+            AuthenticationState authState = await AuthState;
+            ClaimsPrincipal user = authState.User;
+            userClaims = user?.Claims;
+            
+            Claim usernameClaim = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+
+            if (usernameClaim != null)
+            {
+                CustomerLoginDto dto = new CustomerLoginDto(usernameClaim.Value, "");
+                customer1 = await customerService.GetByUsernameAsync(dto);
+                currentCustomer = customer1;
+
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error in OnInitializedAsync: {e.Message}");
+        }
+        return customer1;
+    }
+    
+}
