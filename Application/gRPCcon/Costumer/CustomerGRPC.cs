@@ -170,7 +170,8 @@ public class CustomerGRPC : ICustomerGRPC
             City = customer.Address.City,
             State = customer.Address.State,
             PostalCode = customer.Address.PostalCode,
-            Country = customer.Address.Country
+            Country = customer.Address.Country,
+            Id = customer.Address.id
         };
 
         // Convert the customer to the gRPC customer format
