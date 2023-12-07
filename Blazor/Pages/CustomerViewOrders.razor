@@ -21,20 +21,18 @@ else
     <table class="item-table">
         <thead>
         <tr>
-            <th>Customer username</th>
+            <th>Order Id</th>
             <th>Address</th>
-            <th>Id</th>
             <th>Status</th>
-            <th class="managecol">Manage</th>
+            
         </tr>
         </thead>
         <tbody>
         @foreach (var order in ownerOrders)
         {
             <tr>
-                <td>@order.Customer.UserName</td>
-                <td>@order.Address.ToString()</td>
                 <td>@order.Id</td>
+                <td>@order.Address.ToString()</td>
                 <td>@status</td>
             </tr>
         }
@@ -46,7 +44,6 @@ else
 @code {
      private IEnumerable<Order>? orders;
     private IEnumerable<Order>? ownerOrders;
-    private Order selectedoOrder;
     private string status = "";
     private string msg = "";
     private Customer currentCustomer;
@@ -55,6 +52,8 @@ else
     public Task<AuthenticationState> AuthState { get; set; }
 
     private IEnumerable<Claim> userClaims;
+    
+    
     
 
 
@@ -66,7 +65,7 @@ else
             var allOrders = await orderservice.GetAllAsync();
             orders = FilterOwnerOrders(allOrders);
             UpdateOwnerOrders();
-
+            
         }
         catch (Exception e)
         {
@@ -75,6 +74,7 @@ else
         }
     }
     
+
     private List<Order> FilterOwnerOrders(IEnumerable<Order> allOrders)
     {
         
@@ -113,5 +113,7 @@ else
         }
         return customer1;
     }
+
+    
     
 }
