@@ -33,7 +33,7 @@ else
             <tr>
                 <td>@order.Id</td>
                 <td>@order.Address.ToString()</td>
-                <td>@status</td>
+                <td>@GetConfirmationStatus(order.IsConfirmed)</td>
             </tr>
         }
         </tbody>
@@ -52,6 +52,18 @@ else
     public Task<AuthenticationState> AuthState { get; set; }
 
     private IEnumerable<Claim> userClaims;
+    
+    private string GetConfirmationStatus(bool isConfirmed)
+    {
+        if(isConfirmed)
+        {
+            return "Order Processed";
+        }
+        else
+        {
+            return "Pending Confirmation";
+        }
+    }
     
     
     
