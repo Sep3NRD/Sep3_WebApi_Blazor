@@ -17,21 +17,27 @@ else if (!ownerOrders.Any())
     <p>No Orders to display</p>
 }
 else
+    
+//name
+//dates
+//price
+//isConfirmed
 {
     <table class="item-table">
         <thead>
         <tr>
-            <th>Order Id</th>
-            <th>Address</th>
+            <th>Products</th>
+            <th>Total Amount</th>
+            <th>Order Date</th>
+            <th>Delivery Date</th>
             <th>Status</th>
-            
         </tr>
         </thead>
         <tbody>
         @foreach (var order in ownerOrders)
         {
             <tr>
-                <td>@order.Id</td>
+                <td>@order.Items</td>
                 <td>@order.Address.ToString()</td>
                 <td>@GetConfirmationStatus(order.IsConfirmed)</td>
             </tr>
@@ -85,6 +91,7 @@ else
             msg = e.Message;
         }
     }
+    
     
 
     private List<Order> FilterOwnerOrders(IEnumerable<Order> allOrders)
