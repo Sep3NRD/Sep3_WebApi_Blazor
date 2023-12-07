@@ -138,7 +138,7 @@
 
     private IEnumerable<Claim>? userClaims; // Nullable collection of claims
     private bool showModal = false;
-    private IEnumerable<Address> addresses;
+    private IEnumerable<Address>? addresses;
 
     protected override async Task OnInitializedAsync()
     {
@@ -169,8 +169,11 @@
         navMgr.NavigateTo("/AddNewAddress");
     }
 
-    private void OpenShowModal()
+    private async Task OpenShowModal()
     {
+        Claim username = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+        addresses =await customerService.GetAddressesByUsername(username.Value);
+        
         showModal = true;
     }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using Domain.DTOs;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,5 +12,6 @@ public interface ICustomerLogic
     Task<Customer> GetByUsernameAsync(CustomerLoginDto userLoginDto);
     Task UpdateAsync(Customer customer);
     Task AddNewAddress(AddNewAddressDTO dto);
+    Task<ICollection<Address>> GetAddressesByUsername(string username);
 
 }
