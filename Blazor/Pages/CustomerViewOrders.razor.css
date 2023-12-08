@@ -1,0 +1,21 @@
+.page-title {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.item-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.item-table th, .item-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.item-table th {
+    background-color: #f2f2f2;
+}
