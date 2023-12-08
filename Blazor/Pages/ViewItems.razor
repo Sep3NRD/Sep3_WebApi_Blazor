@@ -144,11 +144,26 @@
     
     private async Task AddToWishList(Item item)
     {
+        
+        
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+        userClaims = user?.Claims;
+        Claim usernameClaim = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+        
         showModal = false;
-        AddToWishListDTO dto = new AddToWishListDTO(item.ItemId, getCurrentCustomer().Id);
-        Console.WriteLine(dto.CustomerId);
-        await wishListService.AddToWishListAsync(dto);
-        toastService.ShowSuccess("Item added to cart" + item.Name);
+        AddToWishListDTO dto = new AddToWishListDTO(item.ItemId, usernameClaim.Value);
+        try
+        {
+            await wishListService.AddToWishListAsync(dto);
+            toastService.ShowSuccess("Item added to cart" + item.Name);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            toastService.ShowError("This item is already on you wishlist");
+        }
+        
     }
     
     private  async Task<Customer> getCurrentCustomer()
@@ -164,6 +179,7 @@
             {
                 CustomerLoginDto dto = new CustomerLoginDto(usernameClaim.Value, "");
                 customer = await customerService.GetByUsernameAsync(dto);
+                Console.Write(customer.Id);
             }
         }
         catch (Exception e)

@@ -15,8 +15,8 @@ public class WishListGRPC: IWIshListGRPC
 
         var request = new WishListRequest()
         {
-            ItemId = dto.ItemId,
-            CustomerId = dto.CustomerId
+            Username = dto.Username,
+            ItemId = dto.ItemId
         };
         
         try
@@ -28,7 +28,7 @@ public class WishListGRPC: IWIshListGRPC
         catch (Exception ex)
         {
             // Handle exceptions
-            Console.WriteLine("An error occurred: " + ex.Message);
+            throw ex;
         }
     }
 }
