@@ -87,42 +87,37 @@
                         <button type="button" class="btn-close" @onclick="CloseModal"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Display other addresses -->
-                        <h4>Other Addresses</h4>
                         @foreach (var address in addresses)
                         {
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label>Street:</label>
-                                        <p @address.Street/>
+                                        <p>@address.Street</p>
                                     </div>
                                     <div class="form-group">
                                         <label>City:</label>
-                                        <p @address.City/>
+                                        <p>@address.City</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Door Number:</label>
-                                        <p @address.DoorNumber/>
+                                        <p>@address.DoorNumber</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Country:</label>
-                                        <p @address.Country/>
+                                        <p>@address.Country</p>
                                     </div>
                                     <div class="form-group">
                                         <label>State:</label>
-                                        <p @address.State/>
+                                        <p>@address.State</p>
                                     </div>
                                     <div class="form-group">
-                                        <label>State:</label>
-                                        <p @address.PostalCode/>
+                                        <label>Postal Code:</label>
+                                        <p>@address.PostalCode</p>
                                     </div>
                                 </div>
                             </div>
                         }
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
                     </div>
                 </div>
             </div>
@@ -138,7 +133,7 @@
 
     private IEnumerable<Claim>? userClaims; // Nullable collection of claims
     private bool showModal = false;
-    private IEnumerable<Address> addresses;
+    private IEnumerable<Address>? addresses;
 
     protected override async Task OnInitializedAsync()
     {
@@ -169,8 +164,11 @@
         navMgr.NavigateTo("/AddNewAddress");
     }
 
-    private void OpenShowModal()
+    private async Task OpenShowModal()
     {
+        Claim username = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+        addresses =await customerService.GetAddressesByUsername(username.Value);
+        
         showModal = true;
     }
 
@@ -209,6 +207,7 @@
         catch (Exception a)
         {
             Console.WriteLine(a);
+            toastService.ShowError("ZIP needs to be a number");
         }
     }
 
@@ -221,6 +220,7 @@
         catch (Exception a)
         {
             Console.WriteLine(a);
+            toastService.ShowError("Door no. needs to be a number");
         }
     }
 

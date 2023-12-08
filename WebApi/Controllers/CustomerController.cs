@@ -97,4 +97,20 @@ public class CustomerController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet("{username}")]
+
+    public async Task<ActionResult<ICollection<Address>>> GetByIdAsync([FromRoute] string username)
+    {
+        try
+        {
+            var addresses = await customerLogic.GetAddressesByUsername(username);
+            return Created("/Customer", addresses);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }

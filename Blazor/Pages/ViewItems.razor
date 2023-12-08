@@ -3,9 +3,14 @@
 @using Blazor.Services.Interfaces
 @inject IItemService itemService
 @inject IShoppingCartService shoppingCartService;
+@inject ICustomerService customerService
+@inject IWishListService wishListService;
 @using Blazored.Toast.Services
 @inject IToastService toastService;
 @using Components
+@using Domain.DTOs
+@using System.Security.Claims
+@using Blazor.Services
 
 <div class = "search-bar">
     <input type="text" @bind="searchItem" placeholder="Search products" />
@@ -52,6 +57,7 @@
                     <h4>@item.Name</h4>
                     <p>Price: @item.Price$</p>
                     <button class="buy-button" @onclick="() => AddToCart(item)">Add To Cart</button>
+                    <button class="buy-button" @onclick="() => AddToWishList(item)">Add To Wish List</button>
                 </div>
             </div>
         }
@@ -93,6 +99,12 @@
     private IEnumerable<Item>? filteredItems;
     private string selectedCategory = "";
     private string orderBy = "";
+    private Customer customer; // Ensure customer is initialized to avoid null reference
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    private IEnumerable<Claim> userClaims;
 
     protected override async Task OnInitializedAsync()
     {
@@ -127,8 +139,35 @@
     {
         showModal = false;
         await shoppingCartService.AddToCart(item);
-        toastService.ShowSuccess("Item added to cart" + item.Name);
+        toastService.ShowSuccess("Item added to cart : " + item.Name);
     }
+    
+    private async Task AddToWishList(Item item)
+    {
+        
+        
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+        userClaims = user?.Claims;
+        Claim usernameClaim = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+        
+        showModal = false;
+        AddToWishListDTO dto = new AddToWishListDTO(item.ItemId, usernameClaim.Value);
+        try
+        {
+            await wishListService.AddToWishListAsync(dto);
+            toastService.ShowSuccess("Item added to cart" + item.Name);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            toastService.ShowError("This item is already on you wishlist");
+        }
+        
+    }
+    
+   
+   
 
     private void CloseModal()
     {
@@ -168,6 +207,5 @@
         filteredItems = items.ToList();
     }
     
-
 }
 }

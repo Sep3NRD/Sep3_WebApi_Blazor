@@ -10,6 +10,15 @@
 <h3>AdminViewOrders</h3>
 
 
+<div class = "search-bar">
+    <select @bind="filter">
+            <option value="">All</option>
+            <option value="DeliveryDate">Delivery Date</option>
+            <option value="Confirmation">Confirmation</option>
+        </select>
+    <button @onclick="Search">Search</button>
+</div>
+
 @if (orders == null)
 {
     <p>Loading...</p>
@@ -31,7 +40,7 @@ else
         </tr>
         </thead>
         <tbody>
-        @foreach (var order in orders)
+        @foreach (var order in filterdOrders)
         {
             <tr>
                 <td>@order.Customer.UserName</td>
@@ -113,6 +122,8 @@ else
     private IEnumerable<Order>? orders;
     private bool showModal = false;
     private Order selectedoOrder;
+    private IEnumerable<Order>? filterdOrders;
+    private string filter = "";
 
 
     protected override async Task OnInitializedAsync()
@@ -120,6 +131,7 @@ else
         try
         {
             orders = await orderservice.GetAllAsync();
+            filterdOrders = orders;
         }
         catch (Exception e)
         {
@@ -188,4 +200,33 @@ else
     // Format the date according to your preference
         return expectedDelivery.ToString("yyyy-MM-dd");
     }
+    
+    private void Search()
+    {
+        if (!string.IsNullOrEmpty(filter))
+        {
+            
+            switch (filter)
+            {
+                case "DeliveryDate":
+                    filterdOrders = orders
+                        .OrderByDescending(o => o.DeliveryDate)
+                        .ToList();
+                    break;
+
+                case "Confirmation":
+                    filterdOrders = orders
+                        .Where(o => !o.IsConfirmed)
+                        .ToList();
+                    break;
+            }
+        }
+        else
+        {
+    // If filter is empty, reset to the original list of orders.
+            filterdOrders = orders.ToList();
+        }
+        StateHasChanged(); // Add this line to update the UI after filtering.
+    }
+
 }}

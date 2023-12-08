@@ -20,6 +20,7 @@ builder.Services.AddScoped<IAuthService, JwtAuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<IOrderService, OrderServiceImpl>();
+builder.Services.AddScoped<IWishListService, WishListServiceImpl>();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredToast();
 
