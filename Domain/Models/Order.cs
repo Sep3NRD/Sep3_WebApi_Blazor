@@ -21,7 +21,7 @@ public class Order
        string itemNames = "";
        foreach (var Item in Items)
        {
-           itemNames += Item.Name + "\n";
+           itemNames += $"{Item.Name}<br />";
        }
 
        return itemNames;
