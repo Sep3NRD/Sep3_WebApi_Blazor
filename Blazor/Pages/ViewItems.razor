@@ -139,7 +139,7 @@
     {
         showModal = false;
         await shoppingCartService.AddToCart(item);
-        toastService.ShowSuccess("Item added to cart" + item.Name);
+        toastService.ShowSuccess("Item added to cart : " + item.Name);
     }
     
     private async Task AddToWishList(Item item)
@@ -166,28 +166,7 @@
         
     }
     
-    private  async Task<Customer> getCurrentCustomer()
-    {
-        try
-        {
-            AuthenticationState authState = await AuthState;
-            ClaimsPrincipal user = authState.User;
-            userClaims = user?.Claims;
-            Claim usernameClaim = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
-
-            if (usernameClaim != null)
-            {
-                CustomerLoginDto dto = new CustomerLoginDto(usernameClaim.Value, "");
-                customer = await customerService.GetByUsernameAsync(dto);
-                Console.Write(customer.Id);
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Error in OnInitializedAsync: {e.Message}");
-        }
-        return customer;
-    }
+   
    
 
     private void CloseModal()
@@ -228,6 +207,5 @@
         filteredItems = items.ToList();
     }
     
-
 }
 }

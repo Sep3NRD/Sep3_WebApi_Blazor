@@ -106,19 +106,13 @@
                 PostalCode = customer.Address.PostalCode,
                 State = customer.Address.State,
                 Country = customer.Address.Country
-                
+
             };
-            if (dto.PostalCode==customerCheck.Address.PostalCode && dto.City.Equals(customerCheck.Address.City)&&dto.DoorNumber==customerCheck.Address.DoorNumber&&dto.Street.Equals(customerCheck.Address.Street))
-            {
-                toastService.ShowError("Address can not be update,something is wrong");
-            }
-            else
-            {
                 // Update customer data through the service
                 await customerService.AddNewAddress(dto);
                 toastService.ShowSuccess("New address has been added");
                 navMgr.NavigateTo("/ManageProfile");
-            }
+            
             
         }
         catch (Exception e)
