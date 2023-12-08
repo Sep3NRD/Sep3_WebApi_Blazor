@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using Blazor.Services.Interfaces;
 using Domain.DTOs;
+using Domain.Models;
 
 namespace Blazor.Services.Http;
 
@@ -22,5 +23,21 @@ public class WishListServiceImpl : IWishListService
         {
             throw new Exception(responseContent);
         }
+    }
+
+    public async Task<WishList> GetWishListAsync(string username)
+    {
+        HttpResponseMessage responseMessage = await client.GetAsync($"http://localhost:5193/Wishlist/{username}");
+        string content = await responseMessage.Content.ReadAsStringAsync();
+        if (!responseMessage.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+        
+        WishList wishList = JsonSerializer.Deserialize<WishList>(content, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return wishList;
     }
 }

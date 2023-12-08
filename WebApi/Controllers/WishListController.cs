@@ -31,4 +31,19 @@ public class WishListController: ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpGet ("{username}")]
+    public async Task<ActionResult<WishList>> GetWishList(string username)
+    {
+        try
+        {
+            var result =await wishListLogic.GetWishListAsync(username);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }

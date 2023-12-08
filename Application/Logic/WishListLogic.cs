@@ -1,6 +1,7 @@
 using Application.gRPCcon.WishList;
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.Models;
 
 namespace Application.Logic;
 
@@ -21,5 +22,15 @@ public class WishListLogic: IWishListLogic
         }
 
         await iWishGrpc.AddToWishList(dto);
+    }
+
+    public async Task<WishList> GetWishListAsync(string usernamed)
+    {
+        if (usernamed ==null)
+        {
+            throw new Exception("Customer id is null");
+        }
+
+        return await iWishGrpc.GetWishListAsync(usernamed);
     }
 }
