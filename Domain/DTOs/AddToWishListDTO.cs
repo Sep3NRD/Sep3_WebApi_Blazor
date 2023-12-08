@@ -4,11 +4,11 @@ public class AddToWishListDTO
 {
     public int ItemId { get; set; }
 
-    public int CustomerId { get; set; }
+    public string Username { get; set; }
 
-    public AddToWishListDTO(int itemId, int customerId)
+    public AddToWishListDTO(int itemId, string username)
     {
         ItemId = itemId;
-        CustomerId = customerId;
+        Username = username;
     }
 }
