@@ -70,11 +70,11 @@
         <div class="card">
             @if(selectedItem!=null)
             {
-            <h3>@selectedItem.Name</h3>
-            <div class="form-group field">
-                 <p><strong>Description:</strong> @selectedItem.Description</p>
-                <p><strong>Price:</strong> @selectedItem.Price $</p>
-            </div>
+                <h3>@selectedItem.Name</h3>
+                <div class="form-group field">
+                    <p><strong>Description:</strong> @selectedItem.Description</p>
+                    <p><strong>Price:</strong> @selectedItem.Price $</p>
+                </div>
             }
             @if (!string.IsNullOrEmpty(msg))
             {
@@ -166,9 +166,6 @@
         
     }
     
-   
-   
-
     private void CloseModal()
     {
         showModal = false;

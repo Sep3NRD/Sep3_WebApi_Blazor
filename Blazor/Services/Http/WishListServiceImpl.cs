@@ -25,7 +25,7 @@ public class WishListServiceImpl : IWishListService
         }
     }
 
-    public async Task<WishList> GetWishListAsync(string username)
+    public async Task<Domain.Models.WishList> GetWishListAsync(string username)
     {
         HttpResponseMessage responseMessage = await client.GetAsync($"http://localhost:5193/Wishlist/{username}");
         string content = await responseMessage.Content.ReadAsStringAsync();
@@ -34,7 +34,7 @@ public class WishListServiceImpl : IWishListService
             throw new Exception(content);
         }
         
-        WishList wishList = JsonSerializer.Deserialize<WishList>(content, new JsonSerializerOptions
+        Domain.Models.WishList wishList = JsonSerializer.Deserialize<Domain.Models.WishList>(content, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;

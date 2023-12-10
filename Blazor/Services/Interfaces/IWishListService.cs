@@ -6,5 +6,5 @@ namespace Blazor.Services.Interfaces;
 public interface IWishListService
 {
     public Task AddToWishListAsync(AddToWishListDTO dto);
-    Task<WishList> GetWishListAsync(string username);
+    Task<Domain.Models.WishList> GetWishListAsync(string username);
 }
