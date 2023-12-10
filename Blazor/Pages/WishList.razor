@@ -1,0 +1,179 @@
+@page "/WishList"
+@using Domain.Models
+@using System.Security.Claims
+@using Blazor.Services.Interfaces
+@using Blazored.Toast.Services
+@inject IShoppingCartService shoppingCartService;
+@inject IItemService itemService
+@inject IToastService toastService;
+@inject IWishListService wishListService;
+@using Components;
+
+<div class="search-bar">
+    <input type="text" @bind="searchItem" placeholder="Search items"/>
+    <select @bind="orderBy">
+        <option value="">Order By</option>
+        <option value="maxPrice">Max Price</option>
+        <option value="minPrice">Min Price</option>
+        <option value="mostRecent">Most Recent</option>
+    </select>
+    <select @bind="selectedCategory">
+        <option value="">Categories</option>
+        <option value="CPU">CPU</option>
+        <option value="GPU">GPU</option>
+        <option value="Motherboard">Motherboard</option>
+        <option value="RAM">RAM</option>
+        <option value="CPU Cooler">CPU Cooler</option>
+        <option value="SSD">SSD</option>
+        <option value="HDD">HDD</option>
+        <option value="PSU">PSU</option>
+        <option value="Case">Case</option>
+    </select>
+    <button @onclick="Search">Search</button>
+</div>
+
+
+<div class="item-grid">
+    @if (wishList != null && wishList.Items != null && wishList.Items.Any())
+    {
+        @foreach (var item in filteredItems)
+        {
+            <div class="item-card">
+                <img src="img/product.png" alt="@item.Name" @onclick="() => ShowItemModal(item)"/>
+                <div class="item-details">
+                    <h4>@item.Name</h4>
+                    <p>Price: @item.Price$</p>
+                    <button class="buy-button" @onclick="() => AddToCart(item)">Add To Cart</button>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Your wishlist is empty.</p>
+    }
+</div>
+
+@if (showModal)
+{
+    <ItemModal ShowModal="showModal">
+        <div class="card">
+            @if (selectedItem != null)
+            {
+                <h3>@selectedItem.Name</h3>
+                <div class="form-group field">
+                    <p><strong>Description:</strong> @selectedItem.Description</p>
+                    <p><strong>Price:</strong> @selectedItem.Price $</p>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(msg))
+            {
+                <label style="color: red">@msg</label>
+            }
+            <button class="btn btn-secondary close-button" @onclick="CloseModal">Close</button>
+        </div>
+    </ItemModal>
+}
+
+@if (!string.IsNullOrEmpty(msg))
+{
+    <label style="color: red">@msg</label>
+}
+
+@code {
+    private Domain.Models.WishList wishList;
+    private string msg = "";
+    private bool showModal;
+    private Item selectedItem;
+    private IEnumerable<Item> filteredItems;
+    private string searchItem = "";
+    private string selectedCategory = "";
+    private string orderBy = "";
+    
+    
+    
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    private IEnumerable<Claim> userClaims;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+        userClaims = user?.Claims;
+        Claim? usernameClaim = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+
+        try
+        {
+           var wishList1 = await wishListService.GetWishListAsync(usernameClaim.Value);
+            wishList = new Domain.Models.WishList
+            {
+                Items = FilterItems(wishList1.Items)
+            };
+            UpdateFilteredItems();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    private void ShowItemModal(Item item)
+    {
+        selectedItem = item;
+        showModal = true;
+    }
+
+    private async Task AddToCart(Item item)
+    {
+        showModal = false;
+        await shoppingCartService.AddToCart(item);
+        toastService.ShowSuccess("Item added to cart: " + item.Name);
+    }
+
+    private void CloseModal()
+    {
+        showModal = false;
+    }
+    private List<Item> FilterItems(IEnumerable<Item> allItems)
+    {
+        return allItems
+            .Where(item => !item.Category.Contains("Pre-Built", StringComparison.OrdinalIgnoreCase))
+            .ToList();
+    }
+    
+    private void Search()
+    {
+            filteredItems = wishList.Items
+                .Where(item =>
+                    (string.IsNullOrEmpty(selectedCategory) || item.Category.Equals(selectedCategory, StringComparison.OrdinalIgnoreCase)) &&
+                    item.Name.Contains(searchItem, StringComparison.OrdinalIgnoreCase)
+                )
+                .ToList();
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                switch (orderBy)
+                {
+                    case "maxPrice":
+                        filteredItems = filteredItems.OrderByDescending(item => item.Price).ToList();
+                        break;
+                    case "minPrice":
+                        filteredItems = filteredItems.OrderBy(item => item.Price).ToList();
+                        break;
+                    case "mostRecent":
+                        filteredItems = filteredItems.OrderByDescending(item => item.ItemId).ToList();
+                        break;
+                }
+            }
+        
+    }
+    
+    private void UpdateFilteredItems()
+    {
+        filteredItems = wishList.Items.ToList();
+    }
+}

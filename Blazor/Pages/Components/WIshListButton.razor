@@ -1,0 +1,19 @@
+@namespace WishList
+@inject NavigationManager navMgr
+
+
+<AuthorizeView>
+    <Authorized>
+        <img class="icon me-2" src="img/wishlist.png" @onclick="WishListR" alt="wishlist"/>
+    </Authorized>
+</AuthorizeView>
+
+
+
+
+@code {
+    private void WishListR()
+    {
+        navMgr.NavigateTo("/WishList");
+    }
+}

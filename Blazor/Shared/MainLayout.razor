@@ -2,8 +2,10 @@
 @using ShoppingCart
 @using Login
 @using Register
+@using WishList
 @using Blazored.Toast
-@using Blazored.Toast.Services
+
+
 <PageTitle>PC Planet</PageTitle>
 
 <div class="page">
@@ -13,6 +15,7 @@
 
     <main>
         <div class="top-row ">
+            <WIshListButton/>
             <ShoppingCartButton/>
             <RegisterButton/>
             <LoginButtons/>
