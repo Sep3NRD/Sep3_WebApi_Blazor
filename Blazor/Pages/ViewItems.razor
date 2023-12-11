@@ -99,7 +99,7 @@
     private IEnumerable<Item>? filteredItems;
     private string selectedCategory = "";
     private string orderBy = "";
-    private Customer customer; // Ensure customer is initialized to avoid null reference
+    private Customer customer;
 
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
