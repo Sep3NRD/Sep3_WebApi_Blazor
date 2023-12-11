@@ -9,7 +9,7 @@
 @inject IToastService toastService;
 @inject NavigationManager navMgr
 
-
+<AuthorizeView Roles="customer">
 @if (customer != null)
 {
     <div class="container mt-5">
@@ -75,7 +75,7 @@
         </div>
     </div>
 }
-
+</AuthorizeView>
 @if (showModal)
 {
     <Modal ShowModal="showModal">
@@ -126,14 +126,14 @@
 }
     
 @code {
-    private Customer? customer; // Nullable Customer object
+    private Customer? customer; // A Customer object
 
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!; // Cascading parameter for authentication state
 
     private IEnumerable<Claim>? userClaims; // Nullable collection of claims
     private bool showModal = false;
-    private IEnumerable<Address>? addresses;
+    private IEnumerable<Address>? addresses; //List of addresses that belong to a Customer
 
     protected override async Task OnInitializedAsync()
     {
@@ -159,14 +159,17 @@
         }
     }
 
+    //Method to navigate to the page to add a new address
     private void NavigateToAddNewAddress()
     {
         navMgr.NavigateTo("/AddNewAddress");
     }
 
+    //Method to open all the addresses that belong to a specific Customer
     private async Task OpenShowModal()
     {
         Claim username = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+        //Get the addresses based on customer username
         addresses =await customerService.GetAddressesByUsername(username.Value);
         
         showModal = true;
@@ -183,10 +186,11 @@
         }
         catch (Exception e)
         {
-            toastService.ShowError(e.Message); // Display error message
+    // Display error message
+            toastService.ShowError(e.Message); 
         }
     }
-
+    //Method to close the modal
     private void CloseModal()
     {
         showModal = false;

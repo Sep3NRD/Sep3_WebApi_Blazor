@@ -4,11 +4,10 @@
 @using Blazor.Services.Interfaces
 @using Blazored.Toast.Services
 @inject IShoppingCartService shoppingCartService;
-@inject IItemService itemService
 @inject IToastService toastService;
 @inject IWishListService wishListService;
 @using Components;
-
+<AuthorizeView Roles="customer">
 <div class="search-bar">
     <input type="text" @bind="searchItem" placeholder="Search items"/>
     <select @bind="orderBy">
@@ -80,6 +79,7 @@
     <label style="color: red">@msg</label>
 }
 
+</AuthorizeView>
 @code {
     private Domain.Models.WishList wishList;
     private string msg = "";

@@ -2,7 +2,7 @@
 @inject NavigationManager navMgr
 
 
-<AuthorizeView>
+<AuthorizeView Roles="customer">
     <Authorized>
         <img class="icon me-2" src="img/wishlist.png" @onclick="WishListR" alt="wishlist"/>
     </Authorized>

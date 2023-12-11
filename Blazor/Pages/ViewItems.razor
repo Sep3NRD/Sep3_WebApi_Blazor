@@ -4,7 +4,6 @@
 @using Blazor.Services.Interfaces
 @inject IItemService itemService
 @inject IShoppingCartService shoppingCartService;
-@inject ICustomerService customerService
 @inject IWishListService wishListService;
 @using Blazored.Toast.Services
 @inject IToastService toastService;
@@ -12,6 +11,8 @@
 @using Domain.DTOs
 @using System.Security.Claims
 @using Blazor.Services
+
+
 
 <div class = "search-bar">
     <input type="text" @bind="searchItem" placeholder="Search products" />
@@ -57,8 +58,10 @@
                 <div class="item-details">
                     <h4>@item.Name</h4>
                     <p>Price: @item.Price$</p>
+                    <AuthorizeView Roles="customer">
                     <button class="buy-button" @onclick="() => AddToCart(item)">Add To Cart</button>
                     <button class="buy-button" @onclick="() => AddToWishList(item)">Add To Wish List</button>
+                    </AuthorizeView>
                 </div>
             </div>
         }

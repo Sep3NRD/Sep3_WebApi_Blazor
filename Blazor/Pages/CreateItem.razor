@@ -64,22 +64,26 @@
 
 @code {
     
+    // Declare private fields for item properties
     private string ItemName = "";
     private string? ItemDescription = "";
     private string? ItemCategory = "";
     private double ItemPrice;
     private int ItemStock = 0;
-    string msg = "";
+    private string msg = "";
     private int MaxDescriptionLength = 250;
 
+    // Method to create a new item
     private async Task Create()
     {
-        
+    // Check if ItemName is empty
         if (string.IsNullOrEmpty(ItemName))
         {
             msg = "Name cannot be empty!";
             return;
         }
+
+    // Check if ItemPrice is not set
         if (ItemPrice == null)
         {
             msg = "Price cannot be empty!";
@@ -88,24 +92,33 @@
 
         try
         {
-            Item item = new(ItemName, ItemDescription, 
-                ItemCategory, ItemPrice, ItemStock);
+    // Create a new item with provided properties
+            Item item = new Item(ItemName, ItemDescription, ItemCategory, ItemPrice, ItemStock);
+
+    // Call the item service to create the item asynchronously
             await itemService.CreateAsync(item);
+
+    // Show success message using toast service
             toastService.ShowSuccess("Item created: " + item.Name);
+
+    // Navigate to the AdminViewItems page
             navMgr.NavigateTo("/AdminViewItems");
-            
         }
         catch (Exception e)
         {
+    // Handle exceptions and set error message
             Console.WriteLine(e);
             msg = e.Message;
         }
     }
-    
+
+    // Method to update the character count for item description
     private void UpdateDescriptionCharCount(ChangeEventArgs e)
     {
+    // Update ItemDescription with the new value from the UI
         ItemDescription = e.Value.ToString();
-    
+
+    // Check if the length of ItemDescription exceeds the maximum allowed length
         if (ItemDescription.Length > MaxDescriptionLength)
         {
             Console.WriteLine("Exceeded max character count!");

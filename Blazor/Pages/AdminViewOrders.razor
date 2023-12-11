@@ -7,6 +7,7 @@
 @inject NavigationManager NavigationManager
 @using Components
 
+<AuthorizeView Roles="admin">
 <h3>AdminViewOrders</h3>
 
 
@@ -40,7 +41,7 @@ else
         </tr>
         </thead>
         <tbody>
-        @foreach (var order in filterdOrders)
+        @foreach (var order in filteredOrders)
         {
             <tr>
                 <td>@order.Customer.UserName</td>
@@ -116,82 +117,102 @@ else
 
         </div>
     </Modal>
+}
+    </AuthorizeView>
 @code
 {
-
+    // Declare private fields to store order-related data and filter criteria
     private IEnumerable<Order>? orders;
     private bool showModal = false;
     private Order selectedoOrder;
-    private IEnumerable<Order>? filterdOrders;
+    private IEnumerable<Order>? filteredOrders;
     private string filter = "";
 
-
+    //method called when the component is initialized
     protected override async Task OnInitializedAsync()
     {
         try
         {
+    // Retrieve all orders asynchronously
             orders = await orderservice.GetAllAsync();
-            filterdOrders = orders;
+
+    // Initialize filteredOrders with all orders
+            filteredOrders = orders;
         }
         catch (Exception e)
         {
+    // Handle exceptions and show an error toast message
             Console.WriteLine(e);
             toastService.ShowError("Something went wrong!");
         }
     }
 
+    // Method to open the order management modal
     private void OpenManage(int orderId)
     {
         try
         {
+    // Find the order with the given ID
             Order order = orders.FirstOrDefault(o => o.Id == orderId);
+
             if (order != null)
             {
+    // Set the selected order and show the modal
                 selectedoOrder = order;
                 showModal = true;
             }
             else
             {
+    // Show an error toast message if the order is not found
                 toastService.ShowError($"Order with ID {orderId} not found");
             }
         }
         catch (Exception e)
         {
+    // Handle exceptions, hide the modal, and show an error toast message
             showModal = false;
             toastService.ShowError($"Error in OpenManage: {e.Message}");
             Console.WriteLine($"Error in OpenManage: {e.Message}");
         }
     }
 
+    // Method to close the order management modal
     private void CloseModal()
     {
         showModal = false;
     }
 
+    // Method to confirm an order asynchronously
     private async Task ConfirmOrder(Order order)
     {
         try
         {
             if (order.IsConfirmed)
             {
+    // Show an info toast message if the order is already confirmed
                 toastService.ShowInfo($"Order with ID {order.Id} is already confirmed");
             }
             else
             {
+    // Confirm the order, show success toast messages, and update the UI
                 await orderservice.ConfirmAsync(order.Id);
-                toastService.ShowSuccess($"Order with id : {order.Id} confirmed with success");
-                toastService.ShowInfo($"Expected delivery date : {CalculateExpectedDeliveryDate()}");
+                toastService.ShowSuccess($"Order with id: {order.Id} confirmed with success");
+                toastService.ShowInfo($"Expected delivery date: {CalculateExpectedDeliveryDate()}");
                 StateHasChanged();
+
+    // Force a page reload to reflect changes in the order list
                 NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
             }
         }
         catch (Exception e)
         {
+    // Handle exceptions and show an error toast message
             toastService.ShowError("Something went wrong");
             Console.WriteLine(e);
         }
     }
 
+    // Method to calculate the expected delivery date (3 days from the current date)
     private string CalculateExpectedDeliveryDate()
     {
         DateTime localNow = DateTime.Now;
@@ -200,33 +221,32 @@ else
     // Format the date according to your preference
         return expectedDelivery.ToString("yyyy-MM-dd");
     }
-    
+
+    // Method to filter orders based on the selected criteria
     private void Search()
     {
         if (!string.IsNullOrEmpty(filter))
         {
-            
             switch (filter)
             {
+    // Order by delivery date in descending order
                 case "DeliveryDate":
-                    filterdOrders = orders
-                        .OrderByDescending(o => o.DeliveryDate)
-                        .ToList();
+                    filteredOrders = orders.OrderByDescending(o => o.DeliveryDate).ToList();
                     break;
 
+    // Filter orders that are not confirmed
                 case "Confirmation":
-                    filterdOrders = orders
-                        .Where(o => !o.IsConfirmed)
-                        .ToList();
+                    filteredOrders = orders.Where(o => !o.IsConfirmed).ToList();
                     break;
             }
         }
         else
         {
     // If filter is empty, reset to the original list of orders.
-            filterdOrders = orders.ToList();
+            filteredOrders = orders.ToList();
         }
-        StateHasChanged(); // Add this line to update the UI after filtering.
-    }
 
-}}
+    // Update the UI after filtering
+        StateHasChanged();
+    }
+}

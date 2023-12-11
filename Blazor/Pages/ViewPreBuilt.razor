@@ -6,7 +6,6 @@
 @using Blazored.Toast.Services
 @inject IToastService toastService;
 @using Components
-
 <div class = "search-bar">
     <input type="text" @bind="searchItem" placeholder="Search items" />
     <select @bind="orderBy">
@@ -35,7 +34,9 @@
                     <div class="item-details">
                         <h4>@item.Name</h4>
                         <p>Price: @item.Price $</p>
+                        <AuthorizeView Roles="customer">
                         <button class="buy-button" @onclick="() => AddToCart(item)">Add To Cart</button>
+                        </AuthorizeView>
                     </div>
                 </div>
         }

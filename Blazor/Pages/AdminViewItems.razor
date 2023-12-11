@@ -10,20 +10,20 @@
 
 <h3>Manage Items</h3>
 
-<div class = "search-bar">
-    <input type="text" @bind="searchItem" placeholder="Search items" />
+<div class="search-bar">
+    <input type="text" @bind="searchItem" placeholder="Search items"/>
     <select @bind="selectedCategory">
-            <option value="">All</option>
-            <option value="CPU">CPU</option>
-            <option value="GPU">GPU</option>
-            <option value="Motherboard">Motherboard</option>
-            <option value="RAM">RAM</option>
-            <option value="CPU Cooler">CPU Cooler</option>
-            <option value="SSD">SSD</option>
-            <option value="HDD">HDD</option>
-            <option value="PSU">PSU</option>
-            <option value="Case">Case</option>
-        </select>
+        <option value="">All</option>
+        <option value="CPU">CPU</option>
+        <option value="GPU">GPU</option>
+        <option value="Motherboard">Motherboard</option>
+        <option value="RAM">RAM</option>
+        <option value="CPU Cooler">CPU Cooler</option>
+        <option value="SSD">SSD</option>
+        <option value="HDD">HDD</option>
+        <option value="PSU">PSU</option>
+        <option value="Case">Case</option>
+    </select>
     <button @onclick="Search">Search</button>
 </div>
 
@@ -43,24 +43,24 @@ else
             <th>Name</th>
             <th>Category</th>
             <th >Stock</th>
-            <th class = "managecol">Manage</th>
+            <th class="managecol">Manage</th>
         </tr>
-</thead>
-<tbody>
-@foreach (var item in filteredItems)
-{
-    <tr>
-        <td>@item.Name</td>
-        <td>@item.Category</td>
-        <td>@item.Stock </td>
-        <td>
-            <button class="manage" @onclick="(e) => OpenManage(item.ItemId)">Manage</button>
-            <button class="delete" @onclick="(e) => Delete(item.ItemId)">Delete</button>
-        </td>
-    </tr>
-}
-</tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var item in filteredItems)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Category</td>
+                <td>@item.Stock </td>
+                <td>
+                    <button class="manage" @onclick="(e) => OpenManage(item.ItemId)">Manage</button>
+                    <button class="delete" @onclick="(e) => Delete(item.ItemId)">Delete</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
 }
 
 
@@ -86,87 +86,109 @@ else
             {
                 <label style="color: red">@msg</label>
             }
-            <div><button class="btn btn-secondary confirm-button" @onclick="ConfirmUpdate">Confirm</button>
+            <div>
+                <button class="btn btn-secondary confirm-button" @onclick="ConfirmUpdate">Confirm</button>
                 <button class="btn btn-secondary close-button" @onclick="CloseModal">Close</button>
-                </div>
-            
+            </div>
+
         </div>
     </Modal>
-
+}
 @code{
+    // Declare private fields to store item-related data and View state
     private IEnumerable<Item>? items;
     private string msg = "";
     private bool showModal = false;
     private Item selectedItem;
     private IEnumerable<Item>? filteredItems;
-    private string searchItem= "";
+    private string searchItem = "";
     private string selectedCategory = "";
 
-
+    // Method called when the component is initialized
     protected override async Task OnInitializedAsync()
     {
         try
         {
+    // Retrieve all items asynchronously
             items = await itemService.GetAsync();
+
+    // Update filteredItems to include all items initially
             UpdateFilteredItems();
         }
         catch (Exception e)
         {
+    // Handle exceptions and set error message
             Console.WriteLine(e);
             msg = e.Message;
         }
     }
 
-
+    // Method to open the item management modal asynchronously
     private async Task OpenManage(int itemId)
     {
+    // Reset the message field
         msg = "";
+
         try
         {
+    // Get the item with the given ID
             Item item = await itemService.GetItemById(itemId);
+
             if (item != null)
             {
+    // Set the selected item and show the modal
                 selectedItem = item;
                 showModal = true;
             }
             else
             {
+    // Log a message if the item is not found
                 Console.WriteLine($"Item with ID {itemId} not found");
             }
-
         }
         catch (Exception e)
         {
+    // Handle exceptions, hide the modal, and log an error message
             showModal = false;
             Console.WriteLine($"Error in OpenManage: {e.Message}");
         }
     }
 
+    // Method to delete an item asynchronously
     private async Task Delete(int itemId)
     {
+    // Reset the message field
         msg = "";
+
         try
         {
             if (itemId != null)
             {
+    // Delete the item with the given ID
                 await itemService.DeleteItem(itemId);
             }
             else
             {
+    // Log a message if the item is not found
                 Console.WriteLine($"Item with ID {itemId} not found");
+                toastService.ShowError($"Item with ID {itemId} not found");
             }
-
         }
         catch (Exception e)
         {
+    // Log exceptions
             Console.WriteLine(e);
             throw;
         }
     }
 
+    // Method to confirm the update of item details asynchronously
     private async Task ConfirmUpdate()
     {
+    // Reset the message field
         msg = "";
+
+    // Check if Price and Stock are not null
         if (selectedItem.Price == null)
         {
             msg = "Price cannot be empty!";
@@ -176,40 +198,46 @@ else
         {
             msg = "Stock cannot be empty!";
         }
+
         try
         {
-            UpdateItemDto item = new(selectedItem.ItemId, selectedItem.Price,
-                selectedItem.Stock);
+    // Create a DTO with updated item details and call the service to update
+            UpdateItemDto item = new UpdateItemDto(selectedItem.ItemId, selectedItem.Price, selectedItem.Stock);
             await itemService.UpdateItem(item);
-            toastService.ShowSuccess("Item details changed succesfully: " + selectedItem.Name);
+
+    // Show success toast message and hide the modal
+            toastService.ShowSuccess("Item details changed successfully: " + selectedItem.Name);
             showModal = false;
         }
         catch (Exception e)
         {
+    // Log exceptions and set error message
             Console.WriteLine(e);
             msg = e.Message;
         }
     }
+
+    // Method to close the item management modal
     private void CloseModal()
     {
         showModal = false;
     }
-    
+
+    // Method to filter items based on category and search criteria
     private void Search()
     {
         filteredItems = items
-            .Where(item => 
+            .Where(item =>
                 (string.IsNullOrEmpty(selectedCategory) || item.Category.Equals(selectedCategory, StringComparison.OrdinalIgnoreCase)) &&
                 item.Name.Contains(searchItem, StringComparison.OrdinalIgnoreCase)
             )
             .ToList();
-        
     }
-    
+
+    // Method to update filteredItems with the complete list of items
     private void UpdateFilteredItems()
     {
         filteredItems = items.ToList();
     }
 
-    }
 }

@@ -1,20 +1,16 @@
 @page "/ShoppingCart"
 @using Blazor.Services.Interfaces
-
 @using Domain.Models
 @inject IShoppingCartService shoppingCartService
 @inject IOrderService orderService
-
 @using Blazored.Toast.Services
-
 @using Blazor.Services
 @using System.Security.Claims
 @using Domain.DTOs
 @inject IToastService toastService;
-
 @inject ICustomerService customerService;
 
-
+<AuthorizeView Roles="customer">
 <div class="cart-title-container">
     <div class="cart-title">
         <h2>Shopping Cart</h2>
@@ -90,7 +86,7 @@ else
                                         <p>@address.PostalCode</p>
                                     </div>
                                     <div>
-                                       <button class="order-button" @onclick="() => PlaceOrderAsync(address)">Confirm</button>
+                                        <button class="order-button" @onclick="() => PlaceOrderAsync(address)">Confirm</button>
                                     </div>
                                 </div>
                             </div>
@@ -100,6 +96,9 @@ else
             </div>
         </div>
     </Modal>
+}
+</AuthorizeView>
+    
 @code {
 
     [CascadingParameter]
@@ -110,40 +109,48 @@ else
     List<Item> cartItems = new List<Item>();
     private IEnumerable<Address>? addresses;
 
+    // Handles post-rendering tasks.
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+    // Get user authentication state
         AuthenticationState authState = await AuthState;
         ClaimsPrincipal user = authState.User;
         userClaims = user?.Claims;
 
+    // Find the username claim
         Claim usernameClaim = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+
+    // Initialize data on the first render
         if (firstRender)
         {
+    // Get cart items and user addresses
             cartItems = await shoppingCartService.GetAllItems();
             addresses = await customerService.GetAddressesByUsername(usernameClaim.Value);
             StateHasChanged();
         }
     }
 
+    // Closes the modal.
     private void CloseModal()
     {
         showModal = false;
     }
 
-
+    // Places an order with the provided address.
     private async Task PlaceOrderAsync(Address address)
     {
-    // Check if there are items in the cart before placing an order
+    // Check if the cart is empty
         if (cartItems == null || cartItems.Count <= 0)
         {
+    // Show error and close modal
             toastService.ShowError("Cannot place an order with an empty cart.");
             showModal = false;
             return;
         }
 
-
         try
         {
+    // Get the current customer and create an order DTO
             Customer customer = await GetCurrentCustomer();
             CreateOrderDto dto = new CreateOrderDto()
             {
@@ -154,64 +161,68 @@ else
                 username = customer.UserName
             };
 
-            Console.WriteLine(address.id);
-
+    // Create the order
             await orderService.CreateAsync(dto);
 
+    // Clear the shopping cart and show success message
             await shoppingCartService.Clear();
-
             toastService.ShowSuccess("Order placed successfully!");
 
+    // Refresh cart items after placing the order
             cartItems = await shoppingCartService.GetAllItems();
         }
         catch (Exception e)
         {
-    // Log the exception details
-            Console.WriteLine(e);
-
-    // Display an error message to the user
+    // Show error message
             toastService.ShowError("Failed to place the order. Please try again later.");
         }
     }
 
-
+    // Deletes the specified item from the shopping cart.
     private async Task DeleteItem(Item item)
     {
+    // Delete the item, refresh cart items, and show success message
         await shoppingCartService.DeleteItem(item);
         cartItems = await shoppingCartService.GetAllItems();
-        toastService.ShowSuccess("Item with name :" + item.Name + " has been deleted");
+        toastService.ShowSuccess($"Item with name: {item.Name} has been deleted");
     }
 
+    // Retrieves the current customer based on the authenticated user's information.
     private async Task<Customer> GetCurrentCustomer()
     {
-        Customer customer1 = null;
+        Customer customer = null;
         try
         {
+    // Get authentication state and user claims
             AuthenticationState authState = await AuthState;
             ClaimsPrincipal user = authState.User;
             userClaims = user?.Claims;
 
+    // Extract the username claim
             Claim usernameClaim = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
 
+    // Get the customer using the username
             if (usernameClaim != null)
             {
                 CustomerLoginDto dto = new CustomerLoginDto(usernameClaim.Value, "");
-                customer1 = await customerService.GetByUsernameAsync(dto);
+                customer = await customerService.GetByUsernameAsync(dto);
             }
         }
         catch (Exception e)
         {
+    // Log error message
             Console.WriteLine($"Error in OnInitializedAsync: {e.Message}");
         }
 
-        return customer1;
+        return customer;
     }
 
-
+    // Calculates and returns the total price of items in the shopping cart.
     private double GetTotalPrice()
     {
         double totalPrice = 0;
 
+    // Calculate the total price based on the quantity and price of each item
         foreach (var item in cartItems)
         {
             totalPrice += item.Price * item.quantity;
@@ -220,6 +231,7 @@ else
         return totalPrice;
     }
 
+    // Opens the modal for managing user addresses.
     private void OpenAddresses()
     {
         showModal = true;

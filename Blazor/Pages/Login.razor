@@ -1,9 +1,7 @@
 ﻿@page "/Login"
 @using Blazor.Services
-
 @inject IAuthService authService
 @inject NavigationManager navMgr
-@inject ICustomerService customerService;
 
 <AuthorizeView>
     <NotAuthorized>
@@ -38,22 +36,26 @@
 </AuthorizeView>
 
 @code {
-    private string userName;
-    private string password;
-    private string errorLabel;
+    private string userName;    // Holds the entered username for login
+    private string password;    // Holds the entered password for login
+    private string errorLabel;  // Displays error messages during login attempts
 
+    // Handles the asynchronous login process.
     private async Task LoginAsync()
     {
-        errorLabel = "";
+        errorLabel = "";  // Reset the error label before attempting login
+
         try
         {
+    // Attempt to login using the provided username and password
             await authService.LoginAsync(userName, password);
+
+    // Navigate to the home page upon successful login
             navMgr.NavigateTo("/");
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            errorLabel = $"Error: {e.Message}";
+            errorLabel = $"Error: {e.Message}";  // Display the error message to the user
         }
     }
     

@@ -6,122 +6,125 @@
 @using Blazor.Services
 @inject IOrderService orderservice;
 @inject ICustomerService customerService;
-<h3>My Orders</h3>
 
-@if (ownerOrders == null)
-{
-    <p>Loading...</p>
-}
-else if (!ownerOrders.Any())
-{
-    <p>No Orders to display</p>
-}
-else
-    
-{
-    <table class="item-table">
-        <thead>
-        <tr>
-            <th>Products</th>
-            <th>Total Amount</th>
-            <th>Order Date</th>
-            <th>Delivery Date</th>
-            <th>Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var order in ownerOrders)
-        {
+<AuthorizeView Roles="customer">
+    <h3>My Orders</h3>
+
+    @if (ownerOrders == null)
+    {
+        <p>Loading...</p>
+    }
+    else if (!ownerOrders.Any())
+    {
+        <p>No Orders to display</p>
+    }
+    else
+
+    {
+        <table class="item-table">
+            <thead>
             <tr>
-                <td>@(new MarkupString(order.ItemNames()))</td>
-                <td>@order.TotalPrice</td>
-                <td>@order.OrderDate</td>
-                <td>@order.DeliveryDate</td>
-                <td>@GetConfirmationStatus(order.IsConfirmed)</td>
+                <th>Products</th>
+                <th>Total Amount</th>
+                <th>Order Date</th>
+                <th>Delivery Date</th>
+                <th>Status</th>
             </tr>
-        }
-        </tbody>
-    </table>
-}
-
+            </thead>
+            <tbody>
+            @foreach (var order in ownerOrders)
+            {
+                <tr>
+                    <td>@(new MarkupString(order.ItemNames()))</td>
+                    <td>@order.TotalPrice</td>
+                    <td>@order.OrderDate</td>
+                    <td>@order.DeliveryDate</td>
+                    <td>@GetConfirmationStatus(order.IsConfirmed)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</AuthorizeView>
 
 @code {
-     private IEnumerable<Order>? orders;
+    // Declare private fields
+    private IEnumerable<Order>? orders;
     private IEnumerable<Order>? ownerOrders;
     private string status = "";
     private string msg = "";
     private Customer currentCustomer;
-    
+
+    // Cascading parameter for authentication state
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
 
+    // Collection to store user claims
     private IEnumerable<Claim> userClaims;
-    
+
+    // Method to get confirmation status based on a boolean value
     private string GetConfirmationStatus(bool isConfirmed)
     {
-        if(isConfirmed)
+        if (isConfirmed)
         {
             return "Order Processed";
         }
-        else
-        {
-            return "Pending Confirmation";
-        }
+        return "Pending Confirmation";
     }
-    
-    
-    
 
-
+    //  method called when the component is initialized
     protected override async Task OnInitializedAsync()
     {
         try
         {
+    // Initialize current customer, get all orders, filter and update owner orders
             GetCurrentCustomer();
             var allOrders = await orderservice.GetAllAsync();
             orders = FilterOwnerOrders(allOrders);
             UpdateOwnerOrders();
-            
         }
         catch (Exception e)
         {
+    // Handle exceptions and set error message
             Console.WriteLine(e);
             msg = e.Message;
         }
     }
-    
-    
 
+    // Method to filter orders based on the current customer
     private List<Order> FilterOwnerOrders(IEnumerable<Order> allOrders)
     {
-        
         return allOrders
             .Where(order => order.Customer.Id == currentCustomer.Id)
             .ToList();
     }
-    
+
+    // Method to update owner orders based on the filtered orders
     private void UpdateOwnerOrders()
     {
         ownerOrders = orders.ToList();
     }
-    
+
+    // Method to get the current customer asynchronously
     private async Task<Customer> GetCurrentCustomer()
     {
         Customer customer1 = null;
         try
         {
+    // Get authentication state and user claims
             AuthenticationState authState = await AuthState;
             ClaimsPrincipal user = authState.User;
             userClaims = user?.Claims;
-            
+
+    // Find the username claim
             Claim usernameClaim = userClaims?.FirstOrDefault(c => c.Type == ClaimTypes.Name);
 
             if (usernameClaim != null)
             {
+    // Create a DTO and fetch customer information
                 CustomerLoginDto dto = new CustomerLoginDto(usernameClaim.Value, "");
                 customer1 = await customerService.GetByUsernameAsync(dto);
                 currentCustomer = customer1;
-
             }
         }
         catch (Exception e)
@@ -131,6 +134,4 @@ else
         return customer1;
     }
 
-    
-    
 }
