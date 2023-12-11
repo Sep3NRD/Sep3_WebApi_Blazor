@@ -94,8 +94,8 @@ public class ItemLogicTest
             .ReturnsAsync(new List<Item>()); 
         
         //Act
-        var logic = new ItemLogic(_mockItemGRPC.Object);
-        var result = await logic.GetAsync();
+        _itemLogic = new ItemLogic(_mockItemGRPC.Object);
+        var result = await _itemLogic.GetAsync();
         
         //Assert
         Assert.IsNotNull(result);
