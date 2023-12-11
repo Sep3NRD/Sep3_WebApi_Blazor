@@ -23,15 +23,12 @@ public class OrderLogic: IOrderLogic
         }
 
         await iOrderGrpc.CreateAsync(dto);
-        // ConfirmAsync(dto); // just a check if it works
         
     }
 
     public async Task ConfirmAsync(int orderId)
     {
-
         await iOrderGrpc.ConfirmAsync(orderId);
-        
     }
 
     public async Task<IEnumerable<Order>> GetAllAsync()
