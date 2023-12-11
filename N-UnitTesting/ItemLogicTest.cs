@@ -2,6 +2,7 @@ using Application.gRPCcon.Item;
 using Application.Logic;
 using Domain.DTOs;
 using Domain.Models;
+using Grpc.Core;
 using Moq;
 
 namespace N_UnitTesting;
@@ -21,6 +22,7 @@ public class ItemLogicTest
     [Test]
     public async Task CreateAsyncTesting()
     {
+        //Arrange
         _mockItemGRPC.Setup(x => x.CreateAsync(It.IsAny<Item>())).ReturnsAsync(new Item
         {
             Name = "nametest",
@@ -56,7 +58,6 @@ public class ItemLogicTest
         }
     }
     
-    
     [Test]
     public async Task GetByIdAsyncTest()
     {
@@ -84,10 +85,38 @@ public class ItemLogicTest
         Assert.AreEqual("Nvidia GTX 3060", result.Name);
         
     }
+
+    [Test]
+    public async Task GetAsyncTest()
+    {
+        //Arrange
+        _mockItemGRPC.Setup(x => x.GetAsync())
+            .ReturnsAsync(new List<Item>()); 
+        
+        //Act
+        var logic = new ItemLogic(_mockItemGRPC.Object);
+        var result = await logic.GetAsync();
+        
+        //Assert
+        Assert.IsNotNull(result);
+    }
+    
+    [Test]
+    public async Task GetAsync_GrpcError_ShouldThrowException()
+    {
+        //Arrange
+        _mockItemGRPC.Setup(x => x.GetAsync())
+            .ThrowsAsync(new RpcException(new Status(StatusCode.Internal, "Internal Server Error")));
+        //Act
+        var logic = new ItemLogic(_mockItemGRPC.Object);
+        //Assert
+        Assert.ThrowsAsync<RpcException>(async () => await logic.GetAsync());
+    }
     
     [Test]
     public async Task UpdateAsyncTesting()
     {
+        //Arrange
         _mockItemGRPC.Setup(x => x.UpdateItemAsync(It.IsAny<UpdateItemDto>())).ReturnsAsync(new UpdateItemDto
         {
             Price = 20.0,
@@ -121,6 +150,7 @@ public class ItemLogicTest
     [Test]
     public async Task DeleteAsyncTesting()
     {
+        //Arrange
         
         const int itemId = 1;
         _mockItemGRPC.Setup(x => x.GetByIdAsync(itemId)).ReturnsAsync(new Item
@@ -137,8 +167,10 @@ public class ItemLogicTest
 
         try
         {
+            //Act
             await _itemLogic.DeleteAsync(itemId);
             
+            //Assert
             _mockItemGRPC.Verify(x => x.GetByIdAsync(itemId), Times.Once);
             _mockItemGRPC.Verify(x => x.DeleteAsync(itemId), Times.Once);
         }
