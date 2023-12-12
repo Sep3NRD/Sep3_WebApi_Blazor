@@ -163,6 +163,7 @@ else
 
     // Create the order
             await orderService.CreateAsync(dto);
+            showModal = false;
 
     // Clear the shopping cart and show success message
             await shoppingCartService.Clear();
@@ -237,4 +238,4 @@ else
         showModal = true;
     }
 
-}}
+}
